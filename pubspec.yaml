@@ -58,6 +58,17 @@ dependencies:
   email_validator: ^2.1.17
   google_nav_bar: ^5.0.6
   equatable: ^2.0.5
+  velocity_x: ^4.1.0
+  flutter_native_splash: ^2.2.19
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/images/logo.png
+  width: 512px
+  height: 512px
+  # fill: true
+  android: true
+  ios: true
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +80,11 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  flutter_launcher_icons: "^0.13.0"
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/logo.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -82,9 +98,12 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/
+    - assets/images/
+    - assets/fonts/
+    - assets/lotties/
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
