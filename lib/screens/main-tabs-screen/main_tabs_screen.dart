@@ -3,8 +3,8 @@
 import 'dart:io';
 
 import 'package:cookbook/constants/app_colors.dart';
-import 'package:cookbook/screens/onboarding/main-tabs-screen/widgets/FadeIndexedStack.dart';
-import 'package:cookbook/screens/onboarding/main-tabs-screen/widgets/HomeBottomNavBar.dart';
+import 'package:cookbook/screens/main-tabs-screen/widgets/FadeIndexedStack.dart';
+import 'package:cookbook/screens/main-tabs-screen/widgets/HomeBottomNavBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -1,9 +1,15 @@
 //Onboarding Pages
 
-class ImageAssets {
+class AppImages {
+  // logo
+  static const String logo = "assets/images/logo.png";
+  // onboarding
   static const String onboarding1 = "assets/images/onboarding1.jpeg";
   static const String onboarding2 = "assets/images/onboarding2.jpeg";
   static const String onboarding3 = "assets/images/onboarding3.jpeg";
+
+  // Sign in
+  static const String signInCover = "assets/images/sign_in_cover.jpeg";
 }
 
 class LottieAssets {

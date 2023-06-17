@@ -4,8 +4,8 @@ import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_textstyle.dart';
 import 'package:cookbook/global/utils/secure_storage.dart';
 import 'package:cookbook/models/onboarding_model.dart';
-import 'package:cookbook/screens/onboarding/main-tabs-screen/main_tabs_screen.dart';
-import 'package:cookbook/widgets/buttons/primary_button.dart';
+import 'package:cookbook/screens/authentication/splash/splash_screen.dart';
+import 'package:cookbook/widgets/buttons/primary_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -117,7 +117,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   caption: 'Getting Started',
                                   onPressed: () {
                                     // Navigate to Login Screen
-                                    MainTabsScreen().launch(context);
+                                    SplashScreen().launch(context);
                                   }),
                             )
                           : Padding(
