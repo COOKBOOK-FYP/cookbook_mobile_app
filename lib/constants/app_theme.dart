@@ -9,9 +9,9 @@ class AppTheme {
       secondary: AppColors.secondaryColor,
       primary: AppColors.primaryColor,
     ),
-    appBarTheme: const AppBarTheme(
+    appBarTheme: AppBarTheme(
       systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
+        statusBarColor: AppColors.transparentColor,
       ),
     ),
   );
@@ -22,9 +22,9 @@ class AppTheme {
       secondary: AppColors.secondaryColor,
       primary: AppColors.primaryColor,
     ),
-    appBarTheme: const AppBarTheme(
+    appBarTheme: AppBarTheme(
       systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
+        statusBarColor: AppColors.transparentColor,
       ),
     ),
   );

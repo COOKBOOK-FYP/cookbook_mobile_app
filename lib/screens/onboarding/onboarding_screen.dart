@@ -2,6 +2,7 @@
 
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_textstyle.dart';
+import 'package:cookbook/global/utils/app_navigator.dart';
 import 'package:cookbook/global/utils/secure_storage.dart';
 import 'package:cookbook/models/onboarding_model.dart';
 import 'package:cookbook/screens/authentication/splash/splash_screen.dart';
@@ -117,7 +118,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   caption: 'Getting Started',
                                   onPressed: () {
                                     // Navigate to Login Screen
-                                    SplashScreen().launch(context);
+                                    AppNavigator.replaceTo(
+                                      context: context,
+                                      screen: const SplashScreen(),
+                                    );
                                   }),
                             )
                           : Padding(

@@ -12,4 +12,15 @@ class AppNavigator {
       ),
     );
   }
+
+  static replaceTo({required BuildContext context, required Widget screen}) {
+    return Navigator.pushReplacement(
+      context,
+      PageTransition(
+        duration: const Duration(milliseconds: 400),
+        type: PageTransitionType.bottomToTop,
+        child: screen,
+      ),
+    );
+  }
 }

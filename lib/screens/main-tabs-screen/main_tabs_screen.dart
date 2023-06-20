@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:cookbook/constants/app_colors.dart';
+import 'package:cookbook/screens/account/account_screen.dart';
 import 'package:cookbook/screens/main-tabs-screen/widgets/FadeIndexedStack.dart';
 import 'package:cookbook/screens/main-tabs-screen/widgets/HomeBottomNavBar.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class _MainTabsScreenState extends State<MainTabsScreen> {
     Container(color: Colors.blue),
     Container(color: Colors.yellow),
     Container(color: Colors.cyan),
-    Container(color: Colors.orange),
+    AccountScreen(),
   ];
 
   @override
