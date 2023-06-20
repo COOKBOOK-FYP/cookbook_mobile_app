@@ -108,10 +108,10 @@ class _SignInScreenState extends State<SignInScreen> {
                       controller: _passwordController,
                       prefixIcon: Ionicons.lock_closed_outline,
                       label: AppText.passwordText,
-                      validator: (val) {
-                        if (val!.isEmpty) {
+                      validator: (text) {
+                        if (text!.isEmpty) {
                           return "Please enter password";
-                        } else if (val.length < 8) {
+                        } else if (text.length < 8) {
                           return "Password length should be greater than 8";
                         }
                         return null;
@@ -127,7 +127,7 @@ class _SignInScreenState extends State<SignInScreen> {
             //   child: Row(
             //     mainAxisAlignment: MainAxisAlignment.end,
             //     children: [
-            //       GestureDetector(
+            //       Gestu reDetector(
             //         onTap: () {
             //           Navigator.of(context).push(MaterialPageRoute(
             //               builder: (builder) => ForgetPasswordScreen()));
