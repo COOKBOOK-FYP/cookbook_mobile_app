@@ -11,8 +11,16 @@ class AppText {
   static const String passwordText = "Password";
   static const String orContinueWith = "Or continue with";
   static const String dontHaveAccount = "Don't have an account?";
-  static const String signupText = "Sign Up";
   static const String continueWithGoogle = "Continue with Google";
+
+  // Sign Up Screen
+  static const String signupText = "Sign Up";
+  static const String firstNameText = "First Name";
+  static const String lastNameText = "Last Name";
+  static const String phoneNumberText = "Phone Number";
+  static const String continueWithText = "Continue with";
+  static const String alreadyHaveAnAccountText = "Already have an account?";
+
   // Main Tabs Screen
   static const String homeText = "Home";
   static const String tab2 = "tab2";

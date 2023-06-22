@@ -1,19 +1,23 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:cookbook/blocs/authentication/google/google_signin_bloc.dart';
+import 'package:cookbook/blocs/authentication/signin/signin_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/constants/app_images.dart';
 import 'package:cookbook/constants/app_texts.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
+import 'package:cookbook/global/utils/app_snakbars.dart';
 import 'package:cookbook/screens/main-tabs-screen/main_tabs_screen.dart';
 import 'package:cookbook/widgets/buttons/primary_button_widget.dart';
 import 'package:cookbook/widgets/text/primary_text_widget.dart';
 import 'package:cookbook/widgets/text_fields/password_text_field_widget.dart';
 import 'package:cookbook/widgets/text_fields/text_field_widget.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -29,7 +33,8 @@ class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController _passwordController = TextEditingController();
   BuildContext? dialogueContext;
   final formGlobalKey = GlobalKey<FormState>();
-  final bloc = GoogleSigninBloc();
+  final googleSigninBloc = GoogleSigninBloc();
+  final signinBloc = SigninBloc();
 
   @override
   void initState() {
@@ -39,15 +44,59 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocListener<GoogleSigninBloc, GoogleSigninState>(
-        listener: (context, state) {
-          if (state is GoogleSigninSuccess) {
-            AppNavigator.replaceTo(
-              context: context,
-              screen: MainTabsScreen(),
-            );
-          }
-        },
+      body: MultiBlocListener(
+        listeners: [
+          BlocListener<GoogleSigninBloc, GoogleSigninState>(
+            listener: (context, state) {
+              if (state is GoogleSigninSuccess) {
+                AppNavigator.replaceTo(
+                  context: context,
+                  screen: MainTabsScreen(),
+                );
+              }
+            },
+          ),
+          BlocListener<SigninBloc, SigninState>(
+            bloc: signinBloc,
+            listener: (context, state) {
+              if (state is SigninStateLoading) {
+                showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (ctx) {
+                      dialogueContext = ctx;
+                      return Container(
+                        color: AppColors.transparentColor,
+                        child: Center(
+                          child: SpinKitFadingCircle(
+                            color: AppColors.primaryColor,
+                            size: 30.0,
+                          ),
+                        ),
+                      );
+                    });
+              }
+              if (state is SigninStateSuccess) {
+                // close the dialoge
+                Navigator.pop(dialogueContext!);
+                // handle session
+                AppNavigator.replaceTo(
+                  context: context,
+                  screen: MainTabsScreen(),
+                );
+              }
+
+              if (state is SigninStateFailed) {
+                // close the dialoge
+                Navigator.pop(dialogueContext!);
+                AppSnackbars.danger(
+                  context,
+                  state.message.replaceAll("[", "]"),
+                );
+              }
+            },
+          ),
+        ],
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Column(
@@ -107,10 +156,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           validator: (val) {
                             if (val!.isEmpty) {
                               return "Please enter email address";
-                            } else if (RegExp(
-                                        r'^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-                                    .hasMatch(val) ==
-                                false) {
+                            } else if (EmailValidator.validate(val) == false) {
                               return "Please enter valid email address";
                             }
                             return null;
@@ -135,27 +181,6 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                 ),
               ),
-              // Padding(
-              //   padding:
-              //       EdgeInsets.only(left: 15.w, right: 18.w, bottom: 20.h),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.end,
-              //     children: [
-              //       Gestu reDetector(
-              //         onTap: () {
-              //           Navigator.of(context).push(MaterialPageRoute(
-              //               builder: (builder) => ForgetPasswordScreen()));
-              //         },
-              //         child: PrimaryTextWidget(
-              //           text: AppText.forgetPassword,
-              //           fontSize: 14.sp,
-              //           fontColor: Colors.black,
-              //           fontFamily: AppFonts.openSansLight,
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
               SizedBox(
                 height: 10.h,
               ),
@@ -166,12 +191,17 @@ class _SignInScreenState extends State<SignInScreen> {
                     height: 50.h,
                     caption: AppText.signinText,
                     onPressed: () async {
-                      if (formGlobalKey.currentState!.validate()) {}
+                      if (formGlobalKey.currentState!.validate()) {
+                        signinBloc.add(
+                          SigninWithCredentialsEvent(
+                            _emailController.text,
+                            _passwordController.text,
+                          ),
+                        );
+                      }
                     }),
               ),
-              SizedBox(
-                height: 20.h,
-              ),
+              SizedBox(height: 20.h),
               Padding(
                 padding: EdgeInsets.only(left: 15.w, right: 15.w, bottom: 20.h),
                 child: Row(children: <Widget>[
@@ -198,13 +228,6 @@ class _SignInScreenState extends State<SignInScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // SocialIconButton(
-                  //   icon: Ionicons.logo_facebook,
-                  //   onPressed: () {},
-                  // ),
-                  // SizedBox(
-                  //   width: 10.w,
-                  // ),
                   SocialIconButton(
                     icon: Ionicons.logo_google,
                     onPressed: () {

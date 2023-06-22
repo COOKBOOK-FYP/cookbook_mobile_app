@@ -1,4 +1,4 @@
-import 'package:cookbook/constants/google_constants.dart';
+import 'package:cookbook/constants/firebase_constants.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Events
@@ -27,7 +27,7 @@ class GoogleSigninBloc extends Bloc<GoogleSigninEvent, GoogleSigninState> {
       if (event is GoogleSigninButtonPressedEvent) {
         emit(GoogleSigninLoading());
         try {
-          await GoogleConstants.googleSignIn.signIn();
+          await FirebaseContants.googleSignIn.signIn();
         } catch (error) {
           emit(GoogleSigninFailed(error.toString()));
         }

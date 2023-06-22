@@ -2,6 +2,7 @@ import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_texts.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
 import 'package:cookbook/screens/authentication/sign-in/signin_screen.dart';
+import 'package:cookbook/screens/authentication/sign-up/signup_screen.dart';
 import 'package:cookbook/widgets/buttons/primary_button_widget.dart';
 import 'package:cookbook/widgets/buttons/secondary_button_widget.dart';
 import 'package:cookbook/widgets/logo/logo_widget.dart';
@@ -42,7 +43,12 @@ class SplashScreen extends StatelessWidget {
             // )
             SecondaryButtonWidget(
               caption: AppText.createNewAccountText,
-              onPressed: () {},
+              onPressed: () {
+                AppNavigator.goToPage(
+                  context: context,
+                  screen: const SignUpScreen(),
+                );
+              },
             ),
             context.isPortrait ? 80.heightBox : 10.heightBox,
           ],

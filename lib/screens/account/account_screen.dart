@@ -1,12 +1,15 @@
-import 'package:cookbook/constants/google_constants.dart';
+import 'package:cookbook/constants/firebase_constants.dart';
+import 'package:cookbook/widgets/appbar/primary_appbar_widget.dart';
 import 'package:cookbook/widgets/buttons/secondary_button_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const PrimaryAppbarWidget(),
       body: SafeArea(
         child: Column(
           children: [
@@ -15,11 +18,11 @@ class AccountScreen extends StatelessWidget {
                 SecondaryButtonWidget(
                   caption: "Log out",
                   onPressed: () {
-                    GoogleConstants.googleSignIn.signOut();
+                    FirebaseContants.googleSignIn.signOut();
                   },
                 ),
               ],
-            ),
+            ).box.make().p20(),
           ],
         ),
       ),

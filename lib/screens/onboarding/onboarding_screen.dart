@@ -4,7 +4,7 @@ import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_textstyle.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
 import 'package:cookbook/global/utils/secure_storage.dart';
-import 'package:cookbook/models/onboarding_model.dart';
+import 'package:cookbook/models/OnBoarding/onboarding_model.dart';
 import 'package:cookbook/screens/authentication/splash/splash_screen.dart';
 import 'package:cookbook/widgets/buttons/primary_button_widget.dart';
 import 'package:flutter/material.dart';

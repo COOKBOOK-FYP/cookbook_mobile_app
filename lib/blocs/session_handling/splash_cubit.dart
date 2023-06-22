@@ -1,7 +1,8 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'package:bloc/bloc.dart';
-import 'package:cookbook/constants/google_constants.dart';
+import 'package:cookbook/constants/firebase_constants.dart';
+import 'package:cookbook/controllers/User/user_controller.dart';
 import 'package:cookbook/global/utils/secure_storage.dart';
 import 'package:meta/meta.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -15,38 +16,45 @@ class SessionHandlingCubit extends Cubit<SessionHandlingState> {
     try {
       bool connectionValue = await isNetworkAvailable();
       if (connectionValue) {
-        String? userToken = await UserSecureStorage.fetchToken();
-        String? userId = await UserSecureStorage.fetchUserId();
         String? newUser = await UserSecureStorage.fetchNewUser();
+        String? userId = await UserSecureStorage.fetchUserId();
 
-        GoogleConstants.googleSignIn.onCurrentUserChanged.listen((account) {
+        FirebaseContants.googleSignIn.onCurrentUserChanged.listen((account) {
           if (account != null) {
+            UserController.createUser(
+              account.id,
+              name: account.displayName,
+              email: account.email,
+              phoneNumber: "",
+              photoUrl: account.photoUrl,
+            );
             emit(SessionHandlingHomeScreen());
           } else {
-            emit(SessionHandlingLoginScreen());
+            if (newUser != null) {
+              emit(SessionHandlingLoginScreen());
+            } else {
+              emit(SessionHandlingOnBoarding());
+            }
           }
         }, onError: (error) {
           emit(SessionHandlingFailed());
         });
 
-        GoogleConstants.googleSignIn.signInSilently(suppressErrors: false).then(
-            (account) {
+        FirebaseContants.googleSignIn
+            .signInSilently(suppressErrors: false)
+            .then((account) {
           if (account != null) {
             emit(SessionHandlingHomeScreen());
           } else {
-            emit(SessionHandlingLoginScreen());
+            if (newUser != null) {
+              emit(SessionHandlingLoginScreen());
+            } else {
+              emit(SessionHandlingOnBoarding());
+            }
           }
         }, onError: (error) {
-          emit(SessionHandlingFailed());
-        });
-
-        if (userToken != null && userId != null) {
-          emit(SessionHandlingHomeScreen());
-        } else if (userId == null && newUser != null) {
           emit(SessionHandlingLoginScreen());
-        } else {
-          emit(SessionHandlingOnBoarding());
-        }
+        });
       } else {
         emit(SessionHandlingFailed());
       }
