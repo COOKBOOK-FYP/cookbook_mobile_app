@@ -15,7 +15,9 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+      appBar: AppBar(),
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             const LogoWidget(),
@@ -26,7 +28,7 @@ class SplashScreen extends StatelessWidget {
                 .makeCentered(),
             20.heightBox,
             AppText.appSplashDescription.text.center.makeCentered(),
-            const Spacer(),
+            40.heightBox,
             PrimaryButtonWidget(
               caption: AppText.signinText,
               onPressed: () {
@@ -37,10 +39,6 @@ class SplashScreen extends StatelessWidget {
               },
             ),
             20.heightBox,
-            // TextButtonWidget(
-            //   text: AppText.createNewAccountText,
-            //   onPressed: () {},
-            // )
             SecondaryButtonWidget(
               caption: AppText.createNewAccountText,
               onPressed: () {

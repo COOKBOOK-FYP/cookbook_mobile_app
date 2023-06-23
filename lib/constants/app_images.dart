@@ -10,6 +10,8 @@ class AppImages {
 
   // Sign in
   static const String signInCover = "assets/images/sign_in_cover.jpeg";
+  // Sign up
+  static const String signUpCover = "assets/images/sign_up_cover.jpeg";
 }
 
 class LottieAssets {

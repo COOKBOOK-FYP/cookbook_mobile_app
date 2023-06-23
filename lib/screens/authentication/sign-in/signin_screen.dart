@@ -42,6 +42,25 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   @override
+  void dispose() {
+    // dispose blocs
+    googleSigninBloc.close();
+    signinBloc.close();
+
+    // dispose controllers
+    _emailController.dispose();
+    _passwordController.dispose();
+
+    // dispose context
+    dialogueContext = null;
+
+    // dispose form
+    formGlobalKey.currentState?.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: MultiBlocListener(
@@ -78,7 +97,9 @@ class _SignInScreenState extends State<SignInScreen> {
               }
               if (state is SigninStateSuccess) {
                 // close the dialoge
-                Navigator.pop(dialogueContext!);
+                if (dialogueContext != null) {
+                  Navigator.pop(dialogueContext!);
+                }
                 // handle session
                 AppNavigator.replaceTo(
                   context: context,
@@ -87,11 +108,12 @@ class _SignInScreenState extends State<SignInScreen> {
               }
 
               if (state is SigninStateFailed) {
-                // close the dialoge
-                Navigator.pop(dialogueContext!);
+                if (dialogueContext != null) {
+                  Navigator.pop(dialogueContext!);
+                }
                 AppSnackbars.danger(
                   context,
-                  state.message.replaceAll("[", "]"),
+                  state.message,
                 );
               }
             },
@@ -102,7 +124,7 @@ class _SignInScreenState extends State<SignInScreen> {
           child: Column(
             children: [
               SizedBox(
-                height: context.height() * 0.35,
+                height: context.height() * 0.36,
                 width: context.width(),
                 child: Stack(children: <Widget>[
                   Image.asset(
@@ -181,9 +203,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 10.h,
-              ),
+              SizedBox(height: 10.h),
               Padding(
                 padding: EdgeInsets.only(left: 15.w, right: 15.w, bottom: 20.h),
                 child: PrimaryButtonWidget(
@@ -201,74 +221,74 @@ class _SignInScreenState extends State<SignInScreen> {
                       }
                     }),
               ),
-              SizedBox(height: 20.h),
-              Padding(
-                padding: EdgeInsets.only(left: 15.w, right: 15.w, bottom: 20.h),
-                child: Row(children: <Widget>[
-                  const Expanded(
-                      child: Divider(
-                    color: Colors.black,
-                  )),
-                  Padding(
-                    padding: EdgeInsets.only(left: 10.w, right: 10.w),
-                    child: PrimaryTextWidget(
-                      text: AppText.orContinueWith,
-                      fontSize: 14.sp,
-                      fontColor: Colors.black,
-                      fontFamily: AppFonts.openSansLight,
-                    ),
-                  ),
-                  const Expanded(
-                      child: Divider(
-                    color: Colors.black,
-                  )),
-                ]),
-              ),
-              SizedBox(height: 20.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SocialIconButton(
-                    icon: Ionicons.logo_google,
-                    onPressed: () {
-                      BlocProvider.of<GoogleSigninBloc>(context).add(
-                        GoogleSigninButtonPressedEvent(),
-                      );
-                    },
-                  ),
-                  SizedBox(
-                    width: 10.w,
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 10.w, right: 10.w),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    PrimaryTextWidget(
-                      text: AppText.dontHaveAccount,
-                      fontSize: 14.sp,
-                      fontFamily: AppFonts.openSansLight,
-                    ),
-                    SizedBox(
-                      width: 5.w,
-                    ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: PrimaryTextWidget(
-                        text: AppText.signupText,
-                        fontSize: 14.sp,
-                        fontColor: Colors.black,
-                        fontFamily: AppFonts.robotoBold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // SizedBox(height: 20.h),
+              // Padding(
+              //   padding: EdgeInsets.only(left: 15.w, right: 15.w, bottom: 20.h),
+              //   child: Row(children: <Widget>[
+              //     const Expanded(
+              //         child: Divider(
+              //       color: Colors.black,
+              //     )),
+              //     Padding(
+              //       padding: EdgeInsets.only(left: 10.w, right: 10.w),
+              //       child: PrimaryTextWidget(
+              //         text: AppText.orContinueWith,
+              //         fontSize: 14.sp,
+              //         fontColor: Colors.black,
+              //         fontFamily: AppFonts.openSansLight,
+              //       ),
+              //     ),
+              //     const Expanded(
+              //         child: Divider(
+              //       color: Colors.black,
+              //     )),
+              //   ]),
+              // ),
+              // SizedBox(height: 20.h),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //     SocialIconButton(
+              //       icon: Ionicons.logo_google,
+              //       onPressed: () {
+              //         BlocProvider.of<GoogleSigninBloc>(context).add(
+              //           GoogleSigninButtonPressedEvent(),
+              //         );
+              //       },
+              //     ),
+              //     SizedBox(
+              //       width: 10.w,
+              //     ),
+              //   ],
+              // ),
+              // SizedBox(
+              //   height: 20.h,
+              // ),
+              // Padding(
+              //   padding: EdgeInsets.only(left: 10.w, right: 10.w),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //       PrimaryTextWidget(
+              //         text: AppText.dontHaveAccount,
+              //         fontSize: 14.sp,
+              //         fontFamily: AppFonts.openSansLight,
+              //       ),
+              //       SizedBox(
+              //         width: 5.w,
+              //       ),
+              //       GestureDetector(
+              //         onTap: () {},
+              //         child: PrimaryTextWidget(
+              //           text: AppText.signupText,
+              //           fontSize: 14.sp,
+              //           fontColor: Colors.black,
+              //           fontFamily: AppFonts.robotoBold,
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
             ],
           ),
         ),

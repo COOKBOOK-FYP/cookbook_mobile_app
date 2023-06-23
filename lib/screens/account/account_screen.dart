@@ -1,6 +1,6 @@
-import 'package:cookbook/constants/firebase_constants.dart';
 import 'package:cookbook/widgets/appbar/primary_appbar_widget.dart';
 import 'package:cookbook/widgets/buttons/secondary_button_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -18,7 +18,7 @@ class AccountScreen extends StatelessWidget {
                 SecondaryButtonWidget(
                   caption: "Log out",
                   onPressed: () {
-                    FirebaseContants.googleSignIn.signOut();
+                    FirebaseAuth.instance.signOut();
                   },
                 ),
               ],

@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 abstract class UserEvent {}
 
 class UserCreateEvent extends UserEvent {
-  final User user;
+  final UserModel user;
   UserCreateEvent({required this.user});
 }
 
@@ -23,7 +23,7 @@ class UserStateInitial extends UserState {}
 class UserStateLoading extends UserState {}
 
 class UserStateSuccess extends UserState {
-  final User user;
+  final UserModel user;
   UserStateSuccess({required this.user});
 }
 
@@ -33,9 +33,15 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       (event, emit) {
         emit(UserStateLoading());
         try {
-          FirebaseContants.usersCollection
-              .doc(event.user.uid)
-              .set(event.user.toJson());
+          FirebaseContants.usersCollection.doc(event.user.uid).set({
+            'userId': event.user.uid,
+            'createdAt': DateTime.now(),
+            'updatedAt': DateTime.now(),
+            'displayName': event.user.displayName,
+            'email': event.user.email,
+            'phoneNumber': event.user.phoneNumber,
+            'photoUrl': event.user.photoURL,
+          });
           emit(UserStateSuccess(user: event.user));
         } catch (e) {
           emit(UserStateInitial());
@@ -46,7 +52,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       emit(UserStateLoading());
       try {
         final user = await FirebaseContants.usersCollection.doc(event.id).get();
-        emit(UserStateSuccess(user: User.fromJson(user.data()!)));
+        emit(UserStateSuccess(user: UserModel.fromJson(user.data()!)));
       } catch (e) {
         emit(UserStateInitial());
       }

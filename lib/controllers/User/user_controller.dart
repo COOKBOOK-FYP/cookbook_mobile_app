@@ -3,7 +3,7 @@ import 'package:cookbook/constants/firebase_constants.dart';
 class UserController {
   static void createUser(
     String userId, {
-    String? name,
+    String? displayName,
     String? email,
     String? phoneNumber,
     String? photoUrl,
@@ -12,12 +12,21 @@ class UserController {
       'userId': userId,
       'createdAt': DateTime.now(),
       'updatedAt': DateTime.now(),
-      'displayName': name,
+      'displayName': displayName ?? "",
       'email': email,
-      'phoneNumber': phoneNumber,
-      'photoUrl': photoUrl,
+      'phoneNumber': phoneNumber ?? "",
+      'photoUrl': photoUrl ?? "",
+      'postCount': 0,
+      'followersCount': 0,
+      'followingCount': 0,
+      'bio': "",
+      'likes': "",
     });
   }
 
-  static void updateUser(String userId) {}
+  static void updateUser(String userId) {
+    FirebaseContants.usersCollection.doc(userId).update({
+      'updatedAt': DateTime.now(),
+    });
+  }
 }

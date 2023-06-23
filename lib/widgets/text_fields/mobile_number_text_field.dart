@@ -27,10 +27,10 @@ class _MobileNumberTextFieldState extends State<MobileNumberTextField> {
       inputFormatters: [
         FilteringTextInputFormatter.allow(
           RegExp(
-            r'^\+?\d*',
+            r'^\+\d{12}$',
           ),
         ),
-        LengthLimitingTextInputFormatter(11),
+        LengthLimitingTextInputFormatter(13),
       ],
       validator: widget.validator ?? (value) => null,
       decoration: InputDecoration(
@@ -51,13 +51,15 @@ class _MobileNumberTextFieldState extends State<MobileNumberTextField> {
         hintText: "Enter Mobile Number",
         border: InputBorder.none,
         prefixIcon: CountryCodePicker(
-          initialSelection: 'HK',
+          initialSelection: 'PK',
           showCountryOnly: true,
           padding: const EdgeInsets.symmetric(horizontal: 8),
           showOnlyCountryWhenClosed: true,
           alignLeft: false,
           hideMainText: true,
-          onInit: (value) {},
+          onInit: (value) {
+            widget.controller.text = value!.dialCode.toString();
+          },
           onChanged: (value) =>
               widget.controller.text = value.dialCode.toString(),
         ),

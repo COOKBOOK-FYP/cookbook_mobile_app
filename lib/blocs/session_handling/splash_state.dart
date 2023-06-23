@@ -5,7 +5,10 @@ abstract class SessionHandlingState {}
 
 class SessionHandlingInitial extends SessionHandlingState {}
 
-class SessionHandlingHomeScreen extends SessionHandlingState {}
+class SessionHandlingHomeScreen extends SessionHandlingState {
+  final User? user;
+  SessionHandlingHomeScreen({this.user});
+}
 
 class SessionHandlingLoginScreen extends SessionHandlingState {}
 

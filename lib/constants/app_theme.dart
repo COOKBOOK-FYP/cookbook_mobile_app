@@ -23,7 +23,7 @@ class AppTheme {
         fontFamily: AppFonts.robotoMonoRegular,
       ),
       systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarColor: AppColors.appBlackColor,
+        statusBarColor: AppColors.transparentColor,
         statusBarBrightness: Brightness.dark,
       ),
     ),

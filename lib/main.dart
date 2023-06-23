@@ -1,7 +1,9 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
+import 'package:cookbook/blocs/Users/user_bloc.dart';
 import 'package:cookbook/blocs/session_handling/splash_cubit.dart';
 import 'package:cookbook/constants/app_theme.dart';
 import 'package:cookbook/constants/bloc_provider.dart';
+import 'package:cookbook/models/User/user.dart';
 import 'package:cookbook/screens/authentication/splash/splash_screen.dart';
 import 'package:cookbook/screens/error/error_screen.dart';
 import 'package:cookbook/screens/main-tabs-screen/main_tabs_screen.dart';
@@ -17,9 +19,8 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
 
   runApp(
     MaterialApp(
@@ -56,6 +57,17 @@ class _MyAppState extends State<MyApp> {
                 home: BlocBuilder<SessionHandlingCubit, SessionHandlingState>(
                   builder: (context, state) {
                     if (state is SessionHandlingHomeScreen) {
+                      BlocProvider.of<UserBloc>(context).add(
+                        UserCreateEvent(
+                          user: UserModel(
+                            displayName: state.user?.displayName.toString(),
+                            email: state.user?.email.toString(),
+                            // phoneNumber: state.user?.phoneNumber.toString(),
+                            uid: state.user?.uid.toString(),
+                            photoURL: state.user?.photoURL.toString(),
+                          ),
+                        ),
+                      );
                       return MainTabsScreen();
                     } else if (state is SessionHandlingLoginScreen) {
                       return SplashScreen();
