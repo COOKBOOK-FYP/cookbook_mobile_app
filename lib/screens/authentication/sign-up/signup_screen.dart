@@ -9,7 +9,6 @@ import 'package:cookbook/global/utils/app_navigator.dart';
 import 'package:cookbook/screens/authentication/sign-up/signup_completed_screen.dart';
 import 'package:cookbook/widgets/buttons/primary_button_widget.dart';
 import 'package:cookbook/widgets/text/primary_text_widget.dart';
-import 'package:cookbook/widgets/text_fields/mobile_number_text_field.dart';
 import 'package:cookbook/widgets/text_fields/password_text_field_widget.dart';
 import 'package:cookbook/widgets/text_fields/text_field_widget.dart';
 import 'package:email_validator/email_validator.dart';
@@ -196,16 +195,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         SizedBox(
                           height: 20.h,
                         ),
-                        MobileNumberTextField(
+                        // MobileNumberTextField(
+                        //   controller: _phoneNumberController,
+                        //   validator: (val) {
+                        //     if (val!.isEmpty) {
+                        //       return "Please enter phone number";
+                        //     } else if (val.length > 13) {
+                        //       return "Password length should be equal to 11";
+                        //     }
+                        //     return null;
+                        //   },
+                        // ),
+                        TextFieldWidget(
                           controller: _phoneNumberController,
-                          validator: (val) {
-                            if (val!.isEmpty) {
-                              return "Please enter phone number";
-                            } else if (val.length > 13) {
-                              return "Password length should be equal to 11";
-                            }
-                            return null;
-                          },
+                          prefixIcon: Ionicons.phone_portrait_outline,
+                          label: AppText.phoneNumberText,
                         ),
                         SizedBox(
                           height: 20.h,

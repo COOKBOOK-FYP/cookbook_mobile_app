@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:cookbook/constants/app_texts.dart';
 import 'package:cookbook/controllers/auth/auth_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,8 +51,6 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
               email: event.email,
               password: event.password,
             );
-            print(
-                "User created with uid: ${userCred.user!.uid}\nemail: ${event.email}\n fullname: ${event.firstName} ${event.lastName}");
             await AuthController.createUser(
               userCred.user!.uid,
               email: event.email,
@@ -59,6 +58,18 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
               phoneNumber: event.phoneNumber,
             );
             emit(SignupStateSuccess());
+          } on FirebaseAuthException catch (e) {
+            if (e.code == 'invalid-email') {
+              emit(SignupStateFailed(message: AppText.invalidEmailText));
+            } else if (e.code == 'email-already-in-use') {
+              emit(SignupStateFailed(message: AppText.emailIsAlreadyInUseText));
+            } else if (e.code == 'weak-password') {
+              emit(SignupStateFailed(message: AppText.weakPasswordText));
+            } else {
+              emit(SignupStateFailed(
+                message: '${AppText.unexpectedLoginErrorText}: ${e.message}',
+              ));
+            }
           } catch (error) {
             emit(SignupStateFailed(message: error.toString()));
           }

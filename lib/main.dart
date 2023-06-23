@@ -1,12 +1,10 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
-import 'package:cookbook/blocs/Users/user_bloc.dart';
 import 'package:cookbook/blocs/session_handling/splash_cubit.dart';
 import 'package:cookbook/constants/app_theme.dart';
 import 'package:cookbook/constants/bloc_provider.dart';
-import 'package:cookbook/models/User/user.dart';
-import 'package:cookbook/screens/authentication/sign-up/signup_completed_screen.dart';
 import 'package:cookbook/screens/authentication/splash/splash_screen.dart';
 import 'package:cookbook/screens/error/error_screen.dart';
+import 'package:cookbook/screens/main-tabs-screen/main_tabs_screen.dart';
 import 'package:cookbook/screens/onboarding/onboarding_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -57,18 +55,7 @@ class _MyAppState extends State<MyApp> {
                 home: BlocBuilder<SessionHandlingCubit, SessionHandlingState>(
                   builder: (context, state) {
                     if (state is SessionHandlingHomeScreen) {
-                      BlocProvider.of<UserBloc>(context).add(
-                        UserCreateEvent(
-                          user: UserModel(
-                            displayName: state.user?.displayName.toString(),
-                            email: state.user?.email.toString(),
-                            // phoneNumber: state.user?.phoneNumber.toString(),
-                            uid: state.user?.uid.toString(),
-                            photoURL: state.user?.photoURL.toString(),
-                          ),
-                        ),
-                      );
-                      return SignupCompletedScreen();
+                      return MainTabsScreen();
                     } else if (state is SessionHandlingLoginScreen) {
                       return SplashScreen();
                     } else if (state is SessionHandlingOnBoarding) {

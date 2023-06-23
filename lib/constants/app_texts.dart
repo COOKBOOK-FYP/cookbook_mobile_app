@@ -24,6 +24,17 @@ class AppText {
   // Account Screen
   static const String signOutText = "Sign Out";
 
+  // Exceptions
+  static const String invalidEmailText = "Invalid Email Address";
+  static const String invalidPasswordText = "Invalid Password";
+  static const String userNotFoundText = "User not found";
+  static const String tooManyLoginsText =
+      "Too many login attempts. Please try again later.";
+  static const String unexpectedLoginErrorText = "Unexpected login error";
+  static const String emailIsAlreadyInUseText =
+      "Email address is already in use";
+  static const String weakPasswordText = "Password is too weak";
+
   // Main Tabs Screen
   static const String homeText = "Home";
   static const String tab2 = "tab2";

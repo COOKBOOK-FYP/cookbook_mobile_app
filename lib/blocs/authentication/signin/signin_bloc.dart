@@ -1,3 +1,4 @@
+import 'package:cookbook/constants/app_texts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -46,8 +47,23 @@ class SigninBloc extends Bloc<SigninEvent, SigninState> {
               password: event.password,
             );
             emit(SigninStateSuccess(userCred));
-          } catch (error) {
-            emit(SigninStateFailed(message: error.toString()));
+          } on FirebaseAuthException catch (e) {
+            if (e.code == 'invalid-email') {
+              emit(SigninStateFailed(message: AppText.invalidEmailText));
+              // Handle the invalid email address error here
+            } else if (e.code == 'wrong-password') {
+              emit(SigninStateFailed(message: AppText.invalidPasswordText));
+            } else if (e.code == 'user-not-found') {
+              emit(SigninStateFailed(message: AppText.userNotFoundText));
+            } else if (e.code == 'too-many-requests') {
+              emit(SigninStateFailed(message: AppText.tooManyLoginsText));
+            } else {
+              emit(SigninStateFailed(
+                message: "${AppText.unexpectedLoginErrorText}: ${e.message}",
+              ));
+            }
+          } catch (e) {
+            emit(SigninStateFailed(message: "Unexpected login error: $e"));
           }
         });
       }

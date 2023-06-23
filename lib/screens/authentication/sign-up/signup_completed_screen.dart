@@ -1,3 +1,4 @@
+import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_images.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
 import 'package:cookbook/screens/main-tabs-screen/main_tabs_screen.dart';
@@ -27,10 +28,20 @@ class _SignupCompletedScreenState extends State<SignupCompletedScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Lottie.asset(
-        LottieAssets.accountCreated,
-        repeat: false,
-      ).box.makeCentered(),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Lottie.asset(
+            LottieAssets.accountCreated,
+            repeat: false,
+          ),
+          "Account".text.xl2.bold.color(AppColors.primaryColor).make(),
+          "Created".text.xl2.bold.color(AppColors.secondaryColor).make(),
+          20.heightBox,
+          "Your account has been created successfully.".text.xl.make(),
+        ],
+      ).box.p20.makeCentered(),
     );
   }
 }

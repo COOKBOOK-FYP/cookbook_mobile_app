@@ -12,7 +12,7 @@ class AppTheme {
     ),
     appBarTheme: AppBarTheme(
       elevation: 0,
-      color: AppColors.appWhiteColor,
+      color: AppColors.backgroundColor,
       actionsIconTheme: IconThemeData(
         color: AppColors.appBlackColor,
       ),
