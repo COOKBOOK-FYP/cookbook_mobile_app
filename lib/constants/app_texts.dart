@@ -21,6 +21,9 @@ class AppText {
   static const String continueWithText = "Continue with";
   static const String alreadyHaveAnAccountText = "Already have an account?";
 
+  // Account Screen
+  static const String signOutText = "Sign Out";
+
   // Main Tabs Screen
   static const String homeText = "Home";
   static const String tab2 = "tab2";

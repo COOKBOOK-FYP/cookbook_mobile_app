@@ -4,9 +4,9 @@ import 'package:cookbook/blocs/session_handling/splash_cubit.dart';
 import 'package:cookbook/constants/app_theme.dart';
 import 'package:cookbook/constants/bloc_provider.dart';
 import 'package:cookbook/models/User/user.dart';
+import 'package:cookbook/screens/authentication/sign-up/signup_completed_screen.dart';
 import 'package:cookbook/screens/authentication/splash/splash_screen.dart';
 import 'package:cookbook/screens/error/error_screen.dart';
-import 'package:cookbook/screens/main-tabs-screen/main_tabs_screen.dart';
 import 'package:cookbook/screens/onboarding/onboarding_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +68,7 @@ class _MyAppState extends State<MyApp> {
                           ),
                         ),
                       );
-                      return MainTabsScreen();
+                      return SignupCompletedScreen();
                     } else if (state is SessionHandlingLoginScreen) {
                       return SplashScreen();
                     } else if (state is SessionHandlingOnBoarding) {

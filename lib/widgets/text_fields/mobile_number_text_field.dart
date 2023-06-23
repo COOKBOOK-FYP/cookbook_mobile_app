@@ -1,7 +1,6 @@
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class MobileNumberTextField extends StatefulWidget {
   const MobileNumberTextField({
@@ -24,14 +23,6 @@ class _MobileNumberTextFieldState extends State<MobileNumberTextField> {
       controller: widget.controller,
       style: const TextStyle(fontSize: 18),
       keyboardType: TextInputType.number,
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(
-          RegExp(
-            r'^\+\d{12}$',
-          ),
-        ),
-        LengthLimitingTextInputFormatter(13),
-      ],
       validator: widget.validator ?? (value) => null,
       decoration: InputDecoration(
         errorBorder: OutlineInputBorder(

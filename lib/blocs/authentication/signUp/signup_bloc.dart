@@ -50,6 +50,8 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
               email: event.email,
               password: event.password,
             );
+            print(
+                "User created with uid: ${userCred.user!.uid}\nemail: ${event.email}\n fullname: ${event.firstName} ${event.lastName}");
             await AuthController.createUser(
               userCred.user!.uid,
               email: event.email,

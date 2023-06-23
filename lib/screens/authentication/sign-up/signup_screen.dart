@@ -6,7 +6,7 @@ import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/constants/app_images.dart';
 import 'package:cookbook/constants/app_texts.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
-import 'package:cookbook/screens/main-tabs-screen/main_tabs_screen.dart';
+import 'package:cookbook/screens/authentication/sign-up/signup_completed_screen.dart';
 import 'package:cookbook/widgets/buttons/primary_button_widget.dart';
 import 'package:cookbook/widgets/text/primary_text_widget.dart';
 import 'package:cookbook/widgets/text_fields/mobile_number_text_field.dart';
@@ -94,7 +94,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             if (state is SignupStateSuccess) {
               AppNavigator.replaceTo(
                 context: context,
-                screen: const MainTabsScreen(),
+                screen: const SignupCompletedScreen(),
               );
             }
           },
@@ -201,7 +201,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           validator: (val) {
                             if (val!.isEmpty) {
                               return "Please enter phone number";
-                            } else if (val.length > 11) {
+                            } else if (val.length > 13) {
                               return "Password length should be equal to 11";
                             }
                             return null;

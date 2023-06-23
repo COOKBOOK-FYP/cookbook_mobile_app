@@ -1,3 +1,4 @@
+import 'package:cookbook/constants/app_texts.dart';
 import 'package:cookbook/widgets/appbar/primary_appbar_widget.dart';
 import 'package:cookbook/widgets/buttons/secondary_button_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,7 +17,7 @@ class AccountScreen extends StatelessWidget {
             Column(
               children: [
                 SecondaryButtonWidget(
-                  caption: "Log out",
+                  caption: AppText.signOutText,
                   onPressed: () {
                     FirebaseAuth.instance.signOut();
                   },
