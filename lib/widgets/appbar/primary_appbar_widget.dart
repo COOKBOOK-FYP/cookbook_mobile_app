@@ -1,9 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/constants/firebase_constants.dart';
+import 'package:cookbook/widgets/buttons/round_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ionicons/ionicons.dart';
 
 class PrimaryAppbarWidget extends StatefulWidget
     implements PreferredSizeWidget {
@@ -57,7 +60,30 @@ class _PrimaryAppbarWidgetState extends State<PrimaryAppbarWidget> {
                   ],
                 ),
               ),
-              actions: widget.actions ?? [],
+              actions: [
+                RoundIconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Ionicons.search_outline,
+                  ),
+                ),
+                RoundIconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Ionicons.settings_outline,
+                  ),
+                ),
+                RoundIconButton(
+                  onPressed: () {},
+                  icon: state.userDocument['photoUrl'] != ""
+                      ? CachedNetworkImage(
+                          imageUrl: state.userDocument['photoUrl'].toString(),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Ionicons.person_outline),
+                        )
+                      : const Icon(Ionicons.person_outline),
+                ),
+              ],
             );
           }
           return Container();
