@@ -1,4 +1,3 @@
-import 'package:cookbook/blocs/Users/user_bloc.dart';
 import 'package:cookbook/blocs/authentication/google/google_signin_bloc.dart';
 import 'package:cookbook/blocs/authentication/signUp/signup_bloc.dart';
 import 'package:cookbook/blocs/authentication/signin/signin_bloc.dart';
@@ -11,7 +10,6 @@ class BlocProviders {
     BlocProvider<SessionHandlingCubit>(
         create: (context) => SessionHandlingCubit()..initliazeRoute()),
     BlocProvider<GoogleSigninBloc>(create: (context) => GoogleSigninBloc()),
-    BlocProvider<UserBloc>(create: (context) => UserBloc()),
     BlocProvider<SigninBloc>(create: (context) => SigninBloc()),
     BlocProvider<SignupBloc>(create: (context) => SignupBloc()),
     BlocProvider<UserCollectionBloc>(create: (context) => UserCollectionBloc()),

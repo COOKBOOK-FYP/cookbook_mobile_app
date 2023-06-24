@@ -5,14 +5,15 @@ class UserModel {
   String? email;
   String? photoURL;
   String? uid;
-  String? likes;
-  String? postCount;
+  int? likes;
+  int? postCount;
   String? bio;
-  String? username;
   Timestamp? createdAt;
   Timestamp? updatedAt;
   String? phoneNumber;
   String? address;
+  int? followersCount;
+  int? followingCount;
 
   UserModel({
     this.displayName,
@@ -22,7 +23,6 @@ class UserModel {
     this.likes,
     this.postCount,
     this.bio,
-    this.username,
     this.createdAt,
     this.updatedAt,
     this.phoneNumber,
@@ -37,7 +37,6 @@ class UserModel {
     likes = json['likes'];
     postCount = json['postCount'];
     bio = json['bio'];
-    username = json['username'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     phoneNumber = json['phoneNumber'];
@@ -53,7 +52,6 @@ class UserModel {
     data['likes'] = likes;
     data['postCount'] = postCount;
     data['bio'] = bio;
-    data['username'] = username;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     data['phoneNumber'] = phoneNumber;

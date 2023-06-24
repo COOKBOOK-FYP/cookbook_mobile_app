@@ -210,7 +210,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           controller: _phoneNumberController,
                           prefixIcon: Ionicons.phone_portrait_outline,
                           label: AppText.phoneNumberText,
+                          validator: (number) {
+                            if (number!.isEmpty) {
+                              return "Please enter phone number";
+                            } else if (!RegExp(r'^\+?[1-9]\d{1,14}$')
+                                .hasMatch(number)) {
+                              return "Please enter valid phone number";
+                            }
+                            return null;
+                          },
                         ),
+
                         SizedBox(
                           height: 20.h,
                         ),
