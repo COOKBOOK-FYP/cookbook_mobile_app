@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cookbook/controllers/Firebase/firebase_controller.dart';
 import 'package:cookbook/models/User/user_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,7 +44,17 @@ class UserCollectionBloc
         userModel = UserModel.fromJson(userDocument.data()!);
         emit(UserCollectionLoadedState(userModel));
       } catch (error) {
-        emit(UserCollectionErrorState(error.toString()));
+        if (error is FirebaseException) {
+          if (error.message!.contains('Failed host lookup')) {
+            emit(UserCollectionErrorState('No internet connection'));
+          }
+        } else if (error is SocketException) {
+          emit(UserCollectionErrorState('No internet connection'));
+        } else if (error is HttpException) {
+          emit(UserCollectionErrorState('No service found'));
+        } else {
+          emit(UserCollectionErrorState(error.toString()));
+        }
       }
     });
   }

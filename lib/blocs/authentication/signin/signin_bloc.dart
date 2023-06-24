@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cookbook/constants/app_texts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -62,8 +64,18 @@ class SigninBloc extends Bloc<SigninEvent, SigninState> {
                 message: "${AppText.unexpectedLoginErrorText}: ${e.message}",
               ));
             }
-          } catch (e) {
-            emit(SigninStateFailed(message: "Unexpected login error: $e"));
+          } catch (error) {
+            if (error is FirebaseException) {
+              if (error.message!.contains('Failed host lookup')) {
+                emit(SigninStateFailed(message: 'No internet connection'));
+              }
+            } else if (error is SocketException) {
+              emit(SigninStateFailed(message: 'No internet connection'));
+            } else if (error is HttpException) {
+              emit(SigninStateFailed(message: 'No service found'));
+            } else {
+              emit(SigninStateFailed(message: error.toString()));
+            }
           }
         });
       }

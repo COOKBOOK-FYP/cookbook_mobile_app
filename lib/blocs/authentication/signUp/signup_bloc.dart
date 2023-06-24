@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:io';
+
 import 'package:cookbook/constants/app_texts.dart';
 import 'package:cookbook/controllers/Auth/auth_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -71,7 +73,17 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
               ));
             }
           } catch (error) {
-            emit(SignupStateFailed(message: error.toString()));
+            if (error is FirebaseException) {
+              if (error.message!.contains('Failed host lookup')) {
+                emit(SignupStateFailed(message: 'No internet connection'));
+              }
+            } else if (error is SocketException) {
+              emit(SignupStateFailed(message: 'No internet connection'));
+            } else if (error is HttpException) {
+              emit(SignupStateFailed(message: 'No service found'));
+            } else {
+              emit(SignupStateFailed(message: error.toString()));
+            }
           }
         });
       }
