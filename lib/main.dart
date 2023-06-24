@@ -1,7 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
 import 'package:cookbook/blocs/session_handling/splash_cubit.dart';
-import 'package:cookbook/constants/app_theme.dart';
-import 'package:cookbook/constants/bloc_provider.dart';
+import 'package:cookbook/global/themes/app_theme.dart';
+import 'package:cookbook/providers/bloc_provider.dart';
 import 'package:cookbook/screens/authentication/splash/splash_screen.dart';
 import 'package:cookbook/screens/error/error_screen.dart';
 import 'package:cookbook/screens/main-tabs-screen/main_tabs_screen.dart';

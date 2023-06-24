@@ -3,6 +3,7 @@ import 'package:cookbook/blocs/authentication/google/google_signin_bloc.dart';
 import 'package:cookbook/blocs/authentication/signUp/signup_bloc.dart';
 import 'package:cookbook/blocs/authentication/signin/signin_bloc.dart';
 import 'package:cookbook/blocs/session_handling/splash_cubit.dart';
+import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BlocProviders {
@@ -12,6 +13,7 @@ class BlocProviders {
     BlocProvider<GoogleSigninBloc>(create: (context) => GoogleSigninBloc()),
     BlocProvider<UserBloc>(create: (context) => UserBloc()),
     BlocProvider<SigninBloc>(create: (context) => SigninBloc()),
-    BlocProvider<SignupBloc>(create: (context) => SignupBloc())
+    BlocProvider<SignupBloc>(create: (context) => SignupBloc()),
+    BlocProvider<UserCollectionBloc>(create: (context) => UserCollectionBloc()),
   ];
 }

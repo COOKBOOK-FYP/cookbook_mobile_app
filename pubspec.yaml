@@ -135,3 +135,60 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family: Roboto_Mono_Bold
+      fonts:
+        - asset: assets/fonts/roboto_mono/RobotoMono-Bold.ttf
+    - family: Roboto_Mono_Bold_Italic
+      fonts:
+        - asset: assets/fonts/roboto_mono/RobotoMono-BoldItalic.ttf
+    - family: Roboto_Mono_Italic
+      fonts:
+        - asset: assets/fonts/roboto_mono/RobotoMono-Italic.ttf
+    - family: Roboto_Mono_Light
+      fonts:
+        - asset: assets/fonts/roboto_mono/RobotoMono-Light.ttf
+    - family: Roboto_Mono_LightItalic
+      fonts:
+        - asset: assets/fonts/roboto_mono/RobotoMono-LightItalic.ttf
+    - family: Roboto_Mono_Regular
+      fonts:
+        - asset: assets/fonts/roboto_mono/RobotoMono-Regular.ttf
+    - family: Roboto_Mono_Medium
+      fonts:
+        - asset: assets/fonts/roboto_mono/RobotoMono-Medium.ttf
+
+    - family: Roboto_Black
+      fonts:
+        - asset: assets/fonts/roboto/Roboto-Black.ttf
+    - family: Roboto_Light
+      fonts:
+        - asset: assets/fonts/roboto/Roboto-Light.ttf
+    - family: Roboto_Bold
+      fonts:
+        - asset: assets/fonts/roboto/Roboto-Bold.ttf
+    - family: Roboto_Medium
+      fonts:
+        - asset: assets/fonts/roboto/Roboto-Medium.ttf
+    - family: Roboto_Regular
+      fonts:
+        - asset: assets/fonts/roboto/Roboto-Regular.ttf
+    - family: Roboto_Thin
+      fonts:
+        - asset: assets/fonts/roboto/Roboto-Thin.ttf
+    
+    - family: OpenSans-Bold
+      fonts:
+        - asset: assets/fonts/openSans/OpenSans-Bold.ttf
+    - family: OpenSans-BoldItalic
+      fonts:
+        - asset: assets/fonts/openSans/OpenSans-BoldItalic.ttf
+    - family: OpenSans-Light
+      fonts:
+        - asset: assets/fonts/openSans/OpenSans-Light.ttf
+    - family: OpenSans-Medium
+      fonts:
+        - asset: assets/fonts/openSans/OpenSans-Medium.ttf
+    - family: OpenSans-Regular
+      fonts:
+        - asset: assets/fonts/openSans/OpenSans-Regular.ttf

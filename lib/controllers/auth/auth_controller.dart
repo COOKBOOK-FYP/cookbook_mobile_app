@@ -24,10 +24,11 @@ class AuthController {
         'phoneNumber': phoneNumber,
         'photoUrl': photoUrl,
         'postCount': postCount,
-        'followersCount': followersCount,
-        'followingCount': followingCount,
-        'bio': bio,
+        'followersCount': followersCount ?? 0,
+        'followingCount': followingCount ?? 0,
+        'bio': bio ?? 'Hey there! I am using CookBook',
         'likes': likes,
+        'address': '',
       },
     );
   }

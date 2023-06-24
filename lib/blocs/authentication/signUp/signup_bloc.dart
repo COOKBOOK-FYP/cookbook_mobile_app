@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:cookbook/constants/app_texts.dart';
-import 'package:cookbook/controllers/auth/auth_controller.dart';
+import 'package:cookbook/controllers/Auth/auth_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nb_utils/nb_utils.dart';

@@ -5,11 +5,12 @@ import 'package:flutter/services.dart';
 
 class AppTheme {
   static var lightTheme = ThemeData(
-    // primarySwatch: Colors.red,
+    primarySwatch: Colors.red,
     colorScheme: ColorScheme.fromSwatch().copyWith(
       secondary: AppColors.secondaryColor,
       primary: AppColors.primaryColor,
     ),
+    scaffoldBackgroundColor: AppColors.backgroundColor,
     appBarTheme: AppBarTheme(
       elevation: 0,
       color: AppColors.backgroundColor,
@@ -24,7 +25,8 @@ class AppTheme {
       ),
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: AppColors.transparentColor,
-        statusBarBrightness: Brightness.dark,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
       ),
     ),
   );
@@ -35,6 +37,7 @@ class AppTheme {
       secondary: AppColors.secondaryColor,
       primary: AppColors.primaryColor,
     ),
+    scaffoldBackgroundColor: AppColors.appBlackColor,
     appBarTheme: AppBarTheme(
       elevation: 0,
       color: AppColors.appBlackColor,
@@ -46,6 +49,8 @@ class AppTheme {
       ),
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: AppColors.transparentColor,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
       ),
     ),
   );

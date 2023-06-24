@@ -1,11 +1,14 @@
-import 'package:cookbook/blocs/Users/user_bloc.dart';
+import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
+import 'package:cookbook/constants/app_fonts.dart';
+import 'package:cookbook/constants/firebase_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PrimaryAppbarWidget extends StatefulWidget
     implements PreferredSizeWidget {
-  const PrimaryAppbarWidget({Key? key}) : super(key: key);
+  const PrimaryAppbarWidget({Key? key, this.actions}) : super(key: key);
+  final List<Widget>? actions;
 
   @override
   State<PrimaryAppbarWidget> createState() => _PrimaryAppbarWidgetState();
@@ -15,10 +18,11 @@ class PrimaryAppbarWidget extends StatefulWidget
 }
 
 class _PrimaryAppbarWidgetState extends State<PrimaryAppbarWidget> {
-  late UserBloc bloc;
-
   @override
   void initState() {
+    context
+        .read<UserCollectionBloc>()
+        .add(UserCollectionGetDataEvent(FirebaseContants.uid));
     super.initState();
   }
 
@@ -26,32 +30,37 @@ class _PrimaryAppbarWidgetState extends State<PrimaryAppbarWidget> {
   Widget build(BuildContext context) {
     return PreferredSize(
       preferredSize: const Size.fromHeight(60.0),
-      child: BlocBuilder<UserBloc, UserState>(
+      child: BlocBuilder<UserCollectionBloc, UserCollectionState>(
         builder: (context, state) {
-          return AppBar(
-            title: RichText(
-              text: TextSpan(
-                text: "Cook",
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: 36,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: "RobotoMono",
-                ),
-                children: [
-                  TextSpan(
-                    text: "Book",
-                    style: TextStyle(
-                      color: AppColors.secondaryColor,
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
+          if (state is UserCollectionLoadedState) {
+            return AppBar(
+              automaticallyImplyLeading: false,
+              title: RichText(
+                text: TextSpan(
+                  text: "Cook",
+                  style: TextStyle(
+                    color: AppColors.primaryColor,
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: AppFonts.openSansBold,
                   ),
-                ],
+                  children: [
+                    TextSpan(
+                      text: "Book",
+                      style: TextStyle(
+                        color: AppColors.secondaryColor,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: AppFonts.robotoLight,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            actions: [],
-          );
+              actions: widget.actions ?? [],
+            );
+          }
+          return Container();
         },
       ),
     );

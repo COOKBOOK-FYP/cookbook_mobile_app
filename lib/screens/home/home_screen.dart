@@ -1,5 +1,8 @@
+import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
+import 'package:cookbook/constants/firebase_constants.dart';
 import 'package:cookbook/widgets/appbar/primary_appbar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -11,13 +14,16 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
+    context
+        .read<UserCollectionBloc>()
+        .add(UserCollectionGetDataEvent(FirebaseContants.uid));
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const PrimaryAppbarWidget(),
+    return const Scaffold(
+      appBar: PrimaryAppbarWidget(),
     );
   }
 }

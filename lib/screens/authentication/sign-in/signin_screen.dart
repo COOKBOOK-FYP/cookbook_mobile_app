@@ -212,6 +212,9 @@ class _SignInScreenState extends State<SignInScreen> {
                     caption: AppText.signinText,
                     onPressed: () async {
                       if (formGlobalKey.currentState!.validate()) {
+                        // hide the keyboard
+                        FocusScope.of(context).unfocus();
+                        // call the signin bloc
                         signinBloc.add(
                           SigninWithCredentialsEvent(
                             _emailController.text,
@@ -278,7 +281,12 @@ class _SignInScreenState extends State<SignInScreen> {
               //         width: 5.w,
               //       ),
               //       GestureDetector(
-              //         onTap: () {},
+              //         onTap: () {
+              //           AppNavigator.replaceTo(
+              //             context: context,
+              //             screen: SignUpScreen(),
+              //           );
+              //         },
               //         child: PrimaryTextWidget(
               //           text: AppText.signupText,
               //           fontSize: 14.sp,

@@ -39,7 +39,7 @@ class _SignupCompletedScreenState extends State<SignupCompletedScreen> {
           "Account".text.xl2.bold.color(AppColors.primaryColor).make(),
           "Created".text.xl2.bold.color(AppColors.secondaryColor).make(),
           20.heightBox,
-          "Your account has been created successfully.".text.xl.make(),
+          "Your account has been created successfully.".text.center.xl.make(),
         ],
       ).box.p20.makeCentered(),
     );

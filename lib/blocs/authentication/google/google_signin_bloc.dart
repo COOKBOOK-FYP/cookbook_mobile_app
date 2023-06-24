@@ -1,4 +1,5 @@
 import 'package:cookbook/constants/firebase_constants.dart';
+import 'package:cookbook/controllers/Auth/auth_controller.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Events
@@ -27,7 +28,14 @@ class GoogleSigninBloc extends Bloc<GoogleSigninEvent, GoogleSigninState> {
       if (event is GoogleSigninButtonPressedEvent) {
         emit(GoogleSigninLoading());
         try {
-          await FirebaseContants.googleSignIn.signIn();
+          final account = await FirebaseContants.googleSignIn.signIn();
+
+          await AuthController.createUser(
+            account!.id,
+            email: account.email,
+            displayName: account.displayName,
+            photoUrl: account.photoUrl,
+          );
         } catch (error) {
           emit(GoogleSigninFailed(error.toString()));
         }
