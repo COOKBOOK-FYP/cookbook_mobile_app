@@ -18,5 +18,6 @@ abstract class AppColors {
   static var appWhiteColor = Colors.white;
   static var appBlackColor = Colors.black;
   static var appGreyColor = Colors.grey.shade300;
+  static var appDarkGreyColor = Colors.grey.shade800;
   static var appRedColor = Colors.red;
 }

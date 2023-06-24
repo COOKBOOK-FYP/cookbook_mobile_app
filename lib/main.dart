@@ -51,7 +51,8 @@ class _MyAppState extends State<MyApp> {
                 debugShowCheckedModeBanner: false,
                 title: 'Cookbook',
                 theme: AppTheme.lightTheme,
-                darkTheme: AppTheme.darkTheme,
+                // darkTheme: AppTheme.darkTheme,
+                // themeMode: ThemeMode.system,
                 home: BlocBuilder<SessionHandlingCubit, SessionHandlingState>(
                   builder: (context, state) {
                     if (state is SessionHandlingHomeScreen) {

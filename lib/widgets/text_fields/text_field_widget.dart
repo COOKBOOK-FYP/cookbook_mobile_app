@@ -13,6 +13,7 @@ class TextFieldWidget extends StatefulWidget {
     this.keyboardType,
     this.validator,
     this.readOnly,
+    this.nextFocusNode,
   }) : super(key: key);
 
   final TextEditingController controller;
@@ -23,6 +24,7 @@ class TextFieldWidget extends StatefulWidget {
   final TextInputType? keyboardType;
   final bool? readOnly;
   final String? Function(String?)? validator;
+  final FocusNode? nextFocusNode;
 
   @override
   State<TextFieldWidget> createState() => _TextFieldWidgetState();
@@ -35,23 +37,28 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
       readOnly: widget.readOnly ?? false,
       controller: widget.controller,
       style: const TextStyle(fontSize: 18),
-      textInputAction: widget.textInputAction ?? TextInputAction.done,
+      textInputAction: widget.textInputAction ?? TextInputAction.next,
       keyboardType: widget.keyboardType ?? TextInputType.text,
+      onFieldSubmitted: (value) => widget.nextFocusNode?.requestFocus(),
       validator: widget.validator ?? (value) => null,
       decoration: InputDecoration(
         errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(20),
             borderSide: BorderSide.none),
         focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(20),
             borderSide: BorderSide.none),
         focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(20),
             borderSide: BorderSide.none),
         enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(20),
             borderSide: BorderSide.none),
-        fillColor: AppColors.appGreyColor,
+        // how to check if the theme is dark or light
+
+        fillColor: Theme.of(context).brightness == Brightness.dark
+            ? AppColors.appDarkGreyColor
+            : AppColors.appGreyColor.withOpacity(0.5),
         filled: true,
         hintText: widget.label ?? "",
         prefixIcon: Icon(

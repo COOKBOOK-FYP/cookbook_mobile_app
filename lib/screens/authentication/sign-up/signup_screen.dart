@@ -29,12 +29,19 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final formGlobalKey = GlobalKey<FormState>();
 
+// controllers for the text fields
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
 
+  // focus nodes for the text fields
+  final FocusNode _firstNameFocusNode = FocusNode();
+  final FocusNode _lastNameFocusNode = FocusNode();
+  final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
+  final FocusNode _phoneNumberFocusNode = FocusNode();
   BuildContext? dialogueContext;
 
   @override
@@ -50,6 +57,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     _phoneNumberController.dispose();
+
+    // dispose all the focus nodes
+    _firstNameFocusNode.dispose();
+    _lastNameFocusNode.dispose();
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    _phoneNumberFocusNode.dispose();
 
     // close the dialogue context
     if (dialogueContext != null) {
@@ -151,6 +165,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       children: [
                         TextFieldWidget(
                           controller: _firstNameController,
+                          focusNode: _firstNameFocusNode,
+                          nextFocusNode: _lastNameFocusNode,
                           prefixIcon: Ionicons.person_outline,
                           label: AppText.firstNameText,
                           validator: (val) {
@@ -165,6 +181,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         TextFieldWidget(
                           controller: _lastNameController,
+                          focusNode: _lastNameFocusNode,
+                          nextFocusNode: _emailFocusNode,
                           prefixIcon: Ionicons.person_outline,
                           label: AppText.lastNameText,
                           validator: (val) {
@@ -179,6 +197,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         TextFieldWidget(
                           controller: _emailController,
+                          focusNode: _emailFocusNode,
+                          nextFocusNode: _phoneNumberFocusNode,
                           prefixIcon: Ionicons.mail_outline,
                           label: AppText.emailText,
                           validator: (val) {
@@ -208,6 +228,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         // ),
                         TextFieldWidget(
                           controller: _phoneNumberController,
+                          focusNode: _phoneNumberFocusNode,
+                          nextFocusNode: _passwordFocusNode,
                           prefixIcon: Ionicons.phone_portrait_outline,
                           label: AppText.phoneNumberText,
                           validator: (number) {
@@ -227,6 +249,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         PasswordTextFieldWidget(
                           controller: _passwordController,
                           prefixIcon: Ionicons.lock_closed_outline,
+                          focusNode: _passwordFocusNode,
                           label: AppText.passwordText,
                           validator: (val) {
                             if (val!.isEmpty) {
