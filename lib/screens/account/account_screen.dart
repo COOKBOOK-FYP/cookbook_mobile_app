@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
+import 'package:cookbook/screens/account/widgets/profile_text_widget.dart';
 import 'package:cookbook/widgets/appbar/primary_appbar_widget.dart';
 import 'package:cookbook/widgets/loading/loading_widget.dart';
 import 'package:flutter/material.dart';
@@ -67,23 +68,30 @@ class _AccountScreenState extends State<AccountScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                state.userDocument.displayName
-                                    .toString()
-                                    .text
-                                    .xl2
-                                    .bold
-                                    .color(Colors.black)
-                                    .make(),
+                                // state.userDocument.firstName
+                                //     .toString()
+                                //     .text
+                                //     .xl2
+                                //     .bold
+                                //     .color(Colors.black)
+                                //     .make(),
+                                ProfileTextWidget(
+                                  text1:
+                                      state.userDocument.firstName.toString(),
+                                  text2: state.userDocument.lastName.toString(),
+                                ),
                                 5.heightBox,
                                 state.userDocument.address
                                     .toString()
                                     .text
+                                    .size(18)
                                     .color(Colors.black)
                                     .make(),
-                                5.heightBox,
+                                10.heightBox,
                                 state.userDocument.bio
                                     .toString()
                                     .text
+                                    .size(15)
                                     .color(Colors.grey)
                                     .make(),
                               ],
@@ -91,7 +99,6 @@ class _AccountScreenState extends State<AccountScreen> {
                           ),
                         ],
                       ).box.make().wh(context.width(), context.height() * 0.25),
-                      const Divider(thickness: 3),
                     ],
                   ).box.make().p12(),
                 ],
