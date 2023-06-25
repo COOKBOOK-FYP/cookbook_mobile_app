@@ -67,29 +67,29 @@ class SessionHandlingCubit extends Cubit<SessionHandlingState> {
           }
         });
 
-        // FirebaseAuth.instance.idTokenChanges().listen((User? user) {
-        //   if (user == null) {
-        //     if (newUser != null) {
-        //       emit(SessionHandlingLoginScreen());
-        //     } else {
-        //       emit(SessionHandlingOnBoarding());
-        //     }
-        //   } else {
-        //     emit(SessionHandlingHomeScreen(user: user));
-        //   }
-        // });
+        FirebaseAuth.instance.idTokenChanges().listen((User? user) {
+          if (user == null) {
+            if (newUser != null) {
+              emit(SessionHandlingLoginScreen());
+            } else {
+              emit(SessionHandlingOnBoarding());
+            }
+          } else {
+            emit(SessionHandlingHomeScreen(user: user));
+          }
+        });
 
-        // FirebaseAuth.instance.userChanges().listen((User? user) {
-        //   if (user == null) {
-        //     if (newUser != null) {
-        //       emit(SessionHandlingLoginScreen());
-        //     } else {
-        //       emit(SessionHandlingOnBoarding());
-        //     }
-        //   } else {
-        //     emit(SessionHandlingHomeScreen(user: user));
-        //   }
-        // });
+        FirebaseAuth.instance.userChanges().listen((User? user) {
+          if (user == null) {
+            if (newUser != null) {
+              emit(SessionHandlingLoginScreen());
+            } else {
+              emit(SessionHandlingOnBoarding());
+            }
+          } else {
+            emit(SessionHandlingHomeScreen(user: user));
+          }
+        });
       } else {
         emit(SessionHandlingFailed());
       }

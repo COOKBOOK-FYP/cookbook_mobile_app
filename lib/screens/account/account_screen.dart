@@ -1,14 +1,27 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
-import 'package:cookbook/constants/app_texts.dart';
+import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/widgets/appbar/primary_appbar_widget.dart';
-import 'package:cookbook/widgets/buttons/secondary_button_widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cookbook/widgets/loading/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ionicons/ionicons.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class AccountScreen extends StatelessWidget {
+class AccountScreen extends StatefulWidget {
   const AccountScreen({Key? key}) : super(key: key);
+
+  @override
+  State<AccountScreen> createState() => _AccountScreenState();
+}
+
+class _AccountScreenState extends State<AccountScreen> {
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,32 +39,74 @@ class AccountScreen extends StatelessWidget {
                 children: [
                   Column(
                     children: [
-                      SecondaryButtonWidget(
-                        caption: AppText.signOutText,
-                        onPressed: () {
-                          FirebaseAuth.instance.signOut();
-                        },
-                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: CachedNetworkImage(
+                              imageUrl: state.userDocument.photoUrl.toString(),
+                              width: 250,
+                              height: 250,
+                              fit: BoxFit.contain,
+                              errorWidget: (context, url, error) => Icon(
+                                Ionicons.person_outline,
+                                color: AppColors.primaryColor,
+                                size: 50,
+                              ),
+                            )
+                                .box
+                                .color(AppColors.appGreyColor)
+                                .roundedFull
+                                .make(),
+                          ),
+                          10.widthBox,
+                          Expanded(
+                            flex: 3,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                state.userDocument.displayName
+                                    .toString()
+                                    .text
+                                    .xl2
+                                    .bold
+                                    .color(Colors.black)
+                                    .make(),
+                                5.heightBox,
+                                state.userDocument.address
+                                    .toString()
+                                    .text
+                                    .color(Colors.black)
+                                    .make(),
+                                5.heightBox,
+                                state.userDocument.bio
+                                    .toString()
+                                    .text
+                                    .color(Colors.grey)
+                                    .make(),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ).box.make().wh(context.width(), context.height() * 0.25),
+                      const Divider(thickness: 3),
                     ],
-                  ).box.make().p20(),
+                  ).box.make().p12(),
                 ],
               ),
             );
           }
+          if (state is UserCollectionLoadingState) {
+            return const LoadingWidget();
+          }
+
           return SafeArea(
-            child: Column(
-              children: [
-                Column(
-                  children: [
-                    SecondaryButtonWidget(
-                      caption: AppText.signOutText,
-                      onPressed: () {
-                        FirebaseAuth.instance.signOut();
-                      },
-                    ),
-                  ],
-                ).box.make().p20(),
-              ],
+            child: Center(
+              child: CircularProgressIndicator(
+                color: AppColors.primaryColor,
+              ),
             ),
           );
         },

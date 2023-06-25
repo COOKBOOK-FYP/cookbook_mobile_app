@@ -1,15 +1,16 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cookbook/controllers/Firebase/firebase_controller.dart';
+import 'package:cookbook/models/User/user_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Events
 abstract class UserCollectionEvent {}
 
 class UserCollectionGetDataEvent extends UserCollectionEvent {
-  String uid;
-  UserCollectionGetDataEvent(this.uid);
+  // String uid;
+  // UserCollectionGetDataEvent(this.uid);
 }
 
 // States
@@ -20,7 +21,7 @@ class UserCollectionInitialState extends UserCollectionState {}
 class UserCollectionLoadingState extends UserCollectionState {}
 
 class UserCollectionLoadedState extends UserCollectionState {
-  final Map<String, dynamic> userDocument;
+  final UserModel userDocument;
   UserCollectionLoadedState(this.userDocument);
 }
 
@@ -36,9 +37,11 @@ class UserCollectionBloc
     on<UserCollectionGetDataEvent>((event, emit) async {
       emit(UserCollectionLoadingState());
       try {
-        final userDocument =
-            await FirebaseController.getUsersCollection(event.uid);
-        emit(UserCollectionLoadedState(userDocument.data()!));
+        final userDocument = await FirebaseController.getUsersCollection(
+          FirebaseAuth.instance.currentUser!.uid,
+        );
+        UserModel user = UserModel.fromJson(userDocument.data()!);
+        emit(UserCollectionLoadedState(user));
       } catch (error) {
         if (error is FirebaseException) {
           if (error.message!.contains('Failed host lookup')) {

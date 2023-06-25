@@ -2,7 +2,9 @@
 
 import 'dart:io';
 
+import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
+import 'package:cookbook/constants/firebase_constants.dart';
 import 'package:cookbook/screens/account/account_screen.dart';
 import 'package:cookbook/screens/home/home_screen.dart';
 import 'package:cookbook/screens/main-tabs-screen/widgets/FadeIndexedStack.dart';
@@ -65,7 +67,11 @@ class _MainTabsScreenState extends State<MainTabsScreen> {
                       tabindex = index;
                     });
                     //Home Page
-                    if (tabindex == 0) {}
+                    if (tabindex == 0) {
+                      context
+                          .read<UserCollectionBloc>()
+                          .add(UserCollectionGetDataEvent());
+                    }
 
                     //Search Page
                     if (tabindex == 1) {}
@@ -77,7 +83,11 @@ class _MainTabsScreenState extends State<MainTabsScreen> {
                     if (tabindex == 3) {}
 
                     //Account Page
-                    if (index == 4) {}
+                    if (index == 4) {
+                      context
+                          .read<UserCollectionBloc>()
+                          .add(UserCollectionGetDataEvent());
+                    }
                   }
                 }),
               ),

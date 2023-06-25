@@ -2,7 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_fonts.dart';
-import 'package:cookbook/constants/firebase_constants.dart';
+import 'package:cookbook/global/utils/app_navigator.dart';
+import 'package:cookbook/screens/settings/settings_screen.dart';
 import 'package:cookbook/widgets/buttons/round_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,9 +24,7 @@ class PrimaryAppbarWidget extends StatefulWidget
 class _PrimaryAppbarWidgetState extends State<PrimaryAppbarWidget> {
   @override
   void initState() {
-    context
-        .read<UserCollectionBloc>()
-        .add(UserCollectionGetDataEvent(FirebaseContants.uid));
+    context.read<UserCollectionBloc>().add(UserCollectionGetDataEvent());
     super.initState();
   }
 
@@ -63,25 +62,28 @@ class _PrimaryAppbarWidgetState extends State<PrimaryAppbarWidget> {
               actions: [
                 RoundIconButton(
                   onPressed: () {},
-                  icon: Icon(
+                  icon: const Icon(
                     Ionicons.search_outline,
                   ),
                 ),
                 RoundIconButton(
-                  onPressed: () {},
-                  icon: Icon(
+                  onPressed: () {
+                    AppNavigator.goToPage(
+                      context: context,
+                      screen: const SettingsScreen(),
+                    );
+                  },
+                  icon: const Icon(
                     Ionicons.settings_outline,
                   ),
                 ),
                 RoundIconButton(
                   onPressed: () {},
-                  icon: state.userDocument['photoUrl'] != ""
-                      ? CachedNetworkImage(
-                          imageUrl: state.userDocument['photoUrl'].toString(),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Ionicons.person_outline),
-                        )
-                      : const Icon(Ionicons.person_outline),
+                  icon: CachedNetworkImage(
+                    imageUrl: state.userDocument.photoUrl.toString(),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Ionicons.person_outline),
+                  ),
                 ),
               ],
             );

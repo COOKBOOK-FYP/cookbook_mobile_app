@@ -8,6 +8,6 @@ class FirebaseContants {
   static final googleUid = FirebaseContants.googleSignIn.currentUser!.id;
 
   // Firebase constants //
-  static final uid = FirebaseAuth.instance.currentUser!.uid;
+  static String uid = FirebaseAuth.instance.currentUser!.uid;
   static final usersCollection = FirebaseFirestore.instance.collection('Users');
 }
