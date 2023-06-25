@@ -11,8 +11,7 @@ import 'package:ionicons/ionicons.dart';
 
 class PrimaryAppbarWidget extends StatefulWidget
     implements PreferredSizeWidget {
-  const PrimaryAppbarWidget({Key? key, this.actions}) : super(key: key);
-  final List<Widget>? actions;
+  const PrimaryAppbarWidget({Key? key}) : super(key: key);
 
   @override
   State<PrimaryAppbarWidget> createState() => _PrimaryAppbarWidgetState();

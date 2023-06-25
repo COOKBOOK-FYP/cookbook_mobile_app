@@ -26,12 +26,7 @@ class _AccountScreenState extends State<AccountScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PrimaryAppbarWidget(
-        actions: [
-          // settings button
-          Container().box.make(),
-        ],
-      ),
+      appBar: const PrimaryAppbarWidget(),
       body: BlocBuilder<UserCollectionBloc, UserCollectionState>(
         builder: (context, state) {
           if (state is UserCollectionLoadedState) {
@@ -68,13 +63,6 @@ class _AccountScreenState extends State<AccountScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                // state.userDocument.firstName
-                                //     .toString()
-                                //     .text
-                                //     .xl2
-                                //     .bold
-                                //     .color(Colors.black)
-                                //     .make(),
                                 ProfileTextWidget(
                                   text1:
                                       state.userDocument.firstName.toString(),
