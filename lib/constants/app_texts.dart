@@ -22,6 +22,9 @@ class AppText {
   static const String alreadyHaveAnAccountText = "Already have an account?";
 
   // Account Screen
+
+  // Settings Screen
+  static const String settingsText = "Settings";
   static const String signOutText = "Sign Out";
 
   // Exceptions

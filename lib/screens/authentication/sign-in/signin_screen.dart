@@ -31,7 +31,6 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  BuildContext? dialogueContext;
   final formGlobalKey = GlobalKey<FormState>();
   final googleSigninBloc = GoogleSigninBloc();
   final signinBloc = SigninBloc();
@@ -50,9 +49,6 @@ class _SignInScreenState extends State<SignInScreen> {
     // dispose controllers
     _emailController.dispose();
     _passwordController.dispose();
-
-    // dispose context
-    dialogueContext = null;
 
     // dispose form
     formGlobalKey.currentState?.dispose();
@@ -84,7 +80,6 @@ class _SignInScreenState extends State<SignInScreen> {
               if (state is SigninStateSuccess) {
                 // close the dialoge
                 AppDialogs.closeLoadingDialog();
-                // handle session
                 AppNavigator.replaceTo(
                   context: context,
                   screen: MainTabsScreen(),
@@ -92,9 +87,7 @@ class _SignInScreenState extends State<SignInScreen> {
               }
 
               if (state is SigninStateFailed) {
-                if (dialogueContext != null) {
-                  Navigator.pop(dialogueContext!);
-                }
+                AppDialogs.closeLoadingDialog();
                 AppSnackbars.danger(
                   context,
                   state.message,

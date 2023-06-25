@@ -1,11 +1,18 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
+import 'package:cookbook/constants/app_texts.dart';
 import 'package:cookbook/global/utils/app_dialogs.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
 import 'package:cookbook/screens/authentication/splash/splash_screen.dart';
-import 'package:cookbook/widgets/buttons/primary_button_widget.dart';
+import 'package:cookbook/widgets/appbar/secondary_appbar_widget.dart';
+import 'package:cookbook/widgets/loading/loading_widget.dart';
+import 'package:cookbook/widgets/page/page_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ionicons/ionicons.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -36,22 +43,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: AppColors.appBlackColor,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-      ),
-      body: Center(
-        child: PrimaryButtonWidget(
-            caption: "Log out",
-            onPressed: () async {
-              await logOut();
-            }),
+      appBar: const SecondaryAppbarWidget(title: AppText.settingsText),
+      body: BlocBuilder<UserCollectionBloc, UserCollectionState>(
+        builder: (context, state) {
+          if (state is UserCollectionLoadedState) {
+            return PageWidget(
+              children: [
+                ListTile(
+                  leading: CachedNetworkImage(
+                    imageUrl: state.userDocument.photoUrl.toString(),
+                  ).box.roundedFull.color(AppColors.appGreyColor).make().p1(),
+                  title:
+                      '${state.userDocument.firstName} ${state.userDocument.lastName}'
+                          .text
+                          .xl2
+                          .bold
+                          .make(),
+                  subtitle: state.userDocument.email?.text.make(),
+                  trailing: const Icon(Ionicons.pencil_outline),
+                ),
+                50.heightBox,
+                ListTile(
+                  trailing: Icon(
+                    Ionicons.log_out_outline,
+                    size: 30,
+                    color: AppColors.appBlackColor,
+                  ),
+                  title: AppText.signOutText.text.xl2.make(),
+                  onTap: () => logOut(),
+                ),
+              ],
+            );
+          }
+          return const LoadingWidget();
+        },
       ),
     );
   }
