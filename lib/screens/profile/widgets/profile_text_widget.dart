@@ -10,21 +10,23 @@ class ProfileTextWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return RichText(
       text: TextSpan(
-        text: "$text1 ",
+        text: text1,
         style: TextStyle(
-          color: AppColors.appBlackColor,
+          color: AppColors.appTextColorPrimary,
           fontSize: 30,
           fontWeight: FontWeight.bold,
-          fontFamily: AppFonts.openSansItalic,
+          fontFamily: AppFonts.robotoMonoBold,
+          // decoration: TextDecoration.underline,
         ),
         children: <TextSpan>[
           TextSpan(
-            text: text2,
+            text: " $text2",
             style: TextStyle(
-              color: AppColors.appBlackColor,
+              color: AppColors.appTextColorPrimary,
               fontSize: 28,
               fontWeight: FontWeight.normal,
-              fontFamily: AppFonts.openSansLight,
+              fontFamily: AppFonts.robotoLight,
+              // decoration: TextDecoration.none,
             ),
           ),
         ],

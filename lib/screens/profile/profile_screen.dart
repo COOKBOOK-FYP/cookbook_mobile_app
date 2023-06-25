@@ -1,7 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
-import 'package:cookbook/screens/account/widgets/profile_text_widget.dart';
+import 'package:cookbook/constants/app_fonts.dart';
+import 'package:cookbook/screens/profile/widgets/profile_text_widget.dart';
 import 'package:cookbook/widgets/appbar/primary_appbar_widget.dart';
 import 'package:cookbook/widgets/loading/loading_widget.dart';
 import 'package:flutter/material.dart';
@@ -39,11 +40,11 @@ class _AccountScreenState extends State<AccountScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
-                            flex: 2,
+                            flex: 3,
                             child: CachedNetworkImage(
                               imageUrl: state.userDocument.photoUrl.toString(),
-                              width: 250,
-                              height: 250,
+                              width: context.width() * 0.40,
+                              height: context.height() * 0.20,
                               fit: BoxFit.contain,
                               errorWidget: (context, url, error) => Icon(
                                 Ionicons.person_outline,
@@ -56,9 +57,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                 .roundedFull
                                 .make(),
                           ),
-                          10.widthBox,
+                          20.widthBox,
                           Expanded(
-                            flex: 3,
+                            flex: 5,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -73,22 +74,26 @@ class _AccountScreenState extends State<AccountScreen> {
                                     .toString()
                                     .text
                                     .size(18)
-                                    .color(Colors.black)
+                                    .color(AppColors.appTextColorPrimary)
                                     .make(),
                                 10.heightBox,
                                 state.userDocument.bio
                                     .toString()
                                     .text
+                                    .fontFamily(AppFonts.openSansLight)
+                                    .maxLines(2)
                                     .size(15)
-                                    .color(Colors.grey)
                                     .make(),
                               ],
                             ),
                           ),
                         ],
-                      ).box.make().wh(context.width(), context.height() * 0.25),
+                      ).box.make().wh(context.width(), context.height() * 0.20),
                     ],
-                  ).box.make().p12(),
+                  )
+                      .box
+                      .padding(const EdgeInsets.symmetric(horizontal: 10))
+                      .make(),
                 ],
               ),
             );

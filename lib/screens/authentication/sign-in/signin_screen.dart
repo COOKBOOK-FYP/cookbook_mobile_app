@@ -6,6 +6,7 @@ import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/constants/app_images.dart';
 import 'package:cookbook/constants/app_texts.dart';
+import 'package:cookbook/global/utils/app_dialogs.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
 import 'package:cookbook/global/utils/app_snakbars.dart';
 import 'package:cookbook/screens/main-tabs-screen/main_tabs_screen.dart';
@@ -17,7 +18,6 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -79,27 +79,11 @@ class _SignInScreenState extends State<SignInScreen> {
             bloc: signinBloc,
             listener: (context, state) {
               if (state is SigninStateLoading) {
-                showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (ctx) {
-                      dialogueContext = ctx;
-                      return Container(
-                        color: AppColors.transparentColor,
-                        child: Center(
-                          child: SpinKitFadingCircle(
-                            color: AppColors.primaryColor,
-                            size: 30.0,
-                          ),
-                        ),
-                      );
-                    });
+                AppDialogs.loadingDialog(context);
               }
               if (state is SigninStateSuccess) {
                 // close the dialoge
-                if (dialogueContext != null) {
-                  Navigator.pop(dialogueContext!);
-                }
+                AppDialogs.closeLoadingDialog();
                 // handle session
                 AppNavigator.replaceTo(
                   context: context,

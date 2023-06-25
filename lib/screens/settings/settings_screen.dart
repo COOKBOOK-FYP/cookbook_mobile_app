@@ -1,9 +1,11 @@
 import 'package:cookbook/constants/app_colors.dart';
+import 'package:cookbook/global/utils/app_dialogs.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
 import 'package:cookbook/screens/authentication/splash/splash_screen.dart';
 import 'package:cookbook/widgets/buttons/primary_button_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:nb_utils/nb_utils.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -14,11 +16,15 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   logOut() {
-    FirebaseAuth.instance.signOut().then((_) {
-      AppNavigator.replaceTo(
-        context: context,
-        screen: const SplashScreen(),
-      );
+    FirebaseAuth.instance.signOut().then((_) async {
+      AppDialogs.loadingDialog(context);
+      Future.delayed(3.seconds, () {
+        AppDialogs.closeLoadingDialog();
+        AppNavigator.replaceTo(
+          context: context,
+          screen: const SplashScreen(),
+        );
+      });
     });
   }
 
