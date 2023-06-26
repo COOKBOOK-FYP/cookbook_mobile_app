@@ -1,4 +1,5 @@
 import 'package:cookbook/constants/app_colors.dart';
+import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/constants/app_texts.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
 import 'package:cookbook/screens/authentication/sign-in/signin_screen.dart';
@@ -22,10 +23,30 @@ class SplashScreen extends StatelessWidget {
           children: [
             const LogoWidget(),
             20.heightBox,
-            AppText.appName.text.xl5
-                .color(AppColors.primaryColor)
-                .bold
-                .makeCentered(),
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: "Cook",
+                    style: TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: AppFonts.openSansLight,
+                      color: AppColors.primaryColor,
+                    ),
+                  ),
+                  TextSpan(
+                    text: "book",
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: AppFonts.robotoLight,
+                      color: AppColors.secondaryColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
             20.heightBox,
             AppText.appSplashDescription.text.center.makeCentered(),
             40.heightBox,

@@ -5,7 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthController {
   static Future<void> createUser(
     String userId, {
-    String? displayName,
+    String? firstName,
+    String? lastName,
     String? email,
     String? phoneNumber,
     String? photoUrl,
@@ -20,7 +21,8 @@ class AuthController {
         'userId': userId,
         'createdAt': Timestamp.now(),
         'updatedAt': Timestamp.now(),
-        'displayName': displayName,
+        'firstName': firstName,
+        'lastName': lastName,
         'email': email,
         'phoneNumber': phoneNumber,
         'photoUrl': photoUrl ?? '',
@@ -36,7 +38,8 @@ class AuthController {
 
   static Future<void> updateUser(
     String userId, {
-    String? displayName,
+    String? firstName,
+    String? lastName,
     String? email,
     String? phoneNumber,
     String? photoUrl,
@@ -54,7 +57,8 @@ class AuthController {
         {
           'userId': userId,
           'updatedAt': Timestamp.now(),
-          'displayName': displayName,
+          'firstName': firstName,
+          'lastName': lastName,
           'email': email,
           'phoneNumber': phoneNumber,
           'photoUrl': photoUrl ?? '',

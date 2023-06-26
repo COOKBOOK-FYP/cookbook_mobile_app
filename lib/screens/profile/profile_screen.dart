@@ -73,7 +73,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                 state.userDocument.address
                                     .toString()
                                     .text
-                                    .size(18)
+                                    .size(16)
+                                    .fontFamily(AppFonts.openSansMedium)
                                     .color(AppColors.appTextColorPrimary)
                                     .make(),
                                 10.heightBox,

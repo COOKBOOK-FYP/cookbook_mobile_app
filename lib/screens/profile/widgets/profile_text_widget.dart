@@ -13,7 +13,7 @@ class ProfileTextWidget extends StatelessWidget {
         text: text1,
         style: TextStyle(
           color: AppColors.appTextColorPrimary,
-          fontSize: 30,
+          fontSize: 25,
           fontWeight: FontWeight.bold,
           fontFamily: AppFonts.robotoMonoBold,
           // decoration: TextDecoration.underline,
@@ -23,7 +23,7 @@ class ProfileTextWidget extends StatelessWidget {
             text: " $text2",
             style: TextStyle(
               color: AppColors.appTextColorPrimary,
-              fontSize: 28,
+              fontSize: 23,
               fontWeight: FontWeight.normal,
               fontFamily: AppFonts.robotoLight,
               // decoration: TextDecoration.none,

@@ -33,7 +33,7 @@ class GoogleSigninBloc extends Bloc<GoogleSigninEvent, GoogleSigninState> {
           await AuthController.createUser(
             account!.id,
             email: account.email,
-            displayName: account.displayName,
+            // displayName: account.displayName,
             photoUrl: account.photoUrl,
           );
         } catch (error) {

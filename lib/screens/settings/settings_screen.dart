@@ -3,6 +3,7 @@ import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_texts.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
+import 'package:cookbook/screens/authentication/delete-account/delete_account_screen.dart';
 import 'package:cookbook/screens/authentication/sign-out/sign_out_screen.dart';
 import 'package:cookbook/widgets/appbar/secondary_appbar_widget.dart';
 import 'package:cookbook/widgets/listTile/custom_list_tile.dart';
@@ -49,7 +50,12 @@ class SettingsScreen extends StatelessWidget {
                 CustomListTile(
                   title: AppText.deleteAccountText,
                   leadingIcon: Ionicons.trash_outline,
-                  onTap: () {},
+                  onTap: () {
+                    AppNavigator.goToPage(
+                      context: context,
+                      screen: const DeleteAccountScreen(),
+                    );
+                  },
                 ),
                 CustomListTile(
                   title: AppText.signOutText,

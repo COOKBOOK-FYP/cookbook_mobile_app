@@ -56,7 +56,8 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
             await AuthController.createUser(
               userCred.user!.uid,
               email: event.email,
-              displayName: "${event.firstName} ${event.lastName}",
+              firstName: event.firstName,
+              lastName: event.lastName,
               phoneNumber: event.phoneNumber,
             );
             emit(SignupStateSuccess());
