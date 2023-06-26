@@ -7,6 +7,7 @@ import 'package:cookbook/screens/settings/settings_screen.dart';
 import 'package:cookbook/widgets/buttons/round_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
@@ -75,7 +76,10 @@ class _PrimaryAppbarWidgetState extends State<PrimaryAppbarWidget> {
                   ),
                   RoundIconButton(
                     onPressed: () {},
-                    icon: const Icon(Ionicons.person_outline),
+                    icon: Icon(
+                      Ionicons.person_outline,
+                      color: AppColors.secondaryColor,
+                    ),
                   ),
                 ],
               ),
@@ -124,12 +128,26 @@ class _PrimaryAppbarWidgetState extends State<PrimaryAppbarWidget> {
                     Ionicons.settings_outline,
                   ),
                 ),
-                RoundIconButton(
-                  onPressed: () {},
-                  icon: CachedNetworkImage(
-                    imageUrl: state.userDocument.photoUrl.toString(),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Ionicons.person_outline),
+                Container(
+                  width: 50.w,
+                  height: 50.w,
+                  margin: const EdgeInsets.only(right: 10),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: AppColors.primaryColor,
+                      width: 2,
+                    ),
+                    image: DecorationImage(
+                      image: CachedNetworkImageProvider(
+                        state.userDocument.photoUrl.toString(),
+                      ),
+                      fit: BoxFit.cover,
+                      onError: (exception, stackTrace) => Icon(
+                        Ionicons.person,
+                        color: AppColors.secondaryColor,
+                      ),
+                    ),
                   ),
                 ),
               ],

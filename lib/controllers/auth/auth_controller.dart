@@ -15,6 +15,8 @@ class AuthController {
     String? followingCount,
     String? bio,
     String? likes,
+    String? location,
+    Timestamp? dateOfBirth,
   }) async {
     FirebaseContants.usersCollection.doc(userId).set(
       {
@@ -31,9 +33,20 @@ class AuthController {
         'followingCount': followingCount ?? 0,
         'bio': bio ?? 'Hey there! I am using CookBook',
         'likes': likes ?? 0,
-        'address': '',
+        'location': location ?? '',
+        'dateOfBirth': dateOfBirth ?? DateTime.now(),
       },
     );
+  }
+
+  static Future<void> deleteUser(String userId) async {
+    FirebaseAuth.instance.currentUser!.delete().then((account) async {
+      final userDocument =
+          await FirebaseContants.usersCollection.doc(userId).get();
+      if (userDocument.exists) {
+        FirebaseContants.usersCollection.doc(userId).delete();
+      }
+    }).catchError((error) {});
   }
 
   static Future<void> updateUser(
@@ -71,11 +84,5 @@ class AuthController {
         },
       );
     }
-  }
-
-  static Future<void> signOut() async {
-    await FirebaseContants.googleSignIn.signOut();
-    FirebaseAuth.instance.authStateChanges();
-    FirebaseAuth.instance.userChanges();
   }
 }

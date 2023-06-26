@@ -28,6 +28,10 @@ class AppText {
   static const String signOutText = "Sign Out";
   static const String deleteAccountText = "Delete Account";
 
+  // Delete Account Screen
+  static const String accountDeleteDescriptionText =
+      "Account once deleted cannot be recovered. We delete all your data from out servers";
+
   // Exceptions
   static const String invalidEmailText = "Invalid Email Address";
   static const String invalidPasswordText = "Invalid Password";

@@ -7,7 +7,6 @@ import 'package:cookbook/widgets/appbar/primary_appbar_widget.dart';
 import 'package:cookbook/widgets/loading/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -41,15 +40,21 @@ class _AccountScreenState extends State<AccountScreen> {
                         children: [
                           Expanded(
                             flex: 3,
-                            child: CachedNetworkImage(
-                              imageUrl: state.userDocument.photoUrl.toString(),
-                              width: context.width() * 0.40,
+                            child: Container(
                               height: context.height() * 0.20,
-                              fit: BoxFit.contain,
-                              errorWidget: (context, url, error) => Icon(
-                                Ionicons.person_outline,
-                                color: AppColors.primaryColor,
-                                size: 50,
+                              width: context.width() * 0.20,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: AppColors.secondaryColor,
+                                  width: 2,
+                                ),
+                                image: DecorationImage(
+                                  image: CachedNetworkImageProvider(
+                                    state.userDocument.photoUrl.toString(),
+                                  ),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             )
                                 .box
@@ -70,7 +75,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                   text2: state.userDocument.lastName.toString(),
                                 ),
                                 5.heightBox,
-                                state.userDocument.address
+                                state.userDocument.location
                                     .toString()
                                     .text
                                     .size(16)
