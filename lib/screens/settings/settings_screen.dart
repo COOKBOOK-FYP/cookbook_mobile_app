@@ -2,43 +2,19 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_texts.dart';
-import 'package:cookbook/global/utils/app_dialogs.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
-import 'package:cookbook/screens/authentication/splash/splash_screen.dart';
+import 'package:cookbook/screens/authentication/sign-out/sign_out_screen.dart';
 import 'package:cookbook/widgets/appbar/secondary_appbar_widget.dart';
+import 'package:cookbook/widgets/listTile/custom_list_tile.dart';
 import 'package:cookbook/widgets/loading/loading_widget.dart';
 import 'package:cookbook/widgets/page/page_widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class SettingsScreen extends StatefulWidget {
+class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
-
-  @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends State<SettingsScreen> {
-  logOut() {
-    FirebaseAuth.instance.signOut().then((_) async {
-      AppDialogs.loadingDialog(context);
-      Future.delayed(3.seconds, () {
-        AppDialogs.closeLoadingDialog();
-        AppNavigator.replaceTo(
-          context: context,
-          screen: const SplashScreen(),
-        );
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +28,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ListTile(
                   leading: CachedNetworkImage(
                     imageUrl: state.userDocument.photoUrl.toString(),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Ionicons.person),
                   ).box.roundedFull.color(AppColors.appGreyColor).make().p1(),
                   title:
                       '${state.userDocument.firstName} ${state.userDocument.lastName}'
@@ -63,14 +41,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   trailing: const Icon(Ionicons.pencil_outline),
                 ),
                 50.heightBox,
-                ListTile(
-                  trailing: Icon(
-                    Ionicons.log_out_outline,
-                    size: 30,
-                    color: AppColors.appBlackColor,
-                  ),
-                  title: AppText.signOutText.text.xl2.make(),
-                  onTap: () => logOut(),
+                CustomListTile(
+                  title: "Themes",
+                  leadingIcon: Ionicons.color_palette_outline,
+                  onTap: () {},
+                ),
+                CustomListTile(
+                  title: AppText.deleteAccountText,
+                  leadingIcon: Ionicons.trash_outline,
+                  onTap: () {},
+                ),
+                CustomListTile(
+                  title: AppText.signOutText,
+                  leadingIcon: Ionicons.log_out_outline,
+                  onTap: () {
+                    AppNavigator.goToPage(
+                      context: context,
+                      screen: const SignOutScreen(),
+                    );
+                  },
                 ),
               ],
             );

@@ -26,6 +26,7 @@ class AppText {
   // Settings Screen
   static const String settingsText = "Settings";
   static const String signOutText = "Sign Out";
+  static const String deleteAccountText = "Delete Account";
 
   // Exceptions
   static const String invalidEmailText = "Invalid Email Address";
