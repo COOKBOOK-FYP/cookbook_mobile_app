@@ -69,7 +69,9 @@ class SplashScreen extends StatelessWidget {
                 );
               },
             ),
+            10.heightBox,
             context.isPortrait ? 80.heightBox : 10.heightBox,
+            "Version: ${AppText.appVersion}".text.makeCentered(),
           ],
         ).box.margin(const EdgeInsets.all(20)).make(),
       ),

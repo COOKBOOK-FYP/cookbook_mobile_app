@@ -27,18 +27,28 @@ class SettingsScreen extends StatelessWidget {
             return PageWidget(
               children: [
                 ListTile(
-                  leading: CachedNetworkImage(
-                    imageUrl: state.userDocument.photoUrl.toString(),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Ionicons.person),
-                  ).box.roundedFull.color(AppColors.appGreyColor).make().p1(),
-                  title:
-                      '${state.userDocument.firstName} ${state.userDocument.lastName}'
-                          .text
-                          .xl2
-                          .bold
-                          .make(),
-                  subtitle: state.userDocument.email?.text.make(),
+                  shape: RoundedRectangleBorder(
+                    side: const BorderSide(width: 1),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  leading: CircleAvatar(
+                    radius: 30,
+                    backgroundColor: AppColors.appGreyColor,
+                    backgroundImage: CachedNetworkImageProvider(
+                      state.userDocument.photoUrl.toString(),
+                    ),
+                    child: state.userDocument.photoUrl.toString().isEmptyOrNull
+                        ? const Icon(Ionicons.person)
+                        : const SizedBox.shrink(),
+                    onBackgroundImageError: (exception, stackTrace) => Icon(
+                      Ionicons.person,
+                      color: AppColors.primaryColor,
+                    ),
+                  ),
+                  title: Text(
+                    '${state.userDocument.firstName} ${state.userDocument.lastName}',
+                  ),
+                  subtitle: Text(state.userDocument.email.toString()),
                   trailing: const Icon(Ionicons.pencil_outline),
                 ),
                 50.heightBox,

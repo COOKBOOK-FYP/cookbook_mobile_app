@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class PrimaryAppbarWidget extends StatefulWidget
     implements PreferredSizeWidget {
@@ -145,10 +146,13 @@ class _PrimaryAppbarWidgetState extends State<PrimaryAppbarWidget> {
                       fit: BoxFit.cover,
                       onError: (exception, stackTrace) => Icon(
                         Ionicons.person,
-                        color: AppColors.secondaryColor,
+                        color: AppColors.primaryColor,
                       ),
                     ),
                   ),
+                  child: state.userDocument.photoUrl.toString().isEmptyOrNull
+                      ? const Icon(Ionicons.person)
+                      : const SizedBox.shrink(),
                 ),
               ],
             );

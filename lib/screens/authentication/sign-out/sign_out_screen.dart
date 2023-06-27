@@ -3,7 +3,7 @@ import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/constants/app_texts.dart';
 import 'package:cookbook/global/utils/app_dialogs.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
-import 'package:cookbook/screens/authentication/splash/splash_screen.dart';
+import 'package:cookbook/screens/authentication/landing/splash_screen.dart';
 import 'package:cookbook/widgets/appbar/secondary_appbar_widget.dart';
 import 'package:cookbook/widgets/buttons/secondary_button_widget.dart';
 import 'package:cookbook/widgets/logo/logo_widget.dart';

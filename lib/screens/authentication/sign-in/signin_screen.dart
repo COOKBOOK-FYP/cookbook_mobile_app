@@ -9,6 +9,7 @@ import 'package:cookbook/constants/app_texts.dart';
 import 'package:cookbook/global/utils/app_dialogs.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
 import 'package:cookbook/global/utils/app_snakbars.dart';
+import 'package:cookbook/screens/authentication/sign-up/signup_screen.dart';
 import 'package:cookbook/screens/main-tabs-screen/main_tabs_screen.dart';
 import 'package:cookbook/widgets/buttons/primary_button_widget.dart';
 import 'package:cookbook/widgets/text/primary_text_widget.dart';
@@ -241,39 +242,36 @@ class _SignInScreenState extends State<SignInScreen> {
               //     ),
               //   ],
               // ),
-              // SizedBox(
-              //   height: 20.h,
-              // ),
-              // Padding(
-              //   padding: EdgeInsets.only(left: 10.w, right: 10.w),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: [
-              //       PrimaryTextWidget(
-              //         text: AppText.dontHaveAccount,
-              //         fontSize: 14.sp,
-              //         fontFamily: AppFonts.openSansLight,
-              //       ),
-              //       SizedBox(
-              //         width: 5.w,
-              //       ),
-              //       GestureDetector(
-              //         onTap: () {
-              //           AppNavigator.replaceTo(
-              //             context: context,
-              //             screen: SignUpScreen(),
-              //           );
-              //         },
-              //         child: PrimaryTextWidget(
-              //           text: AppText.signupText,
-              //           fontSize: 14.sp,
-              //           fontColor: Colors.black,
-              //           fontFamily: AppFonts.robotoBold,
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
+              Padding(
+                padding: EdgeInsets.only(left: 10.w, right: 10.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    PrimaryTextWidget(
+                      text: AppText.dontHaveAccount,
+                      fontSize: 14.sp,
+                      fontFamily: AppFonts.openSansLight,
+                    ),
+                    SizedBox(
+                      width: 5.w,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        AppNavigator.replaceTo(
+                          context: context,
+                          screen: SignUpScreen(),
+                        );
+                      },
+                      child: PrimaryTextWidget(
+                        text: AppText.signupText,
+                        fontSize: 14.sp,
+                        fontColor: Colors.black,
+                        fontFamily: AppFonts.robotoBold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

@@ -10,4 +10,9 @@ class FirebaseContants {
   // Firebase constants //
   static String uid = FirebaseAuth.instance.currentUser!.uid;
   static final usersCollection = FirebaseFirestore.instance.collection('Users');
+  static final recipesCollection =
+      FirebaseFirestore.instance.collection('Recipes');
+  static final commentsCollection =
+      FirebaseFirestore.instance.collection('Comments');
+  static final likesCollection = FirebaseFirestore.instance.collection('Likes');
 }

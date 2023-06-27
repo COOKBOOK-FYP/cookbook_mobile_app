@@ -1,6 +1,8 @@
 class AppText {
   // App Name
   static const String appName = "Cookbook";
+  // App version
+  static const String appVersion = "1.0.0";
   static const String appSplashDescription =
       "Cookbook is a social app that let's you share your recipes with the world.";
 
@@ -20,6 +22,7 @@ class AppText {
   static const String phoneNumberText = "Phone Number";
   static const String continueWithText = "Continue with";
   static const String alreadyHaveAnAccountText = "Already have an account?";
+  static const String locationText = "Location";
 
   // Account Screen
 

@@ -1,10 +1,11 @@
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/constants/app_texts.dart';
+import 'package:cookbook/constants/firebase_constants.dart';
 import 'package:cookbook/global/utils/app_dialogs.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
 import 'package:cookbook/global/utils/app_snakbars.dart';
-import 'package:cookbook/screens/authentication/splash/splash_screen.dart';
+import 'package:cookbook/screens/authentication/landing/splash_screen.dart';
 import 'package:cookbook/widgets/appbar/secondary_appbar_widget.dart';
 import 'package:cookbook/widgets/buttons/primary_button_widget.dart';
 import 'package:cookbook/widgets/logo/logo_widget.dart';
@@ -23,14 +24,22 @@ class DeleteAccountScreen extends StatefulWidget {
 class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
   deleteAccount() {
     FirebaseAuth.instance.currentUser!.delete().then((account) {
-      FirebaseAuth.instance.signOut().then((_) async {
-        AppDialogs.loadingDialog(context);
-        Future.delayed(3.seconds, () {
-          AppDialogs.closeLoadingDialog();
-          AppNavigator.replaceTo(
-            context: context,
-            screen: const SplashScreen(),
-          );
+      FirebaseContants.usersCollection
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .delete()
+          .then((_) {
+        AppSnackbars.success(context, "Account deleted successfully");
+        FirebaseAuth.instance.signOut().then((_) async {
+          AppDialogs.loadingDialog(context);
+          Future.delayed(3.seconds, () {
+            AppDialogs.closeLoadingDialog();
+            AppNavigator.replaceTo(
+              context: context,
+              screen: const SplashScreen(),
+            );
+          });
+        }).catchError((error) {
+          AppSnackbars.success(context, error.toString());
         });
       }).catchError((error) {
         AppSnackbars.danger(context, error.toString());
@@ -76,6 +85,8 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
             caption: AppText.deleteAccountText,
             onPressed: deleteAccount,
           ),
+          30.heightBox,
+          "Hope we meet in another world!".text.center.make(),
         ],
       ),
     );

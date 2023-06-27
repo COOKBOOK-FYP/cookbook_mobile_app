@@ -18,25 +18,48 @@ class AuthController {
     String? location,
     Timestamp? dateOfBirth,
   }) async {
-    FirebaseContants.usersCollection.doc(userId).set(
-      {
-        'userId': userId,
-        'createdAt': Timestamp.now(),
-        'updatedAt': Timestamp.now(),
-        'firstName': firstName,
-        'lastName': lastName,
-        'email': email,
-        'phoneNumber': phoneNumber,
-        'photoUrl': photoUrl ?? '',
-        'postCount': postCount ?? 0,
-        'followersCount': followersCount ?? 0,
-        'followingCount': followingCount ?? 0,
-        'bio': bio ?? 'Hey there! I am using CookBook',
-        'likes': likes ?? 0,
-        'location': location ?? '',
-        'dateOfBirth': dateOfBirth ?? DateTime.now(),
-      },
-    );
+    final userCollection =
+        await FirebaseContants.usersCollection.doc(userId).get();
+    if (!userCollection.exists) {
+      userCollection.reference.set(
+        {
+          'userId': userId,
+          'createdAt': Timestamp.now(),
+          'updatedAt': Timestamp.now(),
+          'firstName': firstName,
+          'lastName': lastName,
+          'email': email,
+          'phoneNumber': phoneNumber,
+          'photoUrl': photoUrl ?? '',
+          'postCount': postCount ?? 0,
+          'followersCount': followersCount ?? 0,
+          'followingCount': followingCount ?? 0,
+          'bio': bio ?? 'Hey there! I am using CookBook',
+          'likes': likes ?? 0,
+          'location': location ?? '',
+          'dateOfBirth': dateOfBirth ?? DateTime.now(),
+        },
+      );
+      // FirebaseContants.usersCollection.doc(userId).set(
+      //   {
+      //     'userId': userId,
+      //     'createdAt': Timestamp.now(),
+      //     'updatedAt': Timestamp.now(),
+      //     'firstName': firstName,
+      //     'lastName': lastName,
+      //     'email': email,
+      //     'phoneNumber': phoneNumber,
+      //     'photoUrl': photoUrl ?? '',
+      //     'postCount': postCount ?? 0,
+      //     'followersCount': followersCount ?? 0,
+      //     'followingCount': followingCount ?? 0,
+      //     'bio': bio ?? 'Hey there! I am using CookBook',
+      //     'likes': likes ?? 0,
+      //     'location': location ?? '',
+      //     'dateOfBirth': dateOfBirth ?? DateTime.now(),
+      //   },
+      // );
+    }
   }
 
   static Future<void> deleteUser(String userId) async {
