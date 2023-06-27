@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/screens/profile/widgets/profile_text_widget.dart';
+import 'package:cookbook/widgets/buttons/secondary_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -28,32 +29,45 @@ class ProfileHeaderWidget extends StatelessWidget {
       children: [
         Expanded(
           flex: 3,
-          child: Container(
-            height: context.height() * 0.20,
-            width: context.width() * 0.20,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: AppColors.secondaryColor,
-                width: 2,
-              ),
-              image: DecorationImage(
-                image: CachedNetworkImageProvider(photoUrl),
-                fit: BoxFit.cover,
-                onError: (exception, stackTrace) => Icon(
-                  Icons.account_circle_rounded,
-                  size: 100,
-                  color: AppColors.primaryColor,
+          child: Stack(
+            children: [
+              Container(
+                height: context.height() * 0.20,
+                width: context.width() * 0.35,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: AppColors.secondaryColor,
+                    width: 1,
+                  ),
+                  image: DecorationImage(
+                    image: CachedNetworkImageProvider(photoUrl),
+                    fit: BoxFit.cover,
+                    onError: (exception, stackTrace) => Icon(
+                      Icons.account_circle_rounded,
+                      size: 100,
+                      color: AppColors.primaryColor,
+                    ),
+                  ),
                 ),
+                child: (photoUrl.isEmpty)
+                    ? const Icon(
+                        Ionicons.person,
+                        size: 50,
+                      )
+                    : const SizedBox.shrink(),
+              ).box.color(AppColors.appGreyColor).roundedFull.makeCentered(),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: SecondaryButtonWidget(
+                  caption: "Edit Profile",
+                  onPressed: () {},
+                ).box.make().h(30),
               ),
-            ),
-            child: (photoUrl.isEmpty)
-                ? const Icon(
-                    Ionicons.person,
-                    size: 50,
-                  )
-                : const SizedBox.shrink(),
-          ).box.color(AppColors.appGreyColor).roundedFull.make(),
+            ],
+          ),
         ),
         20.widthBox,
         Expanded(
@@ -82,6 +96,6 @@ class ProfileHeaderWidget extends StatelessWidget {
           ),
         ),
       ],
-    ).box.make().wh(context.width(), context.height() * 0.20);
+    ).box.make().wh(context.width(), context.height() * 0.25);
   }
 }
