@@ -38,13 +38,16 @@ class _PrimaryAppbarWidgetState extends State<PrimaryAppbarWidget> {
         builder: (context, state) {
           if (state is UserCollectionLoadingState) {
             return Shimmer(
+              colorOpacity: 0.5,
+              enabled: true,
+              direction: const ShimmerDirection.fromLTRB(),
               child: AppBar(
                 automaticallyImplyLeading: false,
                 title: RichText(
                   text: TextSpan(
                     text: "Cook",
                     style: TextStyle(
-                      color: AppColors.primaryColor,
+                      color: AppColors.appDarkGreyColor,
                       fontSize: 36,
                       fontWeight: FontWeight.bold,
                       fontFamily: AppFonts.openSansBold,
@@ -53,7 +56,7 @@ class _PrimaryAppbarWidgetState extends State<PrimaryAppbarWidget> {
                       TextSpan(
                         text: "Book",
                         style: TextStyle(
-                          color: AppColors.secondaryColor,
+                          color: AppColors.appDarkGreyColor,
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
                           fontFamily: AppFonts.robotoLight,
@@ -70,17 +73,28 @@ class _PrimaryAppbarWidgetState extends State<PrimaryAppbarWidget> {
                     ),
                   ),
                   RoundIconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      AppNavigator.goToPage(
+                        context: context,
+                        screen: const SettingsScreen(),
+                      );
+                    },
                     icon: const Icon(
                       Ionicons.settings_outline,
                     ),
                   ),
-                  RoundIconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Ionicons.person_outline,
-                      color: AppColors.secondaryColor,
+                  Container(
+                    width: 50.w,
+                    height: 50.w,
+                    margin: const EdgeInsets.only(right: 10),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: AppColors.appBlackColor,
+                        width: 2,
+                      ),
                     ),
+                    child: const Icon(Ionicons.person),
                   ),
                 ],
               ),

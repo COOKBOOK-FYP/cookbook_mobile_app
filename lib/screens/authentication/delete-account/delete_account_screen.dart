@@ -86,7 +86,11 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
             onPressed: deleteAccount,
           ),
           30.heightBox,
-          "Hope we meet in another world!".text.center.make(),
+          "Hope we meet in another world!"
+              .text
+              .color(AppColors.primaryColor)
+              .center
+              .make(),
         ],
       ),
     );
