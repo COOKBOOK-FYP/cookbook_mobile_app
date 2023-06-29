@@ -58,6 +58,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
               email: event.email,
               firstName: event.firstName,
               lastName: event.lastName,
+              fullName: '${event.firstName} ${event.lastName}',
               phoneNumber: event.phoneNumber,
             );
             emit(SignupStateSuccess());

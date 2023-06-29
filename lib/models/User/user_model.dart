@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class UserModel {
   String? firstName;
   String? lastName;
+  String? fullName;
   String? email;
   String? photoUrl;
   String? userId;
@@ -34,6 +35,7 @@ class UserModel {
   UserModel.fromJson(Map<String, dynamic> json) {
     firstName = json['firstName'];
     lastName = json['lastName'];
+    fullName = json['fullName'];
     email = json['email'];
     photoUrl = json['photoUrl'];
     userId = json['userId'];
@@ -52,6 +54,7 @@ class UserModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['firstName'] = firstName;
     data['lastName'] = lastName;
+    data['fullName'] = fullName;
     data['email'] = email;
     data['photoUrl'] = photoUrl;
     data['userId'] = userId;

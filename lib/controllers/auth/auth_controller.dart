@@ -7,6 +7,7 @@ class AuthController {
     String userId, {
     String? firstName,
     String? lastName,
+    String? fullName,
     String? email,
     String? phoneNumber,
     String? photoUrl,
@@ -28,6 +29,7 @@ class AuthController {
           'updatedAt': Timestamp.now(),
           'firstName': firstName,
           'lastName': lastName,
+          'fullName': fullName,
           'email': email,
           'phoneNumber': phoneNumber,
           'photoUrl': photoUrl ?? '',

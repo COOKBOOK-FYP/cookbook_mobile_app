@@ -35,6 +35,9 @@ class AppText {
   static const String accountDeleteDescriptionText =
       "Account once deleted cannot be recovered. We delete all your data from out servers";
 
+  // Search User Screen
+  static const String searchUserText = "Search User";
+
   // Exceptions
   static const String invalidEmailText = "Invalid Email Address";
   static const String invalidPasswordText = "Invalid Password";

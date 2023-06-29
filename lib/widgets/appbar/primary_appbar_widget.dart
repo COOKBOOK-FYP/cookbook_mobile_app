@@ -3,6 +3,7 @@ import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
+import 'package:cookbook/screens/search/search_user_screen.dart';
 import 'package:cookbook/screens/settings/settings_screen.dart';
 import 'package:cookbook/widgets/buttons/round_icon_button.dart';
 import 'package:flutter/material.dart';
@@ -68,20 +69,11 @@ class _PrimaryAppbarWidgetState extends State<PrimaryAppbarWidget> {
                 actions: [
                   RoundIconButton(
                     onPressed: () {},
-                    icon: const Icon(
-                      Ionicons.search_outline,
-                    ),
+                    icon: const Icon(Ionicons.search_outline),
                   ),
                   RoundIconButton(
-                    onPressed: () {
-                      AppNavigator.goToPage(
-                        context: context,
-                        screen: const SettingsScreen(),
-                      );
-                    },
-                    icon: const Icon(
-                      Ionicons.settings_outline,
-                    ),
+                    onPressed: () {},
+                    icon: const Icon(Ionicons.settings_outline),
                   ),
                   Container(
                     width: 50.w,
@@ -127,10 +119,13 @@ class _PrimaryAppbarWidgetState extends State<PrimaryAppbarWidget> {
               ),
               actions: [
                 RoundIconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Ionicons.search_outline,
-                  ),
+                  onPressed: () {
+                    AppNavigator.goToPage(
+                      context: context,
+                      screen: const SearchUserScreen(),
+                    );
+                  },
+                  icon: const Icon(Ionicons.search_outline),
                 ),
                 RoundIconButton(
                   onPressed: () {
@@ -139,9 +134,7 @@ class _PrimaryAppbarWidgetState extends State<PrimaryAppbarWidget> {
                       screen: const SettingsScreen(),
                     );
                   },
-                  icon: const Icon(
-                    Ionicons.settings_outline,
-                  ),
+                  icon: const Icon(Ionicons.settings_outline),
                 ),
                 Container(
                   width: 50.w,

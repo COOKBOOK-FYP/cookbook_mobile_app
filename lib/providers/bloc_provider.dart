@@ -3,6 +3,7 @@ import 'package:cookbook/blocs/authentication/signUp/signup_bloc.dart';
 import 'package:cookbook/blocs/authentication/signin/signin_bloc.dart';
 import 'package:cookbook/blocs/session_handling/splash_cubit.dart';
 import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
+import 'package:cookbook/blocs/user-search/user_search_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BlocProviders {
@@ -13,5 +14,6 @@ class BlocProviders {
     BlocProvider<SigninBloc>(create: (context) => SigninBloc()),
     BlocProvider<SignupBloc>(create: (context) => SignupBloc()),
     BlocProvider<UserCollectionBloc>(create: (context) => UserCollectionBloc()),
+    BlocProvider<UserSearchBloc>(create: (context) => UserSearchBloc()),
   ];
 }
