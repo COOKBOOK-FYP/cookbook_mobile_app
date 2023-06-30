@@ -32,6 +32,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 children: [
                   Column(
                     children: [
+                      const VxDivider(type: VxDividerType.horizontal),
                       ProfileHeaderWidget(
                         photoUrl: state.userDocument.photoUrl.toString(),
                         firstName: state.userDocument.firstName.toString(),
@@ -39,6 +40,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         location: state.userDocument.location.toString(),
                         bio: state.userDocument.bio.toString(),
                       ),
+                      const VxDivider(type: VxDividerType.horizontal),
                     ],
                   )
                       .box
