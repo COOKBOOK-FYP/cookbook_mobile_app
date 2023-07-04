@@ -18,16 +18,19 @@ class CustomListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(
-        leadingIcon,
-        color: AppColors.appBlackColor,
-        size: 30,
+      leading: CircleAvatar(
+        backgroundColor: AppColors.iconbackgroundColor,
+        child: Icon(
+          leadingIcon,
+          color: AppColors.backgroundColor,
+          size: 25,
+        ),
       ),
       title: title.text.xl2.make(),
       trailing: Icon(
         Ionicons.chevron_forward_outline,
         color: AppColors.appDarkGreyColor,
-        size: 30,
+        size: 25,
       ),
       onTap: onTap,
     );

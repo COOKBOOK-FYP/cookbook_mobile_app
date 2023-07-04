@@ -1,7 +1,7 @@
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_images.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
-import 'package:cookbook/screens/main-tabs/main_tabs_screen.dart';
+import 'package:cookbook/screens/authentication/complete_profile/complete_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -19,7 +19,7 @@ class _SignupCompletedScreenState extends State<SignupCompletedScreen> {
     Future.delayed(5.seconds, () {
       AppNavigator.replaceTo(
         context: context,
-        screen: const MainTabsScreen(),
+        screen: const CompleteProfileScreen(),
       );
     });
     super.initState();

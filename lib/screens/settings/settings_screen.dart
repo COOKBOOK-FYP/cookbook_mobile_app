@@ -5,12 +5,14 @@ import 'package:cookbook/global/utils/app_navigator.dart';
 import 'package:cookbook/screens/authentication/delete-account/delete_account_screen.dart';
 import 'package:cookbook/screens/authentication/sign-out/sign_out_screen.dart';
 import 'package:cookbook/widgets/appbar/secondary_appbar_widget.dart';
-import 'package:cookbook/widgets/circle_avatar/circle_avatar_widget.dart';
+import 'package:cookbook/widgets/images/avatar_image_widget.dart';
 import 'package:cookbook/widgets/listTile/custom_list_tile.dart';
 import 'package:cookbook/widgets/loading/loading_widget.dart';
-import 'package:cookbook/widgets/page/page_widget.dart';
+import 'package:cookbook/widgets/text/primary_text_widget.dart';
+import 'package:cookbook/widgets/text/secondary_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -24,24 +26,65 @@ class SettingsScreen extends StatelessWidget {
       body: BlocBuilder<UserCollectionBloc, UserCollectionState>(
         builder: (context, state) {
           if (state is UserCollectionLoadedState) {
-            return PageWidget(
+            return Column(
               children: [
-                ListTile(
-                  shape: RoundedRectangleBorder(
-                    side: const BorderSide(width: 1),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  leading: CircleAvatarWidget(
-                    photoUrl: state.userDocument.photoUrl.toString(),
-                    iconColor: AppColors.secondaryColor,
-                  ),
-                  title: Text(
-                    '${state.userDocument.firstName} ${state.userDocument.lastName}',
-                  ),
-                  subtitle: Text(state.userDocument.email.toString()),
-                  trailing: const Icon(Ionicons.pencil_outline),
-                ),
-                50.heightBox,
+                // ListTile(
+                //   shape: RoundedRectangleBorder(
+                //     side: const BorderSide(width: 1),
+                //     borderRadius: BorderRadius.circular(5),
+                //   ),
+                //   leading: CircleAvatarWidget(
+                //     photoUrl: state.userDocument.photoUrl.toString(),
+                //     iconColor: AppColors.secondaryColor,
+                //   ),
+                //   title: Text(
+                //     '${state.userDocument.firstName} ${state.userDocument.lastName}',
+                //   ),
+                //   subtitle: Text(state.userDocument.email.toString()),
+                //   trailing: const Icon(Ionicons.pencil_outline),
+                // ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    AvatarImageWidget(
+                      height: 80.h,
+                      width: 80.w,
+                      imageUrl: state.userDocument.photoUrl.toString(),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        PrimaryTextWidget(
+                          text: state.userDocument.fullName.toString(),
+                        ),
+                        SecondaryTextWidget(
+                          text: state.userDocument.email.toString(),
+                          fontColor: Colors.grey,
+                          fontSize: 13,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      width: 10.w,
+                    ),
+                    MaterialButton(
+                      onPressed: () {
+                        // Go to profile update screen
+                      },
+                      color: AppColors.backgroundColor,
+                      textColor: Colors.white,
+                      padding: EdgeInsets.all(5.w),
+                      shape: const CircleBorder(),
+                      child: Icon(
+                        Ionicons.pencil,
+                        size: 20.sp,
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                  ],
+                ).box.make().px12(),
+                Divider(color: AppColors.primaryColor),
+                30.heightBox,
                 CustomListTile(
                   title: "Themes",
                   leadingIcon: Ionicons.color_palette_outline,

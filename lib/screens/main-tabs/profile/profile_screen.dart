@@ -36,7 +36,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         photoUrl: state.userDocument.photoUrl.toString(),
                         firstName: state.userDocument.firstName.toString(),
                         lastName: state.userDocument.lastName.toString(),
-                        location: state.userDocument.location.toString(),
+                        location: state.userDocument.country.toString(),
                         bio: state.userDocument.bio.toString(),
                       ),
                       const VxDivider(type: VxDividerType.horizontal),

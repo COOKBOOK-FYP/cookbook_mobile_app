@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cookbook/constants/firebase_constants.dart';
+import 'package:cookbook/controllers/Firebase/firebase_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthController {
@@ -16,7 +17,7 @@ class AuthController {
     String? followingCount,
     String? bio,
     String? likes,
-    String? location,
+    String? country,
     Timestamp? dateOfBirth,
   }) async {
     final userCollection =
@@ -38,7 +39,7 @@ class AuthController {
           'followingCount': followingCount ?? 0,
           'bio': bio ?? 'Hey there! I am using CookBook',
           'likes': likes ?? 0,
-          'location': location ?? '',
+          'country': country ?? '',
           'dateOfBirth': dateOfBirth ?? DateTime.now(),
         },
       );
@@ -61,6 +62,31 @@ class AuthController {
       //     'dateOfBirth': dateOfBirth ?? DateTime.now(),
       //   },
       // );
+    }
+  }
+
+  static Future<void> completeProfile({
+    required String bio,
+    required String country,
+    required String dateOfBirth,
+  }) async {
+    try {
+      final userDoc = await FirebaseController.getUsersCollection(
+        FirebaseAuth.instance.currentUser!.uid,
+      );
+
+      if (userDoc.exists) {
+        // update the userDoc
+        userDoc.reference.update(
+          {
+            "country": country,
+            "bio": bio,
+            "dateOfBirth": dateOfBirth,
+          },
+        );
+      }
+    } catch (e) {
+      rethrow;
     }
   }
 

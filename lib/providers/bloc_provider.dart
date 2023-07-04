@@ -1,3 +1,4 @@
+import 'package:cookbook/blocs/authentication/complete_profile/complete_profile_bloc.dart';
 import 'package:cookbook/blocs/authentication/google/google_signin_bloc.dart';
 import 'package:cookbook/blocs/authentication/signUp/signup_bloc.dart';
 import 'package:cookbook/blocs/authentication/signin/signin_bloc.dart';
@@ -15,5 +16,8 @@ class BlocProviders {
     BlocProvider<SignupBloc>(create: (context) => SignupBloc()),
     BlocProvider<UserCollectionBloc>(create: (context) => UserCollectionBloc()),
     BlocProvider<UserSearchBloc>(create: (context) => UserSearchBloc()),
+    BlocProvider<CompleteProfileBloc>(
+      create: (context) => CompleteProfileBloc(),
+    ),
   ];
 }

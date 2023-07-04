@@ -13,9 +13,10 @@ class UserModel {
   Timestamp? createdAt;
   Timestamp? updatedAt;
   String? phoneNumber;
-  String? location;
+  String? country;
   int? followersCount;
   int? followingCount;
+  String? dateOfBirth;
 
   UserModel({
     this.firstName,
@@ -29,7 +30,10 @@ class UserModel {
     this.createdAt,
     this.updatedAt,
     this.phoneNumber,
-    this.location,
+    this.country,
+    this.followersCount,
+    this.followingCount,
+    this.dateOfBirth,
   });
 
   UserModel.fromJson(Map<String, dynamic> json) {
@@ -45,9 +49,10 @@ class UserModel {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     phoneNumber = json['phoneNumber'];
-    location = json['location'];
+    country = json['country'];
     followersCount = json['followersCount'];
     followingCount = json['followingCount'];
+    dateOfBirth = json['dateOfBirth'];
   }
 
   Map<String, dynamic> toJson() {
@@ -64,9 +69,10 @@ class UserModel {
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     data['phoneNumber'] = phoneNumber;
-    data['location'] = location;
+    data['country'] = country;
     data['followersCount'] = followersCount;
     data['followingCount'] = followingCount;
+    data['dateOfBirth'] = dateOfBirth;
     return data;
   }
 }
