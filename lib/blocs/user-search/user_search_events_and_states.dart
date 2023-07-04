@@ -5,8 +5,9 @@ abstract class UserSearchEvent {}
 
 class SearchTextChanged extends UserSearchEvent {
   final String searchText;
+  final int paginatedBy;
 
-  SearchTextChanged(this.searchText);
+  SearchTextChanged(this.searchText, this.paginatedBy);
 }
 
 // States

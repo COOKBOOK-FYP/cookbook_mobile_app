@@ -37,6 +37,10 @@ class AppText {
 
   // Search User Screen
   static const String searchUserText = "Search User";
+  static const String enterUserNameText = "Enter user name";
+
+  // Post Screen
+  static const String createPostText = "Create Post";
 
   // Exceptions
   static const String invalidEmailText = "Invalid Email Address";
@@ -55,4 +59,34 @@ class AppText {
   static const String tab3 = "tab3";
   static const String tab4 = "tab4";
   static const String accountText = "Account";
+
+  // Food Categories
+  static const List<String> foodCategories = [
+    "Beverages",
+    "Breads",
+    "Cakes",
+    "Candy",
+    "Casseroles",
+    "Cookies",
+    "Desserts",
+    "Dips",
+    "Dressings",
+    "Fish",
+    "Fruits",
+    "Meat",
+    "Nuts",
+    "Pasta",
+    "Pies",
+    "Pizza",
+    "Potatoes",
+    "Poultry",
+    "Rice",
+    "Salads",
+    "Sandwiches",
+    "Seafood",
+    "Snacks",
+    "Soups",
+    "Vegetables",
+    "Miscellaneous",
+  ];
 }

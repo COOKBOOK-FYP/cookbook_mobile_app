@@ -40,6 +40,7 @@ class _PrimaryAppbarWidgetState extends State<PrimaryAppbarWidget> {
           if (state is UserCollectionLoadingState) {
             return Shimmer(
               colorOpacity: 0.5,
+              duration: const Duration(milliseconds: 1000),
               enabled: true,
               direction: const ShimmerDirection.fromLTRB(),
               child: AppBar(

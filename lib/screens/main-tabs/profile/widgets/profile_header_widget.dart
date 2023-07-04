@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_fonts.dart';
-import 'package:cookbook/screens/profile/widgets/profile_text_widget.dart';
+import 'package:cookbook/screens/main-tabs/profile/widgets/profile_text_widget.dart';
 import 'package:cookbook/widgets/buttons/secondary_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
@@ -33,7 +33,7 @@ class ProfileHeaderWidget extends StatelessWidget {
             children: [
               Container(
                 height: context.height() * 0.20,
-                width: context.width() * 0.35,
+                width: context.width(),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
@@ -58,13 +58,13 @@ class ProfileHeaderWidget extends StatelessWidget {
                     : const SizedBox.shrink(),
               ).box.color(AppColors.appGreyColor).roundedFull.makeCentered(),
               Positioned(
-                bottom: 0,
                 left: 0,
                 right: 0,
+                bottom: 0,
                 child: SecondaryButtonWidget(
                   caption: "Edit Profile",
                   onPressed: () {},
-                ).box.make().h(30),
+                ).box.make().h(20),
               ),
             ],
           ),
@@ -96,6 +96,6 @@ class ProfileHeaderWidget extends StatelessWidget {
           ),
         ),
       ],
-    ).box.make().wh(context.width(), context.height() * 0.25);
+    ).box.make().wh(context.width(), context.height() * 0.20);
   }
 }

@@ -4,7 +4,7 @@ import 'package:cookbook/global/themes/app_theme.dart';
 import 'package:cookbook/providers/bloc_provider.dart';
 import 'package:cookbook/screens/authentication/landing/splash_screen.dart';
 import 'package:cookbook/screens/error/error_screen.dart';
-import 'package:cookbook/screens/main-tabs-screen/main_tabs_screen.dart';
+import 'package:cookbook/screens/main-tabs/main_tabs_screen.dart';
 import 'package:cookbook/screens/onboarding/onboarding_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

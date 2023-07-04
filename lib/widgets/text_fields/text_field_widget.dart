@@ -14,6 +14,7 @@ class TextFieldWidget extends StatefulWidget {
     this.validator,
     this.readOnly,
     this.nextFocusNode,
+    this.onChanged,
   }) : super(key: key);
 
   final TextEditingController controller;
@@ -25,6 +26,7 @@ class TextFieldWidget extends StatefulWidget {
   final bool? readOnly;
   final String? Function(String?)? validator;
   final FocusNode? nextFocusNode;
+  final Function(String)? onChanged;
 
   @override
   State<TextFieldWidget> createState() => _TextFieldWidgetState();
@@ -34,8 +36,9 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      readOnly: widget.readOnly ?? false,
       controller: widget.controller,
+      readOnly: widget.readOnly ?? false,
+      onChanged: widget.onChanged ?? (value) {},
       style: const TextStyle(fontSize: 18),
       textInputAction: widget.textInputAction ?? TextInputAction.next,
       keyboardType: widget.keyboardType ?? TextInputType.text,

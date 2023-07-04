@@ -10,7 +10,7 @@ import 'package:cookbook/global/utils/app_dialogs.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
 import 'package:cookbook/global/utils/app_snakbars.dart';
 import 'package:cookbook/screens/authentication/sign-up/signup_screen.dart';
-import 'package:cookbook/screens/main-tabs-screen/main_tabs_screen.dart';
+import 'package:cookbook/screens/main-tabs/main_tabs_screen.dart';
 import 'package:cookbook/widgets/buttons/primary_button_widget.dart';
 import 'package:cookbook/widgets/text/primary_text_widget.dart';
 import 'package:cookbook/widgets/text_fields/password_text_field_widget.dart';

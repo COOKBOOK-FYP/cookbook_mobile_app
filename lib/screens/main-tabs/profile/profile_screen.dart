@@ -1,6 +1,6 @@
 import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
-import 'package:cookbook/screens/profile/widgets/profile_header_widget.dart';
+import 'package:cookbook/screens/main-tabs/profile/widgets/profile_header_widget.dart';
 import 'package:cookbook/widgets/appbar/primary_appbar_widget.dart';
 import 'package:cookbook/widgets/loading/loading_widget.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +32,6 @@ class _AccountScreenState extends State<AccountScreen> {
                 children: [
                   Column(
                     children: [
-                      const VxDivider(type: VxDividerType.horizontal),
                       ProfileHeaderWidget(
                         photoUrl: state.userDocument.photoUrl.toString(),
                         firstName: state.userDocument.firstName.toString(),
