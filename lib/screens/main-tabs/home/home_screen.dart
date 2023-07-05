@@ -5,6 +5,7 @@ import 'package:cookbook/screens/post/post_screen.dart';
 import 'package:cookbook/widgets/appbar/primary_appbar_widget.dart';
 import 'package:cookbook/widgets/buttons/material_button_widget.dart';
 import 'package:cookbook/widgets/page/page_widget.dart';
+import 'package:cookbook/widgets/post/post_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,43 +30,54 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const PrimaryAppbarWidget(),
-      body: PageWidget(children: [
-        // what's on your mind
-        Row(
-          children: [
-            Expanded(
-              flex: 4,
-              child: GestureDetector(
-                onTap: () => AppNavigator.goToPage(
-                  context: context,
-                  screen: const PostScreen(isImagePost: false),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: AppColors.appBlackColor),
-                  ),
-                  child: "What's on your mind?".text.make().p12(),
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: MaterialButtonWidget(
-                icon: Ionicons.image_outline,
-                iconBgColor: AppColors.primaryColor,
-                size: 25.sp,
-                onPressed: () {
-                  AppNavigator.goToPage(
+      body: PageWidget(
+        children: [
+          // what's on your mind
+          Row(
+            children: [
+              Expanded(
+                flex: 4,
+                child: GestureDetector(
+                  onTap: () => AppNavigator.goToPage(
                     context: context,
-                    screen: const PostScreen(isImagePost: true),
-                  );
-                },
+                    screen: const PostScreen(isImagePost: false),
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: AppColors.appBlackColor),
+                    ),
+                    child: "What's on your mind?".text.make().p12(),
+                  ),
+                ),
               ),
+              Expanded(
+                flex: 1,
+                child: MaterialButtonWidget(
+                  icon: Ionicons.image_outline,
+                  iconBgColor: AppColors.primaryColor,
+                  size: 25.sp,
+                  onPressed: () {
+                    AppNavigator.goToPage(
+                      context: context,
+                      screen: const PostScreen(isImagePost: true),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+          20.heightBox,
+          SizedBox(
+            height: context.screenHeight,
+            child: ListView.builder(
+              itemBuilder: (context, index) => const PostWidget(),
+              itemCount: 20,
+              physics: const BouncingScrollPhysics(),
             ),
-          ],
-        ),
-      ]),
+          ),
+        ],
+      ),
     );
   }
 }

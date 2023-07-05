@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_fonts.dart';
@@ -6,12 +5,12 @@ import 'package:cookbook/global/utils/app_navigator.dart';
 import 'package:cookbook/screens/search/search_user_screen.dart';
 import 'package:cookbook/screens/settings/settings_screen.dart';
 import 'package:cookbook/widgets/buttons/round_icon_button.dart';
+import 'package:cookbook/widgets/images/circular_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 class PrimaryAppbarWidget extends StatefulWidget
     implements PreferredSizeWidget {
@@ -137,31 +136,7 @@ class _PrimaryAppbarWidgetState extends State<PrimaryAppbarWidget> {
                   },
                   icon: const Icon(Ionicons.settings_outline),
                 ),
-                Container(
-                  width: 50.w,
-                  height: 50.w,
-                  margin: const EdgeInsets.only(right: 10),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: AppColors.primaryColor,
-                      width: 2,
-                    ),
-                    image: DecorationImage(
-                      image: CachedNetworkImageProvider(
-                        state.userDocument.photoUrl.toString(),
-                      ),
-                      fit: BoxFit.cover,
-                      onError: (exception, stackTrace) => Icon(
-                        Ionicons.person,
-                        color: AppColors.primaryColor,
-                      ),
-                    ),
-                  ),
-                  child: state.userDocument.photoUrl.toString().isEmptyOrNull
-                      ? const Icon(Ionicons.person)
-                      : const SizedBox.shrink(),
-                ),
+                CircularImage(imageUrl: state.userDocument.photoUrl.toString()),
               ],
             );
           }
