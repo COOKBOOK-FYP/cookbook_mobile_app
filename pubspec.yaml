@@ -68,6 +68,7 @@ dependencies:
   uuid: ^3.0.7
   path_provider: ^2.0.15
   image: ^4.0.17
+  fluttertoast: ^8.2.2
 
 flutter_native_splash:
   color: "#FFFFFF"

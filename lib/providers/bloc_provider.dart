@@ -2,6 +2,7 @@ import 'package:cookbook/blocs/authentication/complete_profile/complete_profile_
 import 'package:cookbook/blocs/authentication/google/google_signin_bloc.dart';
 import 'package:cookbook/blocs/authentication/signUp/signup_bloc.dart';
 import 'package:cookbook/blocs/authentication/signin/signin_bloc.dart';
+import 'package:cookbook/blocs/post/post_bloc.dart';
 import 'package:cookbook/blocs/session_handling/splash_cubit.dart';
 import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/blocs/user-search/user_search_bloc.dart';
@@ -19,5 +20,6 @@ class BlocProviders {
     BlocProvider<CompleteProfileBloc>(
       create: (context) => CompleteProfileBloc(),
     ),
+    BlocProvider<PostBloc>(create: (context) => PostBloc()),
   ];
 }
