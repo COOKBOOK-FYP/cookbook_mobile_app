@@ -9,14 +9,15 @@ import 'package:cookbook/global/utils/app_image_picker.dart';
 import 'package:cookbook/global/utils/app_snakbars.dart';
 import 'package:cookbook/global/utils/media_utils.dart';
 import 'package:cookbook/widgets/appbar/secondary_appbar_widget.dart';
+import 'package:cookbook/widgets/drop_down/drop_down_widget.dart';
 import 'package:cookbook/widgets/images/avatar_image_widget.dart';
 import 'package:cookbook/widgets/listTile/custom_list_tile.dart';
 import 'package:cookbook/widgets/loading/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:uuid/uuid.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -40,18 +41,12 @@ class _PostScreenState extends State<PostScreen> {
 
   File? image;
   File? compressedImage;
+  String foodCategory = AppText.foodCategories[0];
 
   @override
   void initState() {
     context.read<UserCollectionBloc>().add(UserCollectionGetDataEvent());
     if (widget.isImagePost) {
-      // AppImagePicker.pickFromGallery().then((img) {
-      //   if (img != null) {
-      //     setState(() {
-      //       image = img;
-      //     });
-      //   }
-      // });
       pickFromGallery();
     }
     super.initState();
@@ -94,8 +89,12 @@ class _PostScreenState extends State<PostScreen> {
                     description: descriptionController.text,
                   ),
                 );
-          } else {
+          } else if (compressedImage == null) {
             AppSnackbars.normal(context, "Please select an image");
+          } else if (foodCategory == AppText.foodCategories.first) {
+            AppSnackbars.normal(context, "Please select a category");
+          } else if (descriptionController.text.isEmpty) {
+            AppSnackbars.normal(context, "Please enter a description");
           }
         },
         backgroundColor: AppColors.primaryColor,
@@ -114,6 +113,7 @@ class _PostScreenState extends State<PostScreen> {
               gravity: ToastGravity.BOTTOM,
             );
             Navigator.pop(context);
+            // or we can replace the page with main tabs page to get new states
           } else if (state is PostErrorState) {
             AppDialogs.closeLoadingDialog();
             AppSnackbars.danger(context, state.message.toString());
@@ -134,13 +134,14 @@ class _PostScreenState extends State<PostScreen> {
                         children: [
                           AvatarImageWidget(
                             imageUrl: state.userDocument.photoUrl.toString(),
-                            height: 70,
-                            width: 70,
+                            height: 80.h,
+                            width: 80.w,
                           ),
                           20.widthBox,
                           state.userDocument.fullName.toString().text.xl.make(),
                         ],
                       ).box.make().px16(),
+
                       TextFormField(
                         controller: descriptionController,
                         maxLines: 5,
@@ -153,7 +154,20 @@ class _PostScreenState extends State<PostScreen> {
                           border: InputBorder.none,
                         ),
                       ).box.make().px16(),
-                      // const Divider(thickness: 2).box.make().px16(),
+                      DropDownWidget(
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            foodCategory = newValue!;
+                          });
+                        },
+                        value: foodCategory,
+                        items: AppText.foodCategories,
+                      )
+                          .box
+                          .alignCenterRight
+                          .margin(const EdgeInsets.only(right: 12))
+                          .make()
+                          .w(context.width()),
                       AspectRatio(
                         aspectRatio: 16 / 9,
                         child: Container(
@@ -169,6 +183,8 @@ class _PostScreenState extends State<PostScreen> {
                                 ),
                         ),
                       ).box.make().p12(),
+                      // drop down button
+
                       20.heightBox,
                       CustomListTile(
                         leadingIcon: Ionicons.image_outline,
@@ -179,6 +195,7 @@ class _PostScreenState extends State<PostScreen> {
                         },
                       ),
                       const Divider(thickness: 2).box.make().px16(),
+
                       CustomListTile(
                         leadingIcon: Ionicons.camera_outline,
                         title: "Take a photo",

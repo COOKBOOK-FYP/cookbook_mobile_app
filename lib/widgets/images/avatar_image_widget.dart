@@ -34,18 +34,24 @@ class AvatarImageWidget extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(50.r),
-        child: CachedNetworkImage(
-          fit: boxFit ?? BoxFit.fill,
-          imageUrl: imageUrl,
-          placeholder: (context, url) => const Center(
-            child: CircularProgressIndicator(),
-          ),
-          errorWidget: (context, url, error) => Icon(
-            Ionicons.person_outline,
-            size: 40.sp,
-            color: AppColors.primaryColor,
-          ),
-        ),
+        child: imageUrl.isEmpty
+            ? Icon(
+                Ionicons.person_outline,
+                size: 30.sp,
+                color: AppColors.primaryColor,
+              )
+            : CachedNetworkImage(
+                fit: boxFit ?? BoxFit.fill,
+                imageUrl: imageUrl,
+                placeholder: (context, url) => const Center(
+                  child: CircularProgressIndicator(),
+                ),
+                errorWidget: (context, url, error) => Icon(
+                  Ionicons.person_outline,
+                  size: 30.sp,
+                  color: AppColors.primaryColor,
+                ),
+              ),
       ),
     );
   }

@@ -25,8 +25,10 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         await PostController.submitPost(RecipeModel(
           createdAt: Timestamp.now(),
           description: event.description,
+          likes: 0,
           image: image,
           userId: FirebaseAuth.instance.currentUser!.uid,
+          id: event.postId,
         ));
 
         emit(PostSubmittedState());

@@ -62,6 +62,7 @@ class AppText {
 
   // Food Categories
   static const List<String> foodCategories = [
+    "Select Category",
     "Beverages",
     "Breads",
     "Cakes",

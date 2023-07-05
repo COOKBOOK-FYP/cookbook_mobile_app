@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Row(
           children: [
             Expanded(
-              flex: 3,
+              flex: 4,
               child: GestureDetector(
                 onTap: () => AppNavigator.goToPage(
                   context: context,
@@ -50,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Expanded(
+              flex: 1,
               child: MaterialButtonWidget(
                 icon: Ionicons.image_outline,
                 iconBgColor: AppColors.primaryColor,

@@ -29,21 +29,6 @@ class SettingsScreen extends StatelessWidget {
           if (state is UserCollectionLoadedState) {
             return Column(
               children: [
-                // ListTile(
-                //   shape: RoundedRectangleBorder(
-                //     side: const BorderSide(width: 1),
-                //     borderRadius: BorderRadius.circular(5),
-                //   ),
-                //   leading: CircleAvatarWidget(
-                //     photoUrl: state.userDocument.photoUrl.toString(),
-                //     iconColor: AppColors.secondaryColor,
-                //   ),
-                //   title: Text(
-                //     '${state.userDocument.firstName} ${state.userDocument.lastName}',
-                //   ),
-                //   subtitle: Text(state.userDocument.email.toString()),
-                //   trailing: const Icon(Ionicons.pencil_outline),
-                // ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
