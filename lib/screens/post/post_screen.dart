@@ -87,6 +87,7 @@ class _PostScreenState extends State<PostScreen> {
                     compressedImage: compressedImage!,
                     postId: postId,
                     description: descriptionController.text,
+                    category: foodCategory,
                   ),
                 );
           } else if (compressedImage == null) {
@@ -134,8 +135,8 @@ class _PostScreenState extends State<PostScreen> {
                         children: [
                           AvatarImageWidget(
                             imageUrl: state.userDocument.photoUrl.toString(),
-                            height: 80.h,
-                            width: 80.w,
+                            height: 60.h,
+                            width: 60.w,
                           ),
                           20.widthBox,
                           state.userDocument.fullName.toString().text.xl.make(),

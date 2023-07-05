@@ -29,6 +29,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
           image: image,
           userId: FirebaseAuth.instance.currentUser!.uid,
           id: event.postId,
+          category: event.category,
         ));
 
         emit(PostSubmittedState());
