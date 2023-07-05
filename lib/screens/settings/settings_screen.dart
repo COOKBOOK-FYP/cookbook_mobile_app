@@ -5,6 +5,7 @@ import 'package:cookbook/global/utils/app_navigator.dart';
 import 'package:cookbook/screens/authentication/delete-account/delete_account_screen.dart';
 import 'package:cookbook/screens/authentication/sign-out/sign_out_screen.dart';
 import 'package:cookbook/widgets/appbar/secondary_appbar_widget.dart';
+import 'package:cookbook/widgets/buttons/material_button_widget.dart';
 import 'package:cookbook/widgets/images/avatar_image_widget.dart';
 import 'package:cookbook/widgets/listTile/custom_list_tile.dart';
 import 'package:cookbook/widgets/loading/loading_widget.dart';
@@ -67,22 +68,12 @@ class SettingsScreen extends StatelessWidget {
                     SizedBox(
                       width: 10.w,
                     ),
-                    MaterialButton(
-                      onPressed: () {
-                        // Go to profile update screen
-                      },
-                      color: AppColors.backgroundColor,
-                      textColor: Colors.white,
-                      padding: EdgeInsets.all(5.w),
-                      shape: const CircleBorder(),
-                      child: Icon(
-                        Ionicons.pencil,
-                        size: 20.sp,
-                        color: AppColors.primaryColor,
-                      ),
+                    MaterialButtonWidget(
+                      icon: Ionicons.pencil,
+                      onPressed: () {},
                     ),
                   ],
-                ).box.make().px12(),
+                ).box.make().px(10),
                 Divider(color: AppColors.primaryColor),
                 30.heightBox,
                 CustomListTile(

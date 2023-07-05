@@ -206,8 +206,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               return "Please enter email address";
                             } else if (EmailValidator.validate(val) == false) {
                               return "Please enter valid email address";
-                            } else if (EmailValidator.validate(val) == false) {
-                              return "Please enter valid email address";
+                            } else if (val.length > 50) {
+                              return "Email length should be less than 50";
                             }
                             return null;
                           },

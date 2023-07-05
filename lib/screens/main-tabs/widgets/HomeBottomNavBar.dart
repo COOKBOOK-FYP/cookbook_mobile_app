@@ -31,24 +31,6 @@ GNav HomeBottomNavBar(BuildContext context, {void Function(int)? onTabChange}) {
           text: AppText.homeText,
           backgroundColor: AppColors.appWhiteColor,
         ),
-        // GButton(
-        //   icon: Ionicons.search_outline,
-        //   text: AppText.tab2,
-        //   iconSize: 22,
-        //   backgroundColor: AppColors.appWhiteColor,
-        // ),
-        // GButton(
-        //   icon: Ionicons.cart_outline,
-        //   text: AppText.tab3,
-        //   iconSize: 22,
-        //   backgroundColor: AppColors.appWhiteColor,
-        // ),
-        // GButton(
-        //   icon: Ionicons.heart_outline,
-        //   text: AppText.tab4,
-        //   iconSize: 22,
-        //   backgroundColor: AppColors.appWhiteColor,
-        // ),
         GButton(
           icon: Ionicons.person_outline,
           text: AppText.accountText,

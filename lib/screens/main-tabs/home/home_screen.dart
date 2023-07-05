@@ -1,12 +1,14 @@
 import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
-import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
-import 'package:cookbook/screens/main-tabs/post/post_screen.dart';
+import 'package:cookbook/screens/post/post_screen.dart';
 import 'package:cookbook/widgets/appbar/primary_appbar_widget.dart';
+import 'package:cookbook/widgets/buttons/material_button_widget.dart';
 import 'package:cookbook/widgets/page/page_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -30,34 +32,35 @@ class _HomeScreenState extends State<HomeScreen> {
       body: PageWidget(children: [
         // what's on your mind
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            GestureDetector(
-              onTap: () => AppNavigator.goToPage(
-                context: context,
-                screen: const PostScreen(),
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: AppColors.appBlackColor),
+            Expanded(
+              flex: 3,
+              child: GestureDetector(
+                onTap: () => AppNavigator.goToPage(
+                  context: context,
+                  screen: const PostScreen(isImagePost: false),
                 ),
-                child: "What's on your mind?"
-                    .text
-                    .xl
-                    .fontFamily(AppFonts.robotoMonoMedium)
-                    .make()
-                    .p12(),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: AppColors.appBlackColor),
+                  ),
+                  child: "What's on your mind?".text.make().p12(),
+                ),
               ),
             ),
-            TextButton(
-              onPressed: () {
-                AppNavigator.goToPage(
-                  context: context,
-                  screen: const PostScreen(),
-                );
-              },
-              child: "Create Post".text.xl.make(),
+            Expanded(
+              child: MaterialButtonWidget(
+                icon: Ionicons.image_outline,
+                iconBgColor: AppColors.primaryColor,
+                size: 25.sp,
+                onPressed: () {
+                  AppNavigator.goToPage(
+                    context: context,
+                    screen: const PostScreen(isImagePost: true),
+                  );
+                },
+              ),
             ),
           ],
         ),

@@ -9,6 +9,7 @@ import 'package:cookbook/screens/main-tabs/home/home_screen.dart';
 import 'package:cookbook/screens/main-tabs/profile/profile_screen.dart';
 import 'package:cookbook/screens/main-tabs/widgets/FadeIndexedStack.dart';
 import 'package:cookbook/screens/main-tabs/widgets/HomeBottomNavBar.dart';
+import 'package:cookbook/screens/post/post_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -69,15 +70,6 @@ class _MainTabsScreenState extends State<MainTabsScreen> {
                           .read<UserCollectionBloc>()
                           .add(UserCollectionGetDataEvent());
                     }
-
-                    // //Search Page
-                    // if (tabindex == 1) {}
-
-                    // //Cart Page
-                    // if (tabindex == 2) {}
-
-                    // //WishList Page
-                    // if (tabindex == 3) {}
 
                     //Account Page
                     if (index == 1) {

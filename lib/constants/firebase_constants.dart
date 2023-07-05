@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseContants {
@@ -15,4 +16,7 @@ class FirebaseContants {
   static final commentsCollection =
       FirebaseFirestore.instance.collection('Comments');
   static final likesCollection = FirebaseFirestore.instance.collection('Likes');
+
+  // Storage constants //
+  static final storageRef = FirebaseStorage.instance.ref();
 }

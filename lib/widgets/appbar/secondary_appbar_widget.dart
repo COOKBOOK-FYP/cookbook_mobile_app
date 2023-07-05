@@ -13,16 +13,17 @@ class SecondaryAppbarWidget extends StatelessWidget
     return PreferredSize(
       preferredSize: const Size.fromHeight(60),
       child: AppBar(
-          title: title.text.xl2.bold.make(),
-          leading: IconButton(
-            icon: Icon(
-              Ionicons.arrow_back,
-              color: AppColors.appBlackColor,
-            ),
-            onPressed: () {
-              context.pop();
-            },
-          )),
+        title: title.text.xl2.bold.make(),
+        leading: IconButton(
+          icon: Icon(
+            Ionicons.arrow_back,
+            color: AppColors.appBlackColor,
+          ),
+          onPressed: () {
+            context.pop();
+          },
+        ),
+      ),
     );
   }
 

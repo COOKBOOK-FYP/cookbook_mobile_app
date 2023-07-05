@@ -6,23 +6,27 @@ import 'package:velocity_x/velocity_x.dart';
 class CustomListTile extends StatelessWidget {
   final String title;
   final IconData leadingIcon;
-
   final VoidCallback onTap;
+  final Color? leadingIconBackgroundColor;
+  final Color? leadingIconForegroundColor;
 
   const CustomListTile({
     Key? key,
     required this.title,
     required this.leadingIcon,
     required this.onTap,
+    this.leadingIconBackgroundColor,
+    this.leadingIconForegroundColor,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: CircleAvatar(
-        backgroundColor: AppColors.iconbackgroundColor,
+        backgroundColor:
+            leadingIconBackgroundColor ?? AppColors.iconbackgroundColor,
         child: Icon(
           leadingIcon,
-          color: AppColors.backgroundColor,
+          color: leadingIconForegroundColor ?? AppColors.backgroundColor,
           size: 25,
         ),
       ),

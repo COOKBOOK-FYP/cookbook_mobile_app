@@ -12,14 +12,14 @@ class ProfileHeaderWidget extends StatelessWidget {
   final String photoUrl;
   final String firstName;
   final String lastName;
-  final String location;
+  final String country;
   final String bio;
   const ProfileHeaderWidget({
     Key? key,
     required this.photoUrl,
     required this.firstName,
     required this.lastName,
-    required this.location,
+    required this.country,
     required this.bio,
   }) : super(key: key);
   @override
@@ -81,7 +81,7 @@ class ProfileHeaderWidget extends StatelessWidget {
                 text2: lastName,
               ),
               5.heightBox,
-              location.text
+              country.text
                   .size(16)
                   .fontFamily(AppFonts.openSansMedium)
                   .color(AppColors.appTextColorPrimary)

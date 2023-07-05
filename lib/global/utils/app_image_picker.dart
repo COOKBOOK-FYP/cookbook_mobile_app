@@ -1,12 +1,21 @@
+import 'dart:io';
+
 import 'package:image_picker/image_picker.dart';
 
 class AppImagePicker {
-  static Function pickFromGallery = () async {
-    XFile? file = await ImagePicker().pickImage(
+  static Future<File> pickFromGallery() async {
+    XFile? xFile = await ImagePicker().pickImage(
       source: ImageSource.gallery,
     );
-    return file;
-  };
+
+    if (xFile == null) {
+      throw Exception('File is null');
+    } else {
+      // convert XFile to File
+      File file = File(xFile.path);
+      return file;
+    }
+  }
 
   static Function pickFromCamera = () async {
     XFile? file = await ImagePicker().pickImage(
