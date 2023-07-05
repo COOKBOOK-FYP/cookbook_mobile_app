@@ -6,6 +6,7 @@ import 'package:cookbook/constants/app_texts.dart';
 import 'package:cookbook/global/utils/app_image_picker.dart';
 import 'package:cookbook/global/utils/app_snakbars.dart';
 import 'package:cookbook/widgets/appbar/secondary_appbar_widget.dart';
+import 'package:cookbook/widgets/images/avatar_image_widget.dart';
 import 'package:cookbook/widgets/listTile/custom_list_tile.dart';
 import 'package:cookbook/widgets/loading/loading_widget.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class PostScreen extends StatefulWidget {
 
 class _PostScreenState extends State<PostScreen> {
   // scaffold key
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   File? image;
 
@@ -65,12 +66,28 @@ class _PostScreenState extends State<PostScreen> {
           if (state is UserCollectionLoadedState) {
             return SingleChildScrollView(
               child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 child: Column(
                   children: [
+                    Row(
+                      children: [
+                        AvatarImageWidget(
+                          imageUrl: state.userDocument.photoUrl.toString(),
+                          height: 70,
+                          width: 70,
+                        ),
+                        20.widthBox,
+                        state.userDocument.fullName.toString().text.xl.make(),
+                      ],
+                    ).box.make().px16(),
                     TextFormField(
                       maxLines: 5,
                       decoration: const InputDecoration(
                         hintText: "Say something about this recipe",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 20,
+                        ),
                         border: InputBorder.none,
                       ),
                     ).box.make().px16(),
@@ -107,14 +124,15 @@ class _PostScreenState extends State<PostScreen> {
                     CustomListTile(
                       leadingIcon: Ionicons.camera_outline,
                       title: "Take a photo",
-                      onTap: () {},
+                      onTap: () async {
+                        try {
+                          image = await AppImagePicker.pickFromCamera();
+                        } catch (error) {
+                          AppSnackbars.danger(context, error.toString());
+                        }
+                      },
                     ),
                     const Divider(thickness: 2).box.make().px16(),
-                    30.heightBox,
-                    // PrimaryButtonWidget(
-                    //   caption: "Post Recipe",
-                    //   onPressed: () {},
-                    // ).box.make().px16(),
                   ],
                 ).box.make(),
               ),

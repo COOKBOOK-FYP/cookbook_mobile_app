@@ -9,7 +9,7 @@ class AppImagePicker {
     );
 
     if (xFile == null) {
-      throw Exception('File is null');
+      throw Exception('File not selected');
     } else {
       // convert XFile to File
       File file = File(xFile.path);
@@ -17,12 +17,18 @@ class AppImagePicker {
     }
   }
 
-  static Function pickFromCamera = () async {
-    XFile? file = await ImagePicker().pickImage(
+  static Future<File> pickFromCamera() async {
+    XFile? xFile = await ImagePicker().pickImage(
       source: ImageSource.camera,
       maxHeight: 675,
       maxWidth: 960,
     );
-    return file;
-  };
+    if (xFile == null) {
+      throw Exception('File not selected');
+    } else {
+      // convert XFile to File
+      File file = File(xFile.path);
+      return file;
+    }
+  }
 }
