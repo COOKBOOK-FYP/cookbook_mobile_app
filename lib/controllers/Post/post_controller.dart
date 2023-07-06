@@ -28,4 +28,17 @@ class PostController {
       rethrow;
     }
   }
+
+  static Future<List<RecipeModel>> fetchPosts() async {
+    List<RecipeModel> recipes = [];
+    try {
+      final posts = await FirebaseContants.recipesCollection.get();
+      for (var post in posts.docs) {
+        recipes.add(RecipeModel.fromJson(post.data()));
+      }
+      return recipes;
+    } catch (error) {
+      rethrow;
+    }
+  }
 }

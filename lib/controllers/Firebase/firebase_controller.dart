@@ -7,4 +7,9 @@ class FirebaseController {
   ) async {
     return FirebaseContants.usersCollection.doc(uid).get();
   }
+
+  static Future<QuerySnapshot<Map<String, dynamic>>>
+      getRecipesCollection() async {
+    return FirebaseContants.recipesCollection.get();
+  }
 }

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:cookbook/blocs/post/post_bloc.dart';
+import 'package:cookbook/blocs/post/create_post/post_bloc.dart';
 import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_texts.dart';

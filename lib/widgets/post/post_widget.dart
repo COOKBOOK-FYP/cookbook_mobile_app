@@ -1,4 +1,5 @@
 import 'package:cookbook/constants/app_fonts.dart';
+import 'package:cookbook/models/Recipes/recipe_model.dart';
 import 'package:cookbook/widgets/images/circular_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,14 +7,16 @@ import 'package:ionicons/ionicons.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class PostWidget extends StatelessWidget {
-  const PostWidget({Key? key}) : super(key: key);
+  final RecipeModel post;
+  const PostWidget({Key? key, required this.post}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-            CircularImage(
+            const CircularImage(
               imageUrl: "https://picsum.photos/200/300",
             ),
             10.widthBox,
@@ -25,7 +28,13 @@ class PostWidget extends StatelessWidget {
                     .fontFamily(AppFonts.robotoMonoBold)
                     .size(16)
                     .make(),
-                "Category - 4h".text.make(),
+                (DateTime.now().hour - post.createdAt!.toDate().hour) > 24
+                    ? "${post.category} - ${(DateTime.now().hour - post.createdAt!.toDate().hour) ~/ 24} days ago"
+                        .text
+                        .make()
+                    : "${post.category} - ${(DateTime.now().hour - post.createdAt!.toDate().hour)} hours ago"
+                        .text
+                        .make(),
               ],
             ),
             const Spacer(),
@@ -37,16 +46,17 @@ class PostWidget extends StatelessWidget {
         ),
         10.heightBox,
         // image description with auto resize text
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl eget ultricies aliquam, nisl nisl ultricies"
-            .text
-            .make(),
+        post.description.toString().text.make(),
         10.heightBox,
         Container(
           height: 200.h,
-          decoration: const BoxDecoration(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.grey[300],
             image: DecorationImage(
-              image: NetworkImage("https://picsum.photos/200/300"),
-              fit: BoxFit.cover,
+              image: NetworkImage(post.image.toString()),
+              fit: BoxFit.contain,
             ),
           ),
         ),
@@ -58,7 +68,7 @@ class PostWidget extends StatelessWidget {
               size: 30.sp,
             ),
             5.widthBox,
-            "100".text.make(),
+            post.likes.toString().text.make(),
             // 10.widthBox,
             // Icon(
             //   Ionicons.chatbubble_outline,
