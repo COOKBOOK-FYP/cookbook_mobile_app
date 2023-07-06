@@ -24,6 +24,12 @@ class CircularImage extends StatelessWidget {
         image: DecorationImage(
           image: CachedNetworkImageProvider(
             imageUrl,
+            maxHeight: 50,
+            maxWidth: 50,
+            errorListener: () => Icon(
+              Ionicons.person,
+              color: AppColors.primaryColor,
+            ),
           ),
           fit: BoxFit.cover,
           onError: (exception, stackTrace) => Icon(

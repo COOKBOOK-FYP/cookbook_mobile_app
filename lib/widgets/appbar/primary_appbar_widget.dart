@@ -26,7 +26,7 @@ class PrimaryAppbarWidget extends StatefulWidget
 class _PrimaryAppbarWidgetState extends State<PrimaryAppbarWidget> {
   @override
   void initState() {
-    context.read<UserCollectionBloc>().add(UserCollectionGetDataEvent());
+    context.read<UserCollectionBloc>().add(UserCollectionGetDataEvent(null));
     super.initState();
   }
 

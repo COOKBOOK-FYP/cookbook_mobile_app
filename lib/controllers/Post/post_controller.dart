@@ -4,6 +4,7 @@ import 'package:cookbook/constants/firebase_constants.dart';
 import 'package:cookbook/models/Recipes/recipe_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:uuid/uuid.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class PostController {
   static Future<String> uploadImageToStorageAndGet(
@@ -29,16 +30,34 @@ class PostController {
     }
   }
 
-  static Future<List<RecipeModel>> fetchPosts() async {
+  static Future<List<RecipeModel>> fetchPosts(int paginatedBy) async {
     List<RecipeModel> recipes = [];
     try {
       final posts = await FirebaseContants.recipesCollection.get();
-      for (var post in posts.docs) {
-        recipes.add(RecipeModel.fromJson(post.data()));
+      if (posts.docs.isEmpty) {
+        return recipes;
+      } else if (posts.docs.length < paginatedBy) {
+        // if posts are less than paginatedBy
+        for (var post in posts.docs) {
+          recipes.add(RecipeModel.fromJson(post.data()));
+        }
+        return recipes;
+      } else if (posts.docs.length == paginatedBy) {
+        // if posts are equal to paginatedBy
+        for (var post in posts.docs) {
+          recipes.add(RecipeModel.fromJson(post.data()));
+        }
+        return recipes;
+      } else if (posts.docs.length > paginatedBy) {
+        // if posts are greater than paginatedBy
+        final getSomePosts = posts.docs.pickSome(paginatedBy);
+        for (var post in getSomePosts) {
+          recipes.add(RecipeModel.fromJson(post.data()));
+        }
       }
       return recipes;
     } catch (error) {
-      rethrow;
+      return recipes;
     }
   }
 }

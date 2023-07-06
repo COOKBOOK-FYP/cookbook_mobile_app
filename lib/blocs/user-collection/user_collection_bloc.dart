@@ -9,8 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 abstract class UserCollectionEvent {}
 
 class UserCollectionGetDataEvent extends UserCollectionEvent {
-  // String uid;
-  // UserCollectionGetDataEvent(this.uid);
+  String? uid;
+  UserCollectionGetDataEvent(this.uid);
 }
 
 // States
@@ -38,7 +38,7 @@ class UserCollectionBloc
       emit(UserCollectionLoadingState());
       try {
         final userDocument = await FirebaseController.getUsersCollection(
-          FirebaseAuth.instance.currentUser!.uid,
+          event.uid ?? FirebaseAuth.instance.currentUser!.uid,
         );
         UserModel user = UserModel.fromJson(userDocument.data()!);
         emit(UserCollectionLoadedState(user));

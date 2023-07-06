@@ -6,8 +6,10 @@ import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_texts.dart';
 import 'package:cookbook/global/utils/app_dialogs.dart';
 import 'package:cookbook/global/utils/app_image_picker.dart';
+import 'package:cookbook/global/utils/app_navigator.dart';
 import 'package:cookbook/global/utils/app_snakbars.dart';
 import 'package:cookbook/global/utils/media_utils.dart';
+import 'package:cookbook/screens/main-tabs/main_tabs_screen.dart';
 import 'package:cookbook/widgets/appbar/secondary_appbar_widget.dart';
 import 'package:cookbook/widgets/drop_down/drop_down_widget.dart';
 import 'package:cookbook/widgets/images/avatar_image_widget.dart';
@@ -45,7 +47,7 @@ class _PostScreenState extends State<PostScreen> {
 
   @override
   void initState() {
-    context.read<UserCollectionBloc>().add(UserCollectionGetDataEvent());
+    context.read<UserCollectionBloc>().add(UserCollectionGetDataEvent(null));
     if (widget.isImagePost) {
       pickFromGallery();
     }
@@ -78,10 +80,15 @@ class _PostScreenState extends State<PostScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       appBar: const SecondaryAppbarWidget(title: AppText.createPostText),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          if (compressedImage != null) {
+          if (compressedImage == null) {
+            AppSnackbars.normal(context, "Please select a recipe image");
+          } else if (foodCategory == AppText.foodCategories.first) {
+            AppSnackbars.normal(context, "Please select a recipe category");
+          } else if (compressedImage != null) {
             context.read<PostBloc>().add(
                   PostSubmitEvent(
                     compressedImage: compressedImage!,
@@ -90,12 +97,6 @@ class _PostScreenState extends State<PostScreen> {
                     category: foodCategory,
                   ),
                 );
-          } else if (compressedImage == null) {
-            AppSnackbars.normal(context, "Please select an image");
-          } else if (foodCategory == AppText.foodCategories.first) {
-            AppSnackbars.normal(context, "Please select a category");
-          } else if (descriptionController.text.isEmpty) {
-            AppSnackbars.normal(context, "Please enter a description");
           }
         },
         backgroundColor: AppColors.primaryColor,
@@ -113,8 +114,12 @@ class _PostScreenState extends State<PostScreen> {
               toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.BOTTOM,
             );
-            Navigator.pop(context);
+            // Navigator.pop(context);
             // or we can replace the page with main tabs page to get new states
+            AppNavigator.replaceTo(
+              context: context,
+              screen: const MainTabsScreen(),
+            );
           } else if (state is PostErrorState) {
             AppDialogs.closeLoadingDialog();
             AppSnackbars.danger(context, state.message.toString());

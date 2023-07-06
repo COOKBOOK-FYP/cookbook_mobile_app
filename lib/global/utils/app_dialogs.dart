@@ -26,4 +26,31 @@ class AppDialogs {
   static void closeLoadingDialog() {
     Navigator.pop(dialogueContext!);
   }
+
+  static void exitDialog() {
+    showDialog(
+      context: dialogueContext!,
+      builder: (ctx) {
+        return AlertDialog(
+          title: const Text("Are you sure?"),
+          content: const Text("Do you want to exit the app?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(ctx);
+              },
+              child: const Text("No"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(ctx);
+                Navigator.pop(dialogueContext!);
+              },
+              child: const Text("Yes"),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

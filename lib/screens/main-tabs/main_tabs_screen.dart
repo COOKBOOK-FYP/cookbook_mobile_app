@@ -68,14 +68,14 @@ class _MainTabsScreenState extends State<MainTabsScreen> {
                     if (tabindex == 0) {
                       context
                           .read<UserCollectionBloc>()
-                          .add(UserCollectionGetDataEvent());
+                          .add(UserCollectionGetDataEvent(null));
                     }
 
                     //Account Page
                     if (index == 1) {
                       context
                           .read<UserCollectionBloc>()
-                          .add(UserCollectionGetDataEvent());
+                          .add(UserCollectionGetDataEvent(null));
                     }
                   }
                 }),
