@@ -2,15 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RecipeModel {
   Timestamp? createdAt;
-  int? likes;
+  Map? likes;
   String? description;
   String? category;
   Timestamp? updatedAt;
   String? image;
   List? ingredients;
   String? instructions;
-  String? userId;
-  String? id;
+  String? ownerId;
+  String? postId;
+  String? ownerName;
+  String? ownerPhotoUrl;
 
   RecipeModel({
     this.createdAt,
@@ -21,8 +23,10 @@ class RecipeModel {
     this.image,
     this.ingredients,
     this.instructions,
-    this.userId,
-    this.id,
+    this.ownerId,
+    this.postId,
+    this.ownerName,
+    this.ownerPhotoUrl,
   });
 
   RecipeModel.fromJson(Map<String, dynamic> json) {
@@ -34,8 +38,10 @@ class RecipeModel {
     image = json['image'];
     ingredients = json['ingredients'];
     instructions = json['instructions'];
-    userId = json['userId'];
-    id = json['id'];
+    ownerId = json['ownerId'];
+    postId = json['postId'];
+    ownerName = json['ownerName'];
+    ownerPhotoUrl = json['ownerPhotoUrl'];
   }
 
   Map<String, dynamic> toJson() {
@@ -48,8 +54,11 @@ class RecipeModel {
     data['image'] = image;
     data['ingredients'] = ingredients;
     data['instructions'] = instructions;
-    data['userId'] = userId;
-    data['id'] = id;
+    data['ownerId'] = ownerId;
+    data['postId'] = postId;
+    data['ownerName'] = ownerName;
+    data['ownerPhotoUrl'] = ownerPhotoUrl;
+
     return data;
   }
 }

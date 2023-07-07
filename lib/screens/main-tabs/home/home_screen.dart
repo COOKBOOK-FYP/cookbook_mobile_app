@@ -61,52 +61,26 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Text(state.message),
             );
           } else if (state is FetchPostEmptyState) {
-            return const Center(
-              child: Text("No posts found"),
+            return PageWidget(
+              children: [
+                const CreatePostWidget(),
+                20.heightBox,
+                const Center(
+                  child: Text('No posts found'),
+                ),
+              ],
             );
           } else if (state is FetchPostLoadedState) {
             return PageWidget(
               scrollController: scrollController,
               children: [
                 // what's on your mind
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 4,
-                      child: GestureDetector(
-                        onTap: () => AppNavigator.goToPage(
-                          context: context,
-                          screen: const PostScreen(isImagePost: false),
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: AppColors.appBlackColor),
-                          ),
-                          child: "What's on your mind?".text.make().p12(),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: MaterialButtonWidget(
-                        icon: Ionicons.image_outline,
-                        iconBgColor: AppColors.primaryColor,
-                        size: 25.sp,
-                        onPressed: () {
-                          AppNavigator.goToPage(
-                            context: context,
-                            screen: const PostScreen(isImagePost: true),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                const CreatePostWidget(),
                 20.heightBox,
                 ListView.builder(
-                  itemBuilder: (context, index) =>
-                      PostWidget(post: state.posts[index]),
+                  itemBuilder: (context, index) => PostWidget(
+                    post: state.posts[index],
+                  ),
                   itemCount: state.posts.length,
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
@@ -119,6 +93,50 @@ class _HomeScreenState extends State<HomeScreen> {
           return const SizedBox.shrink();
         },
       ),
+    );
+  }
+}
+
+class CreatePostWidget extends StatelessWidget {
+  const CreatePostWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 4,
+          child: GestureDetector(
+            onTap: () => AppNavigator.goToPage(
+              context: context,
+              screen: const PostScreen(isImagePost: false),
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: AppColors.appBlackColor),
+              ),
+              child: "What's on your mind?".text.make().p12(),
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: MaterialButtonWidget(
+            icon: Ionicons.image_outline,
+            iconBgColor: AppColors.primaryColor,
+            size: 25.sp,
+            onPressed: () {
+              AppNavigator.goToPage(
+                context: context,
+                screen: const PostScreen(isImagePost: true),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }

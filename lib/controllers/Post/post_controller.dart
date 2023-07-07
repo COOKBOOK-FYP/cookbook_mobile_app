@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cookbook/constants/firebase_constants.dart';
 import 'package:cookbook/models/Recipes/recipe_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:uuid/uuid.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -20,11 +21,15 @@ class PostController {
   // now submit post
   static Future<void> submitPost(RecipeModel recipe) async {
     // recipe id
-    final recipeId = const Uuid().v4();
+    final postId = const Uuid().v4();
     try {
       await FirebaseContants.recipesCollection
-          .doc(recipeId)
-          .set(recipe.toJson());
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection("UserPosts")
+          .doc(postId)
+          .set(
+            recipe.toJson(),
+          );
     } catch (error) {
       rethrow;
     }
@@ -33,7 +38,11 @@ class PostController {
   static Future<List<RecipeModel>> fetchPosts(int paginatedBy) async {
     List<RecipeModel> recipes = [];
     try {
-      final posts = await FirebaseContants.recipesCollection.get();
+      final posts = await FirebaseContants.recipesCollection
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection("UserPosts")
+          .orderBy('createdAt', descending: true)
+          .get();
       if (posts.docs.isEmpty) {
         return recipes;
       } else if (posts.docs.length < paginatedBy) {

@@ -44,6 +44,8 @@ class _PostScreenState extends State<PostScreen> {
   File? image;
   File? compressedImage;
   String foodCategory = AppText.foodCategories[0];
+  late String userName;
+  late String userImage;
 
   @override
   void initState() {
@@ -79,59 +81,72 @@ class _PostScreenState extends State<PostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
-      appBar: const SecondaryAppbarWidget(title: AppText.createPostText),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if (compressedImage == null) {
-            AppSnackbars.normal(context, "Please select a recipe image");
-          } else if (foodCategory == AppText.foodCategories.first) {
-            AppSnackbars.normal(context, "Please select a recipe category");
-          } else if (compressedImage != null) {
-            context.read<PostBloc>().add(
-                  PostSubmitEvent(
-                    compressedImage: compressedImage!,
-                    postId: postId,
-                    description: descriptionController.text,
-                    category: foodCategory,
-                  ),
-                );
-          }
-        },
-        backgroundColor: AppColors.primaryColor,
-        splashColor: AppColors.secondaryColor,
-        child: "Post".text.make(),
-      ),
-      body: BlocListener<PostBloc, PostState>(
+    return BlocListener<PostBloc, PostState>(
+      listener: (context, state) {
+        if (state is PostLoadingState) {
+          AppDialogs.loadingDialog(context);
+        } else if (state is PostSubmittedState) {
+          AppDialogs.closeLoadingDialog();
+          Fluttertoast.showToast(
+            msg: "Post submitted successfully",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+          );
+          // Navigator.pop(context);
+          // or we can replace the page with main tabs page to get new states
+          AppNavigator.replaceTo(
+            context: context,
+            screen: const MainTabsScreen(),
+          );
+        } else if (state is PostErrorState) {
+          AppDialogs.closeLoadingDialog();
+          AppSnackbars.danger(context, state.message.toString());
+        }
+      },
+      child: BlocConsumer<UserCollectionBloc, UserCollectionState>(
         listener: (context, state) {
-          if (state is PostLoadingState) {
-            AppDialogs.loadingDialog(context);
-          } else if (state is PostSubmittedState) {
-            AppDialogs.closeLoadingDialog();
-            Fluttertoast.showToast(
-              msg: "Post submitted successfully",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-            );
-            // Navigator.pop(context);
-            // or we can replace the page with main tabs page to get new states
-            AppNavigator.replaceTo(
-              context: context,
-              screen: const MainTabsScreen(),
-            );
-          } else if (state is PostErrorState) {
-            AppDialogs.closeLoadingDialog();
-            AppSnackbars.danger(context, state.message.toString());
+          if (state is UserCollectionLoadedState) {
+            userName = state.userDocument.fullName.toString();
+            userImage = state.userDocument.photoUrl.toString();
           }
         },
-        child: BlocBuilder<UserCollectionBloc, UserCollectionState>(
-          builder: (context, state) {
-            if (state is UserCollectionLoadingState) {
-              return const LoadingWidget();
-            }
-            if (state is UserCollectionLoadedState) {
-              return SingleChildScrollView(
+        builder: (context, state) {
+          if (state is UserCollectionLoadingState) {
+            return const Scaffold(
+              body: LoadingWidget(),
+            );
+          }
+          if (state is UserCollectionLoadedState) {
+            return Scaffold(
+              key: scaffoldKey,
+              appBar:
+                  const SecondaryAppbarWidget(title: AppText.createPostText),
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  if (compressedImage == null) {
+                    AppSnackbars.normal(
+                        context, "Please select a recipe image");
+                  } else if (foodCategory == AppText.foodCategories.first) {
+                    AppSnackbars.normal(
+                        context, "Please select a recipe category");
+                  } else if (compressedImage != null) {
+                    context.read<PostBloc>().add(
+                          PostSubmitEvent(
+                            compressedImage: compressedImage!,
+                            postId: postId,
+                            description: descriptionController.text,
+                            category: foodCategory,
+                            ownerName: userName,
+                            ownerPhotoUrl: userImage,
+                          ),
+                        );
+                  }
+                },
+                backgroundColor: AppColors.primaryColor,
+                splashColor: AppColors.secondaryColor,
+                child: "Post".text.make(),
+              ),
+              body: SingleChildScrollView(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   child: Column(
@@ -217,11 +232,11 @@ class _PostScreenState extends State<PostScreen> {
                     ],
                   ).box.make(),
                 ),
-              );
-            }
-            return Container();
-          },
-        ),
+              ),
+            );
+          }
+          return Container();
+        },
       ),
     );
   }

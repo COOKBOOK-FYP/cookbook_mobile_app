@@ -9,11 +9,15 @@ class PostSubmitEvent extends PostEvent {
   final String postId;
   final String description;
   final String category;
+  final String ownerName;
+  final String ownerPhotoUrl;
   PostSubmitEvent({
     required this.compressedImage,
     required this.postId,
     required this.description,
     required this.category,
+    required this.ownerName,
+    required this.ownerPhotoUrl,
   });
 }
 

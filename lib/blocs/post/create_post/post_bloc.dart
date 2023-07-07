@@ -14,7 +14,6 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     // Then submit a post to the firestore.
     on<PostSubmitEvent>((event, emit) async {
       emit(PostLoadingState());
-
       try {
         final image = await PostController.uploadImageToStorageAndGet(
           event.compressedImage,
@@ -22,15 +21,19 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         );
 
         // now submit post
-        await PostController.submitPost(RecipeModel(
-          createdAt: Timestamp.now(),
-          description: event.description,
-          likes: 0,
-          image: image,
-          userId: FirebaseAuth.instance.currentUser!.uid,
-          id: event.postId,
-          category: event.category,
-        ));
+        await PostController.submitPost(
+          RecipeModel(
+            createdAt: Timestamp.now(),
+            description: event.description,
+            // likes: 0,
+            image: image,
+            ownerId: FirebaseAuth.instance.currentUser!.uid,
+            postId: event.postId,
+            category: event.category,
+            ownerName: event.ownerName,
+            ownerPhotoUrl: event.ownerPhotoUrl,
+          ),
+        );
 
         emit(PostSubmittedState());
       } catch (e) {

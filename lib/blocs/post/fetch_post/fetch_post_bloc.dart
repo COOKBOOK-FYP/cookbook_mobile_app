@@ -13,7 +13,6 @@ class FetchPostBloc extends Bloc<FetchPostEvent, FetchPostState> {
       emit(FetchPostLoadingState());
       try {
         posts = await PostController.fetchPosts(event.paginatedBy);
-
         if (posts.isEmpty) {
           emit(FetchPostEmptyState());
         } else {
