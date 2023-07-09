@@ -22,7 +22,12 @@ class FetchPostLoadedState extends FetchPostState {
 // Events
 abstract class FetchPostEvent {}
 
-class FetchPostGetDataEvent extends FetchPostEvent {
+class FetchCurrentPosts extends FetchPostEvent {
   final int paginatedBy;
-  FetchPostGetDataEvent(this.paginatedBy);
+  FetchCurrentPosts(this.paginatedBy);
+}
+
+class FetchAllPosts extends FetchPostEvent {
+  final int paginatedBy;
+  FetchAllPosts(this.paginatedBy);
 }

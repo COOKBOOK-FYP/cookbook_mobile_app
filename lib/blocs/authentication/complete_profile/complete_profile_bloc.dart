@@ -18,6 +18,7 @@ class CompleteProfileBloc
             bio: event.bio,
             country: event.country,
             dateOfBirth: event.dateOfBirth,
+            photoUrl: event.photoUrl,
           );
           emit(CompleteProfileSuccess());
         }

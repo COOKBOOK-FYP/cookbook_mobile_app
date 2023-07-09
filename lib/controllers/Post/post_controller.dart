@@ -9,9 +9,10 @@ import 'package:velocity_x/velocity_x.dart';
 
 class PostController {
   static Future<String> uploadImageToStorageAndGet(
-      File compressedImage, String postId) async {
+      File compressedImage, String postId,
+      {child}) async {
     final storageReference = FirebaseStorage.instance.ref();
-    final uploadTask =
+    final uploadTask = child ??
         storageReference.child('posts/$postId.jpg').putFile(compressedImage);
     final taskSnapshot = await uploadTask.whenComplete(() {});
     final downloadUrl = await taskSnapshot.ref.getDownloadURL();
@@ -35,12 +36,47 @@ class PostController {
     }
   }
 
-  static Future<List<RecipeModel>> fetchPosts(int paginatedBy) async {
+  static Future<List<RecipeModel>> fetchCurrentUserPosts(
+      int paginatedBy) async {
     List<RecipeModel> recipes = [];
     try {
       final posts = await FirebaseContants.recipesCollection
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .collection("UserPosts")
+          .orderBy('createdAt', descending: true)
+          .get();
+      if (posts.docs.isEmpty) {
+        return recipes;
+      } else if (posts.docs.length < paginatedBy) {
+        // if posts are less than paginatedBy
+        for (var post in posts.docs) {
+          recipes.add(RecipeModel.fromJson(post.data()));
+        }
+        return recipes;
+      } else if (posts.docs.length == paginatedBy) {
+        // if posts are equal to paginatedBy
+        for (var post in posts.docs) {
+          recipes.add(RecipeModel.fromJson(post.data()));
+        }
+        return recipes;
+      } else if (posts.docs.length > paginatedBy) {
+        // if posts are greater than paginatedBy
+        final getSomePosts = posts.docs.pickSome(paginatedBy);
+        for (var post in getSomePosts) {
+          recipes.add(RecipeModel.fromJson(post.data()));
+        }
+      }
+      return recipes;
+    } catch (error) {
+      return recipes;
+    }
+  }
+
+  // fetch all posts
+  static Future<List<RecipeModel>> fetchAllPosts(int paginatedBy) async {
+    List<RecipeModel> recipes = [];
+    try {
+      final posts = await FirebaseContants.recipesCollection
           .orderBy('createdAt', descending: true)
           .get();
       if (posts.docs.isEmpty) {

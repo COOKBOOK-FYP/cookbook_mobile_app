@@ -1,16 +1,27 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:io';
+
 import 'package:cookbook/blocs/authentication/complete_profile/complete_profile_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
+import 'package:cookbook/constants/app_fonts.dart';
+import 'package:cookbook/controllers/Post/post_controller.dart';
 import 'package:cookbook/global/utils/app_dialogs.dart';
+import 'package:cookbook/global/utils/app_image_picker.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
 import 'package:cookbook/global/utils/app_snakbars.dart';
+import 'package:cookbook/global/utils/media_utils.dart';
 import 'package:cookbook/screens/main-tabs/main_tabs_screen.dart';
 import 'package:cookbook/widgets/buttons/primary_button_widget.dart';
 import 'package:cookbook/widgets/page/page_widget.dart';
 import 'package:country_picker/country_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:uuid/uuid.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class CompleteProfileScreen extends StatefulWidget {
@@ -26,11 +37,54 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
   TextEditingController countryController = TextEditingController();
   TextEditingController dobController = TextEditingController();
 
+  File? image;
+  File? compressedImage;
+
+  String profileImageId = const Uuid().v4();
+
+  String photoUrl = "";
+
+  pickFromGallery() async {
+    try {
+      image = await AppImagePicker.pickFromGallery();
+      if (image != null) {
+        compressedImage = await MediaUtils.compressImage(
+          image!,
+          postId: profileImageId,
+        );
+        setState(() {});
+      }
+    } catch (error) {
+      AppSnackbars.danger(context, error.toString());
+    }
+  }
+
+  uploadImageToFirebaseStorageAndDownloadUrl() async {
+    if (image != null) {
+      compressedImage =
+          await MediaUtils.compressImage(image!, postId: profileImageId);
+      photoUrl = await PostController.uploadImageToStorageAndGet(
+        compressedImage!,
+        profileImageId,
+        child: FirebaseStorage.instance
+            .ref()
+            .child("profile_images/$profileImageId.jpg")
+            .putFile(compressedImage!),
+      );
+    } else {
+      photoUrl = "";
+    }
+  }
+
   @override
   void dispose() {
     bioController.dispose();
     countryController.dispose();
     dobController.dispose();
+
+    image = null;
+    compressedImage = null;
+
     super.dispose();
   }
 
@@ -40,15 +94,17 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
       body: SafeArea(
         child: BlocListener<CompleteProfileBloc, CompleteProfileState>(
           listener: (context, state) {
-            if (state is CompleteProfileLoading) {
-              AppDialogs.loadingDialog(context);
-            } else if (state is CompleteProfileSuccess) {
+            // if (state is CompleteProfileLoading) {
+            //   AppDialogs.loadingDialog(context);
+            // } else
+            if (state is CompleteProfileSuccess) {
               AppDialogs.closeLoadingDialog();
               AppNavigator.replaceTo(
                 context: context,
                 screen: const MainTabsScreen(),
               );
             } else if (state is CompleteProfileFailed) {
+              AppDialogs.closeLoadingDialog();
               AppSnackbars.danger(context, state.error);
             }
           },
@@ -60,6 +116,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                   style: context.textTheme.headlineMedium!.copyWith(
                     fontWeight: FontWeight.bold,
                     color: AppColors.primaryColor,
+                    fontFamily: AppFonts.robotoMonoLight,
                   ),
                   children: [
                     TextSpan(
@@ -67,20 +124,56 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                       style: context.textTheme.headlineMedium!.copyWith(
                         fontWeight: FontWeight.normal,
                         color: AppColors.secondaryColor,
+                        fontFamily: AppFonts.robotoMonoMedium,
                       ),
                     ),
                   ],
                 ),
               ),
               20.heightBox,
+              // Pick Image and show it as circle avatar
+              Stack(
+                children: [
+                  compressedImage == null
+                      ? CircleAvatar(
+                          radius: 100.r,
+                          backgroundColor: AppColors.appGreyColor,
+                          child: Icon(Ionicons.person, size: 80.sp),
+                        )
+                      : Container(
+                          height: 200.h,
+                          width: 200.w,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: FileImage(compressedImage!),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: IconButton(
+                      onPressed: () async {
+                        await pickFromGallery();
+                      },
+                      icon: const CircleAvatar(
+                        child: Icon(Ionicons.camera_outline),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              20.heightBox,
+
+              // Bio
               TextFormField(
                 controller: bioController,
-                maxLines: 5,
-                decoration: InputDecoration(
+                maxLines: 3,
+                decoration: const InputDecoration(
                   hintText: "Enter your bio",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+                  border: UnderlineInputBorder(),
                 ),
               ),
               20.heightBox,
@@ -89,20 +182,18 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                 controller: countryController,
                 readOnly: true,
                 decoration: InputDecoration(
-                  hintText: "Enter your location",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+                  hintText: "Select your country",
                   suffixIcon: IconButton(
                     onPressed: () {
                       showCountryPicker(
                         context: context,
-                        onSelect: (Country country) {
+                        showPhoneCode: false,
+                        onSelect: (country) {
                           countryController.text = country.name;
                         },
                       );
                     },
-                    icon: const FieldIcon(icon: Ionicons.flag),
+                    icon: const FieldIcon(icon: Ionicons.globe_outline),
                   ),
                 ),
               ),
@@ -112,25 +203,21 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                 controller: dobController,
                 readOnly: true,
                 decoration: InputDecoration(
-                  hintText: "Enter your date of birth",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+                  hintText: "Select your date of birth",
                   suffixIcon: IconButton(
                     onPressed: () async {
-                      // user goe date picker
-                      showDatePicker(
+                      final date = await showDatePicker(
                         context: context,
                         initialDate: DateTime.now(),
                         firstDate: DateTime(1900),
                         lastDate: DateTime.now(),
-                      ).then((date) {
-                        if (date != null) {
-                          dobController.text = date.toIso8601String();
-                        }
-                      });
+                      );
+                      if (date != null) {
+                        // user Intl package to format date
+                        dobController.text = DateFormat.yMMMd().format(date);
+                      }
                     },
-                    icon: const FieldIcon(icon: Ionicons.calendar),
+                    icon: const FieldIcon(icon: Ionicons.calendar_outline),
                   ),
                 ),
               ),
@@ -138,13 +225,33 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
               PrimaryButtonWidget(
                 caption: "Continue",
                 onPressed: () async {
-                  context.read<CompleteProfileBloc>().add(
-                        CompleteProfileEventSubmit(
-                          bio: bioController.text,
-                          country: countryController.text,
-                          dateOfBirth: dobController.text,
-                        ),
-                      );
+                  if (bioController.text.isEmpty) {
+                    AppSnackbars.danger(context, "Bio is required");
+                    return;
+                  }
+                  if (countryController.text.isEmpty) {
+                    AppSnackbars.danger(context, "Country is required");
+                    return;
+                  }
+                  if (dobController.text.isEmpty) {
+                    AppSnackbars.danger(context, "Date of birth is required");
+                    return;
+                  }
+                  try {
+                    AppDialogs.loadingDialog(context);
+                    await uploadImageToFirebaseStorageAndDownloadUrl();
+                    context.read<CompleteProfileBloc>().add(
+                          CompleteProfileEventSubmit(
+                            bio: bioController.text,
+                            country: countryController.text,
+                            dateOfBirth: dobController.text,
+                            photoUrl: photoUrl,
+                          ),
+                        );
+                  } catch (error) {
+                    AppDialogs.closeLoadingDialog();
+                    AppSnackbars.danger(context, error.toString());
+                  }
                 },
               ),
             ],

@@ -28,8 +28,14 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // context.read<UserCollectionBloc>().add(UserCollectionGetDataEvent());
     // increasePaginatedBy();
-    context.read<FetchPostBloc>().add(FetchPostGetDataEvent(paginatedBy));
+    context.read<FetchPostBloc>().add(FetchAllPosts(paginatedBy));
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 
   increasePaginatedBy() {
@@ -40,9 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
         paginatedBy += AppConfig.recipesPostPagenatedCount;
         AppConfig.recipesPostMaxCount().then((maxCount) {
           if (paginatedBy <= maxCount) {
-            context
-                .read<FetchPostBloc>()
-                .add(FetchPostGetDataEvent(paginatedBy));
+            context.read<FetchPostBloc>().add(FetchCurrentPosts(paginatedBy));
           }
         });
       }

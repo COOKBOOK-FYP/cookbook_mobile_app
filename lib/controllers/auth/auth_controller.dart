@@ -69,6 +69,7 @@ class AuthController {
     required String bio,
     required String country,
     required String dateOfBirth,
+    required String photoUrl,
   }) async {
     try {
       final userDoc = await FirebaseController.getUsersCollection(
@@ -82,6 +83,7 @@ class AuthController {
             "country": country,
             "bio": bio,
             "dateOfBirth": dateOfBirth,
+            "photoUrl": photoUrl,
           },
         );
       }

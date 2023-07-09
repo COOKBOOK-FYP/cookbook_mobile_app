@@ -22,10 +22,12 @@ class CompleteProfileEventSubmit extends CompleteProfileEvent {
   final String bio;
   final String country;
   final String dateOfBirth;
+  final String photoUrl;
 
   CompleteProfileEventSubmit({
     required this.bio,
     required this.country,
     required this.dateOfBirth,
+    required this.photoUrl,
   });
 }

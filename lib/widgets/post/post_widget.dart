@@ -1,4 +1,5 @@
 import 'package:cookbook/constants/app_fonts.dart';
+import 'package:cookbook/global/utils/format_timestamp.dart';
 import 'package:cookbook/models/Recipes/recipe_model.dart';
 import 'package:cookbook/widgets/images/circular_image.dart';
 import 'package:flutter/material.dart';
@@ -31,13 +32,10 @@ class PostWidget extends StatelessWidget {
                     .fontFamily(AppFonts.robotoMonoBold)
                     .size(16)
                     .make(),
-                (DateTime.now().hour - post.createdAt!.toDate().hour) > 24
-                    ? "${post.category} - ${(DateTime.now().hour - post.createdAt!.toDate().hour) ~/ 24} days ago"
-                        .text
-                        .make()
-                    : "${post.category} - ${(DateTime.now().hour - post.createdAt!.toDate().hour)} hours ago"
-                        .text
-                        .make(),
+                // just now, 2 min ago, 1 day ago
+                "${post.category} - ${formatTimestamp(post.createdAt!)}"
+                    .text
+                    .make(),
               ],
             ),
             const Spacer(),
