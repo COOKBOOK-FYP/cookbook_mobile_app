@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookbook/constants/app_colors.dart';
+import 'package:cookbook/widgets/loading/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ionicons/ionicons.dart';
@@ -44,7 +45,7 @@ class AvatarImageWidget extends StatelessWidget {
                 fit: boxFit ?? BoxFit.fill,
                 imageUrl: imageUrl,
                 placeholder: (context, url) => const Center(
-                  child: CircularProgressIndicator(),
+                  child: LoadingWidget(),
                 ),
                 errorWidget: (context, url, error) => Icon(
                   Ionicons.person_outline,

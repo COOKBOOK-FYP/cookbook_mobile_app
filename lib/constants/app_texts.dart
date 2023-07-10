@@ -42,6 +42,9 @@ class AppText {
   // Post Screen
   static const String createPostText = "Create Post";
 
+  // Update Profile Screen
+  static const String updateProfileText = "Update Profile";
+
   // Exceptions
   static const String invalidEmailText = "Invalid Email Address";
   static const String invalidPasswordText = "Invalid Password";

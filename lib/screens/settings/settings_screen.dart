@@ -4,6 +4,7 @@ import 'package:cookbook/constants/app_texts.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
 import 'package:cookbook/screens/authentication/delete-account/delete_account_screen.dart';
 import 'package:cookbook/screens/authentication/sign-out/sign_out_screen.dart';
+import 'package:cookbook/screens/main-tabs/profile/update_profile_screen.dart';
 import 'package:cookbook/widgets/appbar/secondary_appbar_widget.dart';
 import 'package:cookbook/widgets/buttons/material_button_widget.dart';
 import 'package:cookbook/widgets/images/avatar_image_widget.dart';
@@ -17,8 +18,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
+
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  @override
+  void initState() {
+    context.read<UserCollectionBloc>().add(UserCollectionGetDataEvent(null));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +67,12 @@ class SettingsScreen extends StatelessWidget {
                     ),
                     MaterialButtonWidget(
                       icon: Ionicons.pencil,
-                      onPressed: () {},
+                      onPressed: () {
+                        AppNavigator.goToPage(
+                          context: context,
+                          screen: const UpdateProfileScreen(),
+                        );
+                      },
                     ),
                   ],
                 ).box.make().px(10),

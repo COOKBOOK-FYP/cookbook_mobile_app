@@ -77,6 +77,8 @@ class PostController {
     List<RecipeModel> recipes = [];
     try {
       final posts = await FirebaseContants.recipesCollection
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection("UserPosts")
           .orderBy('createdAt', descending: true)
           .get();
       if (posts.docs.isEmpty) {

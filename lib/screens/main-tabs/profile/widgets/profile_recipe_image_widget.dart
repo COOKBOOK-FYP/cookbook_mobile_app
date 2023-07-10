@@ -25,7 +25,6 @@ class ProfileRecipeImageWidget extends StatelessWidget {
               loadingProgress == null
                   ? child
                   : const SizedBox(
-                      height: 100,
                       child: LoadingWidget(),
                     ),
         ),

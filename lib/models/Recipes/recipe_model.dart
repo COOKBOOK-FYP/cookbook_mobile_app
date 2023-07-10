@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class RecipeModel {
   Timestamp? createdAt;
   Map? likes;
+  int? likeCount;
   String? description;
   String? category;
   Timestamp? updatedAt;
@@ -17,6 +18,7 @@ class RecipeModel {
   RecipeModel({
     this.createdAt,
     this.likes,
+    this.likeCount,
     this.description,
     this.category,
     this.updatedAt,
@@ -32,6 +34,7 @@ class RecipeModel {
   RecipeModel.fromJson(Map<String, dynamic> json) {
     createdAt = json['createdAt'];
     likes = json['likes'];
+    likeCount = json['likeCount'];
     description = json['description'];
     category = json['category'];
     updatedAt = json['updatedAt'];
@@ -48,6 +51,7 @@ class RecipeModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['createdAt'] = createdAt;
     data['likes'] = likes;
+    data['likeCount'] = likeCount;
     data['description'] = description;
     data['category'] = category;
     data['updatedAt'] = updatedAt;
