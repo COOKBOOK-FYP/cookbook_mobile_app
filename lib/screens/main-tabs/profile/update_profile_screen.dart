@@ -3,7 +3,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cookbook/blocs/profile/update_profile_bloc.dart';
 import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_texts.dart';
@@ -17,7 +17,6 @@ import 'package:cookbook/widgets/appbar/secondary_appbar_widget.dart';
 import 'package:cookbook/widgets/buttons/secondary_button_widget.dart';
 import 'package:cookbook/widgets/page/page_widget.dart';
 import 'package:country_picker/country_picker.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,6 +47,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   final TextEditingController dobController = TextEditingController();
 
   UserModel user = UserModel();
+  UpdateProfileBloc updateProfileBloc = UpdateProfileBloc();
 
   // form key
   final formKey = GlobalKey<FormState>();
@@ -130,170 +130,178 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
             setState(() {});
           }
         },
-        child: Form(
-          key: formKey,
-          child: PageWidget(
-            children: [
-              Center(
-                child: Stack(
-                  children: [
-                    compressedImage == null
-                        ? Container(
-                            height: 200.h,
-                            width: 200.w,
-                            decoration: BoxDecoration(
-                              color: AppColors.appGreyColor,
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: CachedNetworkImageProvider(
-                                  user.photoUrl.toString(),
-                                  errorListener: () => const Icon(
+        child: BlocListener<UpdateProfileBloc, UpdateProfileState>(
+          bloc: updateProfileBloc,
+          listener: (context, state) {
+            if (state is UpdateProfileSuccessState) {
+              AppDialogs.closeLoadingDialog();
+              AppSnackbars.success(context, state.message);
+              context
+                  .read<UserCollectionBloc>()
+                  .add(UserCollectionGetDataEvent(null));
+
+              // go back to previous page but with new data
+              Navigator.pop(context, true);
+            } else if (state is UpdateProfileErrorState) {
+              AppDialogs.closeLoadingDialog();
+              AppSnackbars.danger(context, state.message);
+            }
+          },
+          child: Form(
+            key: formKey,
+            child: PageWidget(
+              children: [
+                Center(
+                  child: Stack(
+                    children: [
+                      compressedImage == null
+                          ? Container(
+                              height: 200.h,
+                              width: 200.w,
+                              decoration: BoxDecoration(
+                                color: AppColors.appGreyColor,
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: CachedNetworkImageProvider(
+                                    user.photoUrl.toString(),
+                                    errorListener: () => const Icon(
+                                      Ionicons.person_outline,
+                                      size: 100,
+                                    ),
+                                  ),
+                                  fit: BoxFit.cover,
+                                  onError: (exception, stackTrace) =>
+                                      const Icon(
                                     Ionicons.person_outline,
                                     size: 100,
                                   ),
                                 ),
-                                fit: BoxFit.cover,
-                                onError: (exception, stackTrace) => const Icon(
-                                  Ionicons.person_outline,
-                                  size: 100,
+                              ),
+                              child: user.photoUrl.toString() == ""
+                                  ? Icon(
+                                      Ionicons.person_outline,
+                                      color: AppColors.secondaryColor,
+                                      size: 100,
+                                    )
+                                  : null,
+                            )
+                          : Container(
+                              height: 200.h,
+                              width: 200.w,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: FileImage(compressedImage!),
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                             ),
-                            child: user.photoUrl.toString() == ""
-                                ? Icon(
-                                    Ionicons.person_outline,
-                                    color: AppColors.secondaryColor,
-                                    size: 100,
-                                  )
-                                : null,
-                          )
-                        : Container(
-                            height: 200.h,
-                            width: 200.w,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: FileImage(compressedImage!),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: IconButton(
+                          onPressed: () async {
+                            await pickFromGallery();
+                          },
+                          icon: CircleAvatar(
+                            backgroundColor: AppColors.secondaryColor,
+                            child: const Icon(Ionicons.camera_outline),
                           ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: IconButton(
-                        onPressed: () async {
-                          await pickFromGallery();
-                        },
-                        icon: CircleAvatar(
-                          backgroundColor: AppColors.secondaryColor,
-                          child: const Icon(Ionicons.camera_outline),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              20.heightBox,
-              // Bio
+                20.heightBox,
+                // Bio
 
-              UpdateTextFieldWidget(
-                controller: bioController,
-                icon: Ionicons.person_outline,
-                hintText: "Bio",
-                maxLines: 3,
-                validator: (p0) => p0!.isEmpty ? "Bio is required" : null,
-              ),
-              10.heightBox,
-              UpdateTextFieldWidget(
-                controller: firstNameController,
-                icon: Ionicons.person_outline,
-                hintText: "First Name",
-              ),
-              10.heightBox,
-              UpdateTextFieldWidget(
-                controller: lastNameController,
-                icon: Ionicons.person_outline,
-                hintText: "Last Name",
-              ),
-              10.heightBox,
-              UpdateTextFieldWidget(
-                controller: mobileController,
-                icon: Ionicons.phone_portrait_outline,
-                hintText: "Phone Number",
-              ),
-              10.heightBox,
-              UpdateTextFieldWidget(
-                controller: countryController,
-                icon: Ionicons.globe_outline,
-                readOnly: true,
-                hintText: "Country",
-                onPressed: () {
-                  showCountryPicker(
-                    context: context,
-                    showPhoneCode: false,
-                    onSelect: (country) {
-                      countryController.text = country.name;
-                    },
-                  );
-                },
-              ),
-              10.heightBox,
-              // date of birth
-              UpdateTextFieldWidget(
-                controller: dobController,
-                hintText: "Date of birth",
-                readOnly: true,
-                icon: Ionicons.calendar_outline,
-                onPressed: () async {
-                  final date = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(1900),
-                    lastDate: DateTime.now(),
-                  );
-                  if (date != null) {
-                    // user Intl package to format date
-                    dobController.text = DateFormat.yMMMd().format(date);
-                  }
-                },
-              ),
-              10.heightBox,
-              SecondaryButtonWidget(
-                caption: AppText.updateProfileText,
-                onPressed: () async {
-                  try {
-                    if (formKey.currentState!.validate()) {
-                      AppDialogs.loadingDialog(context);
-                      await uploadImageToFirebaseStorageAndDownloadUrl();
-                      await FirebaseFirestore.instance
-                          .collection("Users")
-                          .doc(FirebaseAuth.instance.currentUser!.uid)
-                          .update({
-                        "firstName": firstNameController.text,
-                        "lastName": lastNameController.text,
-                        "bio": bioController.text,
-                        "country": countryController.text,
-                        "dateOfBirth": dobController.text,
-                        "phoneNumber": mobileController.text,
-                        "photoUrl": photoUrl,
-                      });
-                      AppDialogs.closeLoadingDialog();
-                      AppSnackbars.success(context, "Profile updated");
-                      context
-                          .read<UserCollectionBloc>()
-                          .add(UserCollectionGetDataEvent(null));
-
-                      // go back to previous page but with new data
-                      Navigator.pop(context, true);
+                UpdateTextFieldWidget(
+                  controller: bioController,
+                  icon: Ionicons.person_outline,
+                  hintText: "Bio",
+                  maxLines: 3,
+                  validator: (p0) => p0!.isEmpty ? "Bio is required" : null,
+                ),
+                10.heightBox,
+                UpdateTextFieldWidget(
+                  controller: firstNameController,
+                  icon: Ionicons.person_outline,
+                  hintText: "First Name",
+                ),
+                10.heightBox,
+                UpdateTextFieldWidget(
+                  controller: lastNameController,
+                  icon: Ionicons.person_outline,
+                  hintText: "Last Name",
+                ),
+                10.heightBox,
+                UpdateTextFieldWidget(
+                  controller: mobileController,
+                  icon: Ionicons.phone_portrait_outline,
+                  hintText: "Phone Number",
+                ),
+                10.heightBox,
+                UpdateTextFieldWidget(
+                  controller: countryController,
+                  icon: Ionicons.globe_outline,
+                  readOnly: true,
+                  hintText: "Country",
+                  onPressed: () {
+                    showCountryPicker(
+                      context: context,
+                      showPhoneCode: false,
+                      onSelect: (country) {
+                        countryController.text = country.name;
+                      },
+                    );
+                  },
+                ),
+                10.heightBox,
+                // date of birth
+                UpdateTextFieldWidget(
+                  controller: dobController,
+                  hintText: "Date of birth",
+                  readOnly: true,
+                  icon: Ionicons.calendar_outline,
+                  onPressed: () async {
+                    final date = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime.now(),
+                    );
+                    if (date != null) {
+                      // user Intl package to format date
+                      dobController.text = DateFormat.yMMMd().format(date);
                     }
-                  } catch (error) {
-                    AppDialogs.closeLoadingDialog();
-                    AppSnackbars.danger(context, "Failed to update profile");
-                  }
-                },
-              ),
-            ],
+                  },
+                ),
+                10.heightBox,
+                SecondaryButtonWidget(
+                  caption: AppText.updateProfileText,
+                  onPressed: () async {
+                    try {
+                      if (formKey.currentState!.validate()) {
+                        AppDialogs.loadingDialog(context);
+                        await uploadImageToFirebaseStorageAndDownloadUrl();
+                        updateProfileBloc = updateProfileBloc
+                          ..add(UpdateProfileOnChangedEvent(
+                            bio: bioController.text.trim(),
+                            firstName: firstNameController.text.trim(),
+                            lastName: lastNameController.text.trim(),
+                            phoneNumber: mobileController.text.trim(),
+                            country: countryController.text.trim(),
+                            dateOfBirth: dobController.text.trim(),
+                          ));
+                      }
+                    } catch (error) {
+                      AppDialogs.closeLoadingDialog();
+                      AppSnackbars.danger(context, "Failed to update profile");
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
