@@ -1,7 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/models/Recipes/recipe_model.dart';
-import 'package:cookbook/widgets/loading/loading_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:ionicons/ionicons.dart';
 
 class ProfileRecipeImageWidget extends StatelessWidget {
   final RecipeModel recipe;
@@ -17,16 +18,11 @@ class ProfileRecipeImageWidget extends StatelessWidget {
           color: AppColors.primaryColor,
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Image.network(
-          recipe.image.toString(),
+        child: CachedNetworkImage(
+          imageUrl: recipe.image.toString(),
           fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
-          loadingBuilder: (context, child, loadingProgress) =>
-              loadingProgress == null
-                  ? child
-                  : const SizedBox(
-                      child: LoadingWidget(),
-                    ),
+          errorWidget: (context, url, error) =>
+              const Icon(Ionicons.image_outline),
         ),
       ),
     );

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cookbook/constants/firebase_constants.dart';
 import 'package:cookbook/models/Recipes/recipe_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -31,6 +32,14 @@ class PostController {
           .set(
             recipe.toJson(),
           );
+      // update post count in user collection for the current user
+      await FirebaseContants.usersCollection
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .update(
+        {
+          'postCount': FieldValue.increment(1),
+        },
+      );
     } catch (error) {
       rethrow;
     }

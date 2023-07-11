@@ -6,6 +6,7 @@ import 'package:cookbook/widgets/appbar/primary_appbar_widget.dart';
 import 'package:cookbook/widgets/loading/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -49,14 +50,30 @@ class _AccountScreenState extends State<AccountScreen> {
                           country: state.userDocument.country.toString(),
                           bio: state.userDocument.bio.toString(),
                         ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            'Recipes: ${state.userDocument.postCount}'
+                                .text
+                                .size(20.sp)
+                                .semiBold
+                                .make(),
+                            "Likes: ${state.userDocument.likes}"
+                                .text
+                                .size(20.sp)
+                                .semiBold
+                                .make(),
+                          ],
+                        ),
                         const VxDivider(type: VxDividerType.horizontal),
+                        10.heightBox,
                         BlocBuilder<FetchPostBloc, FetchPostState>(
                           builder: (context, st) {
                             if (st is FetchPostLoadedState) {
                               return StaggeredGrid.count(
-                                crossAxisCount: 4,
-                                mainAxisSpacing: 4,
-                                crossAxisSpacing: 4,
+                                crossAxisCount: 3,
+                                mainAxisSpacing: 3,
+                                crossAxisSpacing: 3,
                                 children: st.posts
                                     .map(
                                       (recipe) => ProfileRecipeImageWidget(
