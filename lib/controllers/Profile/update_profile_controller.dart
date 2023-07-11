@@ -22,7 +22,7 @@ abstract class UpdateProfileController {
       "dateOfBirth": dateOfBirth,
       "photoUrl": photoUrl,
       "country": country,
-      "fullName": "$firstName $lastName,",
+      "fullName": "$firstName $lastName",
       "updatedAt": Timestamp.now(),
     });
     return true;

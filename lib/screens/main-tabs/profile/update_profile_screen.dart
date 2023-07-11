@@ -285,14 +285,17 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         AppDialogs.loadingDialog(context);
                         await uploadImageToFirebaseStorageAndDownloadUrl();
                         updateProfileBloc = updateProfileBloc
-                          ..add(UpdateProfileOnChangedEvent(
-                            bio: bioController.text.trim(),
-                            firstName: firstNameController.text.trim(),
-                            lastName: lastNameController.text.trim(),
-                            phoneNumber: mobileController.text.trim(),
-                            country: countryController.text.trim(),
-                            dateOfBirth: dobController.text.trim(),
-                          ));
+                          ..add(
+                            UpdateProfileOnChangedEvent(
+                              bio: bioController.text.trim(),
+                              firstName: firstNameController.text.trim(),
+                              lastName: lastNameController.text.trim(),
+                              phoneNumber: mobileController.text.trim(),
+                              country: countryController.text.trim(),
+                              dateOfBirth: dobController.text.trim(),
+                              photoUrl: photoUrl,
+                            ),
+                          );
                       }
                     } catch (error) {
                       AppDialogs.closeLoadingDialog();
