@@ -116,4 +116,17 @@ class PostController {
       return recipes;
     }
   }
+
+  Future<int> countPostLikes(likes) async {
+    int count = 0;
+    if (likes == null) {
+      return count;
+    }
+    likes.values.forEach((val) {
+      if (val == true) {
+        count += 1;
+      }
+    });
+    return count;
+  }
 }

@@ -6,7 +6,6 @@ import 'package:cookbook/widgets/appbar/primary_appbar_widget.dart';
 import 'package:cookbook/widgets/loading/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -49,21 +48,8 @@ class _AccountScreenState extends State<AccountScreen> {
                           lastName: state.userDocument.lastName.toString(),
                           country: state.userDocument.country.toString(),
                           bio: state.userDocument.bio.toString(),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            'Recipes: ${state.userDocument.postCount}'
-                                .text
-                                .size(20.sp)
-                                .semiBold
-                                .make(),
-                            "Likes: ${state.userDocument.likes}"
-                                .text
-                                .size(20.sp)
-                                .semiBold
-                                .make(),
-                          ],
+                          likes: state.userDocument.likes ?? 0,
+                          postCount: state.userDocument.postCount ?? 0,
                         ),
                         const VxDivider(type: VxDividerType.horizontal),
                         10.heightBox,

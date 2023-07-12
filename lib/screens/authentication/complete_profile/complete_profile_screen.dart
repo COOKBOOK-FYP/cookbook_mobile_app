@@ -44,6 +44,12 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
 
   String photoUrl = "";
 
+  @override
+  void initState() {
+    bioController.text = 'Hey there! I am using Cookbook';
+    super.initState();
+  }
+
   pickFromGallery() async {
     try {
       image = await AppImagePicker.pickFromGallery();
@@ -98,13 +104,13 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
             //   AppDialogs.loadingDialog(context);
             // } else
             if (state is CompleteProfileSuccess) {
-              AppDialogs.closeLoadingDialog();
+              AppDialogs.closeDialog();
               AppNavigator.replaceTo(
                 context: context,
                 screen: const MainTabsScreen(),
               );
             } else if (state is CompleteProfileFailed) {
-              AppDialogs.closeLoadingDialog();
+              AppDialogs.closeDialog();
               AppSnackbars.danger(context, state.error);
             }
           },
@@ -242,14 +248,14 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                     await uploadImageToFirebaseStorageAndDownloadUrl();
                     context.read<CompleteProfileBloc>().add(
                           CompleteProfileEventSubmit(
-                            bio: bioController.text,
-                            country: countryController.text,
-                            dateOfBirth: dobController.text,
+                            bio: bioController.text.trim(),
+                            country: countryController.text.trim(),
+                            dateOfBirth: dobController.text.trim(),
                             photoUrl: photoUrl,
                           ),
                         );
                   } catch (error) {
-                    AppDialogs.closeLoadingDialog();
+                    AppDialogs.closeDialog();
                     AppSnackbars.danger(context, error.toString());
                   }
                 },

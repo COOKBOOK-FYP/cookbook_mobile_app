@@ -18,7 +18,7 @@ class AuthController {
     String? bio,
     String? likes,
     String? country,
-    Timestamp? dateOfBirth,
+    String? dateOfBirth,
   }) async {
     final userCollection =
         await FirebaseContants.usersCollection.doc(userId).get();
@@ -40,28 +40,9 @@ class AuthController {
           'bio': bio ?? 'Hey there! I am using CookBook',
           'likes': likes ?? 0,
           'country': country ?? '',
-          'dateOfBirth': dateOfBirth ?? DateTime.now(),
+          'dateOfBirth': dateOfBirth ?? "",
         },
       );
-      // FirebaseContants.usersCollection.doc(userId).set(
-      //   {
-      //     'userId': userId,
-      //     'createdAt': Timestamp.now(),
-      //     'updatedAt': Timestamp.now(),
-      //     'firstName': firstName,
-      //     'lastName': lastName,
-      //     'email': email,
-      //     'phoneNumber': phoneNumber,
-      //     'photoUrl': photoUrl ?? '',
-      //     'postCount': postCount ?? 0,
-      //     'followersCount': followersCount ?? 0,
-      //     'followingCount': followingCount ?? 0,
-      //     'bio': bio ?? 'Hey there! I am using CookBook',
-      //     'likes': likes ?? 0,
-      //     'location': location ?? '',
-      //     'dateOfBirth': dateOfBirth ?? DateTime.now(),
-      //   },
-      // );
     }
   }
 
@@ -100,42 +81,5 @@ class AuthController {
         FirebaseContants.usersCollection.doc(userId).delete();
       }
     }).catchError((error) {});
-  }
-
-  static Future<void> updateUser(
-    String userId, {
-    String? firstName,
-    String? lastName,
-    String? email,
-    String? phoneNumber,
-    String? photoUrl,
-    String? postCount,
-    String? followersCount,
-    String? followingCount,
-    String? bio,
-    String? likes,
-  }) async {
-    final userDocument =
-        await FirebaseContants.usersCollection.doc(userId).get();
-
-    if (userDocument.exists) {
-      FirebaseContants.usersCollection.doc(userId).update(
-        {
-          'userId': userId,
-          'updatedAt': Timestamp.now(),
-          'firstName': firstName,
-          'lastName': lastName,
-          'email': email,
-          'phoneNumber': phoneNumber,
-          'photoUrl': photoUrl ?? '',
-          'postCount': postCount ?? 0,
-          'followersCount': followersCount ?? 0,
-          'followingCount': followingCount ?? 0,
-          'bio': bio ?? 'Hey there! I am using CookBook',
-          'likes': likes ?? 0,
-          'address': '',
-        },
-      );
-    }
   }
 }

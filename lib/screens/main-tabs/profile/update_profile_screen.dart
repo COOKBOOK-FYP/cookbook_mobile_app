@@ -134,7 +134,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           bloc: updateProfileBloc,
           listener: (context, state) {
             if (state is UpdateProfileSuccessState) {
-              AppDialogs.closeLoadingDialog();
+              AppDialogs.closeDialog();
               AppSnackbars.success(context, state.message);
               context
                   .read<UserCollectionBloc>()
@@ -143,7 +143,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
               // go back to previous page but with new data
               Navigator.pop(context, true);
             } else if (state is UpdateProfileErrorState) {
-              AppDialogs.closeLoadingDialog();
+              AppDialogs.closeDialog();
               AppSnackbars.danger(context, state.message);
             }
           },
@@ -298,7 +298,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           );
                       }
                     } catch (error) {
-                      AppDialogs.closeLoadingDialog();
+                      AppDialogs.closeDialog();
                       AppSnackbars.danger(context, "Failed to update profile");
                     }
                   },

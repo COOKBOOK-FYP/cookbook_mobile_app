@@ -80,7 +80,7 @@ class _SignInScreenState extends State<SignInScreen> {
               }
               if (state is SigninStateSuccess) {
                 // close the dialoge
-                AppDialogs.closeLoadingDialog();
+                AppDialogs.closeDialog();
                 AppNavigator.replaceTo(
                   context: context,
                   screen: MainTabsScreen(),
@@ -88,7 +88,7 @@ class _SignInScreenState extends State<SignInScreen> {
               }
 
               if (state is SigninStateFailed) {
-                AppDialogs.closeLoadingDialog();
+                AppDialogs.closeDialog();
                 AppSnackbars.danger(
                   context,
                   state.message,

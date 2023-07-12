@@ -86,7 +86,7 @@ class _PostScreenState extends State<PostScreen> {
         if (state is PostLoadingState) {
           AppDialogs.loadingDialog(context);
         } else if (state is PostSubmittedState) {
-          AppDialogs.closeLoadingDialog();
+          AppDialogs.closeDialog();
           Fluttertoast.showToast(
             msg: "Post submitted successfully",
             toastLength: Toast.LENGTH_SHORT,
@@ -99,7 +99,7 @@ class _PostScreenState extends State<PostScreen> {
             screen: const MainTabsScreen(),
           );
         } else if (state is PostErrorState) {
-          AppDialogs.closeLoadingDialog();
+          AppDialogs.closeDialog();
           AppSnackbars.danger(context, state.message.toString());
         }
       },

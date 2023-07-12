@@ -32,7 +32,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
         FirebaseAuth.instance.signOut().then((_) async {
           AppDialogs.loadingDialog(context);
           Future.delayed(3.seconds, () {
-            AppDialogs.closeLoadingDialog();
+            AppDialogs.closeDialog();
             AppNavigator.replaceTo(
               context: context,
               screen: const SplashScreen(),
