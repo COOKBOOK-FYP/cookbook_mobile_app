@@ -33,7 +33,7 @@ class AppDialogs {
       builder: (ctx) {
         dialogueContext = ctx;
         return Lottie.asset(
-          LottieAssets.thumbLike,
+          LottieAssets.doubleTapLike2,
         );
       },
     );

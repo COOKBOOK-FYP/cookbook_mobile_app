@@ -21,6 +21,8 @@ class LottieAssets {
   static const String emptyproducts = "assets/lotties/empty_products.json";
   static const String like = 'assets/lotties/like.json';
   static const String thumbLike = 'assets/lotties/thumb_like.json';
+  static const String doubleTapLike = 'assets/lotties/double_tap_like.json';
+  static const String doubleTapLike2 = 'assets/lotties/double_tap_like2.json';
 }
 
 class AppSvgs {

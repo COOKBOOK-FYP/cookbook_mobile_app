@@ -48,6 +48,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       height: 80.h,
                       width: 80.w,
                       imageUrl: state.userDocument.photoUrl.toString(),
+                      boxFit: BoxFit.cover,
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

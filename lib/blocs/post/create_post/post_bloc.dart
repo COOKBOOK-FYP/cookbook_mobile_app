@@ -25,7 +25,10 @@ class PostBloc extends Bloc<PostEvent, PostState> {
           RecipeModel(
             createdAt: Timestamp.now(),
             description: event.description,
-            // likes: 0,
+            likes: {
+              FirebaseAuth.instance.currentUser!.uid: true,
+            },
+            likeCount: 1,
             image: image,
             ownerId: FirebaseAuth.instance.currentUser!.uid,
             postId: event.postId,

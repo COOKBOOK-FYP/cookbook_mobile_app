@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/constants/app_images.dart';
+import 'package:cookbook/constants/firebase_constants.dart';
 import 'package:cookbook/global/utils/app_dialogs.dart';
 import 'package:cookbook/global/utils/format_timestamp.dart';
 import 'package:cookbook/models/Recipes/recipe_model.dart';
@@ -27,9 +28,34 @@ class _PostWidgetState extends State<PostWidget> {
   @override
   void initState() {
     setState(() {
-      isPostLiked = widget.post.likes?[FirebaseAuth.instance.currentUser!.uid];
+      isPostLiked =
+          widget.post.likes?[FirebaseAuth.instance.currentUser!.uid] ?? false;
     });
     super.initState();
+  }
+
+  Future<void> likePost() async {
+    if (isPostLiked == true) {
+      widget.post.likes?.remove(FirebaseAuth.instance.currentUser!.uid);
+      widget.post.likeCount = widget.post.likeCount! - 1;
+      isPostLiked = false;
+    } else {
+      widget.post.likes?[FirebaseAuth.instance.currentUser!.uid] = true;
+      widget.post.likeCount = widget.post.likeCount! + 1;
+      isPostLiked = true;
+    }
+    await FirebaseContants.recipesCollection
+        .doc(widget.post.ownerId)
+        .collection('UserPosts')
+        .doc(widget.post.postId)
+        .update({'likes': widget.post.likes});
+
+    FirebaseContants.recipesCollection
+        .doc(widget.post.ownerId)
+        .collection('UserPosts')
+        .doc(widget.post.postId)
+        .update({'likeCount': widget.post.likeCount});
+    setState(() {});
   }
 
   @override
@@ -59,7 +85,11 @@ class _PostWidgetState extends State<PostWidget> {
               ],
             ),
             const Spacer(),
-            Icon(Ionicons.ellipsis_horizontal_outline, size: 20.sp),
+            Icon(
+              Ionicons.trash,
+              size: 20.sp,
+              color: Colors.red,
+            ),
           ],
         ),
         10.heightBox,
@@ -67,22 +97,15 @@ class _PostWidgetState extends State<PostWidget> {
         widget.post.description.toString().text.make(),
         10.heightBox,
         GestureDetector(
-          onDoubleTap: () {
-            setState(() {
-              isPostLiked = !isPostLiked!;
-
-              if (isPostLiked == true) {
-                AppDialogs.postLikeDialog(context);
-                Future.delayed(const Duration(seconds: 1), () {
-                  AppDialogs.closeDialog();
-                });
-              }
-            });
+          onDoubleTap: () async {
+            AppDialogs.postLikeDialog(context);
+            await likePost();
+            AppDialogs.closeDialog();
           },
           child: Stack(
             children: [
               AspectRatio(
-                aspectRatio: 0.7,
+                aspectRatio: 0.8,
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -91,7 +114,7 @@ class _PostWidgetState extends State<PostWidget> {
                       image: CachedNetworkImageProvider(
                         widget.post.image.toString(),
                       ),
-                      fit: BoxFit.contain,
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
@@ -99,29 +122,31 @@ class _PostWidgetState extends State<PostWidget> {
             ],
           ),
         ),
-        10.heightBox,
         Row(
           children: [
             IconButton(
               onPressed: () {
                 setState(() {
-                  isPostLiked = !isPostLiked!;
+                  likePost();
                 });
               },
               icon: isPostLiked == true
                   ? Lottie.asset(
-                      LottieAssets.like,
+                      LottieAssets.doubleTapLike2,
                       repeat: false,
                     )
                   : Icon(
                       isPostLiked == true
                           ? Ionicons.heart
                           : Ionicons.heart_outline,
-                      color: Colors.pink,
+                      color: Colors.lightBlue,
+                      size: 25.sp,
                     ),
             ),
-            5.widthBox,
-            widget.post.likeCount.toString().text.make(),
+
+            isPostLiked == true
+                ? "You and other ${widget.post.likeCount}".text.make()
+                : widget.post.likeCount.toString().text.make(),
             // 10.widthBox,
             // Icon(
             //   Ionicons.chatbubble_outline,
@@ -139,7 +164,7 @@ class _PostWidgetState extends State<PostWidget> {
             // ),
           ],
         ),
-        const Divider(thickness: 2),
+        const Divider(thickness: 1),
       ],
     );
   }
