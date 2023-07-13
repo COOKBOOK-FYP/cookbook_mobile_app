@@ -13,6 +13,8 @@ class FetchPostErrorState extends FetchPostState {
   FetchPostErrorState({required this.message});
 }
 
+class FetchPostNoInternetState extends FetchPostState {}
+
 class FetchPostLoadedState extends FetchPostState {
   final List<RecipeModel> posts;
 

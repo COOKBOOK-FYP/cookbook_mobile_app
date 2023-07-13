@@ -18,6 +18,8 @@ class LottieAssets {
   static const String accountCreated = 'assets/lotties/account_created.json';
   static const String notification = 'assets/lotties/notifcation.json';
   static const String error = 'assets/lotties/error_lottie.json';
+  static const String noInternet = 'assets/lotties/no_internet.json';
+  static const String noPosts = 'assets/lotties/no_posts.json';
   static const String emptyproducts = "assets/lotties/empty_products.json";
   static const String like = 'assets/lotties/like.json';
   static const String thumbLike = 'assets/lotties/thumb_like.json';

@@ -1,14 +1,13 @@
-import 'package:cookbook/blocs/session_handling/splash_cubit.dart';
+import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/constants/app_images.dart';
 import 'package:cookbook/widgets/buttons/primary_button_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class ErrorScreen extends StatelessWidget {
-  const ErrorScreen({Key? key}) : super(key: key);
+class NoInternetScreen extends StatelessWidget {
+  final VoidCallback onPressed;
+  const NoInternetScreen({Key? key, required this.onPressed}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,14 +15,16 @@ class ErrorScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Lottie.asset(LottieAssets.error),
-            "Something went wrong".text.xl2.make(),
-            SizedBox(height: 20.h),
+            Lottie.asset(LottieAssets.noInternet),
+            "No Internet Connection"
+                .text
+                .maxLines(2)
+                .fontFamily(AppFonts.openSansMedium)
+                .xl2
+                .make(),
             PrimaryButtonWidget(
               caption: "Retry",
-              onPressed: () {
-                context.read<SessionHandlingCubit>().initliazeRoute();
-              },
+              onPressed: onPressed,
             ),
           ],
         )

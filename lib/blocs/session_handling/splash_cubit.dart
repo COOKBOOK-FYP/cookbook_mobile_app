@@ -91,7 +91,7 @@ class SessionHandlingCubit extends Cubit<SessionHandlingState> {
           }
         });
       } else {
-        emit(SessionHandlingFailed());
+        emit(SessionHandlingNoInternet());
       }
     } catch (e) {
       emit(SessionHandlingFailed());

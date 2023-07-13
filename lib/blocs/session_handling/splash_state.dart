@@ -14,4 +14,6 @@ class SessionHandlingLoginScreen extends SessionHandlingState {}
 
 class SessionHandlingFailed extends SessionHandlingState {}
 
+class SessionHandlingNoInternet extends SessionHandlingState {}
+
 class SessionHandlingOnBoarding extends SessionHandlingState {}

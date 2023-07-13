@@ -1,17 +1,21 @@
 import 'package:cookbook/blocs/post/fetch_post/fetch_post_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_config.dart';
+import 'package:cookbook/constants/app_fonts.dart';
+import 'package:cookbook/constants/app_images.dart';
 import 'package:cookbook/global/utils/app_dialogs.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
 import 'package:cookbook/screens/post/post_screen.dart';
 import 'package:cookbook/widgets/appbar/primary_appbar_widget.dart';
 import 'package:cookbook/widgets/buttons/material_button_widget.dart';
+import 'package:cookbook/widgets/buttons/primary_button_widget.dart';
 import 'package:cookbook/widgets/page/page_widget.dart';
 import 'package:cookbook/widgets/post/post_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:lottie/lottie.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -75,16 +79,44 @@ class _HomeScreenState extends State<HomeScreen> {
               return Center(
                 child: Text(state.message),
               );
-            } else if (state is FetchPostEmptyState) {
-              return PageWidget(
+            } else if (state is FetchPostNoInternetState) {
+              return Column(
                 children: [
                   const CreatePostWidget(),
                   20.heightBox,
-                  const Center(
-                    child: Text('No posts found'),
+                  Lottie.asset(LottieAssets.noInternet),
+                  20.heightBox,
+                  "No internet connection!"
+                      .text
+                      .maxLines(2)
+                      .fontFamily(AppFonts.openSansBold)
+                      .makeCentered(),
+                  PrimaryButtonWidget(
+                    caption: "Retry",
+                    onPressed: () {
+                      context
+                          .read<FetchPostBloc>()
+                          .add(FetchAllPosts(paginatedBy));
+                    },
                   ),
                 ],
-              );
+              ).box.make().p20();
+            } else if (state is FetchPostEmptyState) {
+              return Column(
+                children: [
+                  const CreatePostWidget(),
+                  Lottie.asset(LottieAssets.noPosts),
+                  Expanded(
+                    child: "It seems like no one has posted anything yet!"
+                        .text
+                        .maxLines(2)
+                        .size(20.sp)
+                        .center
+                        .fontFamily(AppFonts.openSansBold)
+                        .makeCentered(),
+                  ),
+                ],
+              ).box.make().p20();
             } else if (state is FetchPostLoadedState) {
               return PageWidget(
                 scrollController: scrollController,
