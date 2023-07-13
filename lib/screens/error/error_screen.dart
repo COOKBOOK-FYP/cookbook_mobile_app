@@ -1,38 +1,53 @@
-import 'package:cookbook/blocs/session_handling/splash_cubit.dart';
+import 'package:cookbook/constants/app_colors.dart';
+import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/constants/app_images.dart';
-import 'package:cookbook/widgets/buttons/primary_button_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class ErrorScreen extends StatelessWidget {
-  const ErrorScreen({Key? key}) : super(key: key);
+  final String lottie;
+  final String message;
+  final String? buttonText;
+  final VoidCallback onPressed;
+  const ErrorScreen({
+    Key? key,
+    required this.lottie,
+    required this.message,
+    this.buttonText,
+    required this.onPressed,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Lottie.asset(LottieAssets.error),
-            "Something went wrong".text.xl2.make(),
-            SizedBox(height: 20.h),
-            PrimaryButtonWidget(
-              caption: "Retry",
-              onPressed: () {
-                context.read<SessionHandlingCubit>().initliazeRoute();
-              },
+    return Column(
+      children: [
+        Lottie.asset(LottieAssets.noPosts),
+        message.text
+            .maxLines(2)
+            .size(20.sp)
+            .center
+            .fontFamily(AppFonts.openSansBold)
+            .makeCentered(),
+        20.heightBox,
+        GestureDetector(
+          onTap: onPressed,
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: AppColors.primaryColor),
             ),
-          ],
-        )
-            .box
-            .padding(
-              const EdgeInsets.all(20),
-            )
-            .make(),
-      ),
-    );
+            child: buttonText!.text.center
+                .color(AppColors.primaryColor)
+                .size(20.sp)
+                .fontFamily(AppFonts.robotoMonoMedium)
+                .make()
+                .py12(),
+          ).box.roundedFull.make(),
+        ),
+      ],
+    ).box.make().p20();
   }
 }

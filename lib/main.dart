@@ -3,8 +3,8 @@ import 'package:cookbook/blocs/session_handling/splash_cubit.dart';
 import 'package:cookbook/global/themes/app_theme.dart';
 import 'package:cookbook/providers/bloc_provider.dart';
 import 'package:cookbook/screens/authentication/landing/splash_screen.dart';
-import 'package:cookbook/screens/error/error_screen.dart';
 import 'package:cookbook/screens/error/no_internet_screen.dart';
+import 'package:cookbook/screens/error/something_went_wrong_screen.dart';
 import 'package:cookbook/screens/main-tabs/main_tabs_screen.dart';
 import 'package:cookbook/screens/onboarding/onboarding_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -69,7 +69,11 @@ class _MyAppState extends State<MyApp> {
                         },
                       );
                     } else if (state is SessionHandlingFailed) {
-                      return ErrorScreen();
+                      return SomethingWentWrongScreen(
+                        onPressed: () {
+                          context.read<SessionHandlingCubit>().initliazeRoute();
+                        },
+                      );
                     } else {
                       return SizedBox();
                     }
