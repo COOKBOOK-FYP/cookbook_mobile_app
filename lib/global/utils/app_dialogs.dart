@@ -1,8 +1,7 @@
-import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_images.dart';
+import 'package:cookbook/widgets/loading/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_exit_app/flutter_exit_app.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lottie/lottie.dart';
 
 class AppDialogs {
@@ -13,15 +12,16 @@ class AppDialogs {
       barrierDismissible: false,
       builder: (ctx) {
         dialogueContext = ctx;
-        return Container(
-          color: AppColors.transparentColor,
-          child: Center(
-            child: SpinKitFadingCircle(
-              color: AppColors.primaryColor,
-              size: 30.0,
-            ),
-          ),
-        );
+        // return Container(
+        //   color: AppColors.transparentColor,
+        //   child: Center(
+        //     child: SpinKitFadingCircle(
+        //       color: AppColors.primaryColor,
+        //       size: 30.0,
+        //     ),
+        //   ),
+        // );
+        return const LoadingWidget();
       },
     );
   }

@@ -25,6 +25,7 @@ class LottieAssets {
   static const String thumbLike = 'assets/lotties/thumb_like.json';
   static const String doubleTapLike = 'assets/lotties/double_tap_like.json';
   static const String doubleTapLike2 = 'assets/lotties/double_tap_like2.json';
+  static const String loading = 'assets/lotties/loading.json';
 }
 
 class AppSvgs {

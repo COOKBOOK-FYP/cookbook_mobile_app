@@ -108,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ).box.make().p20();
               } else if (state is FetchPostEmptyState) {
                 return Column(children: [
-                  const CreatePostWidget(),
+                  const CreatePostWidget().box.make().p20(),
                   ErrorScreen(
                     lottie: LottieAssets.noPosts,
                     message: "It seems like no one has posted anything yet!",

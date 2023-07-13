@@ -26,9 +26,9 @@ class PostBloc extends Bloc<PostEvent, PostState> {
             createdAt: Timestamp.now(),
             description: event.description,
             likes: {
-              FirebaseAuth.instance.currentUser!.uid: true,
+              FirebaseAuth.instance.currentUser!.uid: false,
             },
-            likeCount: 1,
+            likeCount: 0,
             image: image,
             ownerId: FirebaseAuth.instance.currentUser!.uid,
             postId: event.postId,
