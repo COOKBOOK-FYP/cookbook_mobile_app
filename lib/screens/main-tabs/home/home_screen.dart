@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // context.read<UserCollectionBloc>().add(UserCollectionGetDataEvent());
     // increasePaginatedBy();
-    context.read<FetchPostBloc>().add(FetchAllPosts(paginatedBy));
+    context.read<FetchPostBloc>().add(FetchCurrentPosts(paginatedBy));
     super.initState();
   }
 
@@ -71,9 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return AppDialogs.exitDialog(context);
       },
       child: RefreshIndicator(
-        onRefresh: () async {
-          context.read<FetchPostBloc>().add(FetchAllPosts(paginatedBy));
-        },
+        onRefresh: () async {},
         child: Scaffold(
           key: scaffoldKey,
           appBar: const PrimaryAppbarWidget(),
@@ -101,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       onPressed: () {
                         context
                             .read<FetchPostBloc>()
-                            .add(FetchAllPosts(paginatedBy));
+                            .add(FetchCurrentPosts(paginatedBy));
                       },
                     ),
                   ],
@@ -112,11 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ErrorScreen(
                     lottie: LottieAssets.noPosts,
                     message: "It seems like no one has posted anything yet!",
-                    onPressed: () async {
-                      context
-                          .read<FetchPostBloc>()
-                          .add(FetchAllPosts(paginatedBy));
-                    },
+                    onPressed: () async {},
                     buttonText: "Load Posts",
                   ),
                 ]);

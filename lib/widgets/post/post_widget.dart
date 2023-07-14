@@ -1,12 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
+import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/constants/app_images.dart';
 import 'package:cookbook/constants/firebase_constants.dart';
 import 'package:cookbook/global/utils/app_dialogs.dart';
+import 'package:cookbook/global/utils/app_navigator.dart';
 import 'package:cookbook/global/utils/format_timestamp.dart';
 import 'package:cookbook/models/Recipes/recipe_model.dart';
+import 'package:cookbook/screens/comments/comments_screen.dart';
 import 'package:cookbook/widgets/images/circular_image.dart';
 import 'package:cookbook/widgets/loading/loading_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -102,12 +105,12 @@ class _PostWidgetState extends State<PostWidget> {
                           .make(),
                     ],
                   ),
-                  const Spacer(),
-                  Icon(
-                    Ionicons.trash,
-                    size: 20.sp,
-                    color: Colors.red,
-                  ),
+                  // const Spacer(),
+                  // Icon(
+                  //   Ionicons.trash,
+                  //   size: 20.sp,
+                  //   color: Colors.red,
+                  // ),
                 ],
               ),
               10.heightBox,
@@ -182,21 +185,21 @@ class _PostWidgetState extends State<PostWidget> {
                   //   size: 20.sp,
                   // ),
                   const Spacer(),
-                  // IconButton(
-                  //   splashRadius: 20.sp,
-                  //   splashColor: AppColors.secondaryColor,
-                  //   icon: Icon(
-                  //     Ionicons.chatbox_outline,
-                  //     size: 20.sp,
-                  //   ),
-                  //   onPressed: () {
-                  //     AppNavigator.goToPage(
-                  //       context: context,
-                  //       screen: CommentsScreen(post: widget.post),
-                  //     );
-                  //   },
-                  // ),
-                  // "Comments".text.semiBold.make(),
+                  IconButton(
+                    splashRadius: 20.sp,
+                    splashColor: AppColors.secondaryColor,
+                    icon: Icon(
+                      Ionicons.chatbox_outline,
+                      size: 20.sp,
+                    ),
+                    onPressed: () {
+                      AppNavigator.goToPage(
+                        context: context,
+                        screen: CommentsScreen(post: widget.post),
+                      );
+                    },
+                  ),
+                  "Comments".text.semiBold.make(),
                 ],
               ),
               const Divider(thickness: 1),

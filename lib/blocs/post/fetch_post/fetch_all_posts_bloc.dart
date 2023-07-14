@@ -1,21 +1,20 @@
 import 'dart:io';
 
+import 'package:cookbook/blocs/post/fetch_post/fetch_post_bloc.dart';
 import 'package:cookbook/controllers/Post/post_controller.dart';
 import 'package:cookbook/models/Recipes/recipe_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-part 'fetch_post_states_events.dart';
-
-class FetchPostBloc extends Bloc<FetchPostEvent, FetchPostState> {
-  FetchPostBloc() : super(FetchPostInitialState()) {
-    on<FetchCurrentPosts>((event, emit) async {
+class FetchAllPostsBloc extends Bloc<FetchPostEvent, FetchPostState> {
+  FetchAllPostsBloc() : super(FetchPostInitialState()) {
+    on<FetchAllPosts>((event, emit) async {
       List<RecipeModel> posts = [];
       emit(FetchPostLoadingState());
       bool connectionValue = await isNetworkAvailable();
       if (connectionValue) {
         try {
-          posts = await PostController.fetchCurrentUserPosts(event.paginatedBy);
+          posts = await PostController.fetchAllPosts(event.paginatedBy);
           if (posts.isEmpty) {
             emit(FetchPostEmptyState());
           } else {

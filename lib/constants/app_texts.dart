@@ -45,6 +45,10 @@ class AppText {
   // Update Profile Screen
   static const String updateProfileText = "Update Profile";
 
+  // Comments Screen
+  static const String commentsText = "Comments";
+  static const String addCommentText = "Add a comment...";
+
   // Exceptions
   static const String invalidEmailText = "Invalid Email Address";
   static const String invalidPasswordText = "Invalid Password";

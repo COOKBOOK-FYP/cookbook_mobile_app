@@ -119,18 +119,20 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
               RichText(
                 text: TextSpan(
                   text: "Complete",
-                  style: context.textTheme.headlineMedium!.copyWith(
+                  style: context.textTheme.bodyLarge!.copyWith(
                     fontWeight: FontWeight.bold,
                     color: AppColors.primaryColor,
                     fontFamily: AppFonts.robotoMonoLight,
+                    fontSize: 30.sp,
                   ),
                   children: [
                     TextSpan(
                       text: " Profile",
-                      style: context.textTheme.headlineMedium!.copyWith(
+                      style: context.textTheme.bodyLarge!.copyWith(
                         fontWeight: FontWeight.normal,
                         color: AppColors.secondaryColor,
                         fontFamily: AppFonts.robotoMonoMedium,
+                        fontSize: 28.sp,
                       ),
                     ),
                   ],

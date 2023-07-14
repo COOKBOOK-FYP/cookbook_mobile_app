@@ -81,11 +81,8 @@ class PostController {
   static Future<List<RecipeModel>> fetchAllPosts(int paginatedBy) async {
     List<RecipeModel> recipes = [];
     try {
-      final posts = await FirebaseContants.recipesCollection
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection("UserPosts")
-          .orderBy('createdAt', descending: true)
-          .get();
+      final posts = await FirebaseContants.recipesCollection.get();
+
       if (posts.docs.isEmpty) {
         return recipes;
       } else if (posts.docs.length < paginatedBy) {

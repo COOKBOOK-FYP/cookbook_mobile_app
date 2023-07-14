@@ -190,14 +190,17 @@ class _PostScreenState extends State<PostScreen> {
                           .make()
                           .w(context.width()),
                       AspectRatio(
-                        aspectRatio: 16 / 9,
+                        aspectRatio: 1.2,
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(color: Colors.grey),
                           ),
                           child: compressedImage != null
-                              ? Image.file(compressedImage!)
+                              ? Image.file(
+                                  compressedImage!,
+                                  fit: BoxFit.cover,
+                                )
                               : Icon(
                                   Ionicons.image_outline,
                                   size: 80.sp,
