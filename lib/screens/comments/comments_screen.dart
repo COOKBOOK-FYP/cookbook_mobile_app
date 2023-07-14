@@ -1,11 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cookbook/blocs/comments/comments_bloc.dart';
+import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/constants/app_texts.dart';
 import 'package:cookbook/global/utils/app_dialogs.dart';
 import 'package:cookbook/global/utils/app_snakbars.dart';
 import 'package:cookbook/models/Comments/comment_model.dart';
 import 'package:cookbook/models/Recipes/recipe_model.dart';
 import 'package:cookbook/widgets/appbar/secondary_appbar_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -23,6 +26,7 @@ class CommentsScreen extends StatefulWidget {
 class _CommentsScreenState extends State<CommentsScreen> {
   final commentsController = TextEditingController();
   CommentsBloc commentsBloc = CommentsBloc();
+  UserCollectionBloc userCollectionBloc = UserCollectionBloc();
 
   @override
   void initState() {
@@ -30,6 +34,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
       ..add(
         CommentsGetDataEvent(postId: widget.post.postId!),
       );
+
     super.initState();
   }
 
@@ -76,17 +81,39 @@ class _CommentsScreenState extends State<CommentsScreen> {
                     child: ListView.builder(
                       itemBuilder: (context, index) {
                         CommentModel comment = st.comments[index];
-                        return ListTile(
-                          title: "${comment.comment}"
-                              .text
-                              .size(16)
-                              .make()
-                              .pOnly(bottom: 8),
-                          subtitle: Text(
-                            DateFormat.yMMMd().format(
-                              comment.createdAt!.toDate(),
-                            ),
-                          ),
+                        return BlocBuilder<UserCollectionBloc,
+                            UserCollectionState>(
+                          bloc: userCollectionBloc
+                            ..add(UserCollectionGetDataEvent(
+                                st.comments[index].userId)),
+                          builder: (context, userState) {
+                            if (userState is UserCollectionLoadedState) {
+                              return ListTile(
+                                leading: CircleAvatar(
+                                  backgroundImage: CachedNetworkImageProvider(
+                                    userState.userDocument.photoUrl.toString(),
+                                  ),
+                                  onBackgroundImageError:
+                                      (exception, stackTrace) =>
+                                          const Icon(Icons.error),
+                                ),
+                                title: Text(
+                                  userState.userDocument.fullName.toString(),
+                                ),
+                                subtitle: "${comment.comment}"
+                                    .text
+                                    .size(16)
+                                    .make()
+                                    .pOnly(bottom: 8),
+                                trailing: Text(
+                                  DateFormat.yMMMd().format(
+                                    comment.createdAt!.toDate(),
+                                  ),
+                                ),
+                              );
+                            }
+                            return Container();
+                          },
                         );
                       },
                       itemCount: st.comments.length,
@@ -109,7 +136,8 @@ class _CommentsScreenState extends State<CommentsScreen> {
                                   comment: commentsController.text.trim(),
                                   createdAt: Timestamp.now(),
                                   postId: widget.post.postId,
-                                  userId: widget.post.ownerId,
+                                  userId:
+                                      FirebaseAuth.instance.currentUser!.uid,
                                 ),
                               ),
                             );
