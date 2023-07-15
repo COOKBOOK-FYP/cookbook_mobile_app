@@ -1,18 +1,18 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cookbook/blocs/comments/comments_bloc.dart';
 import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
+import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_texts.dart';
-import 'package:cookbook/global/utils/app_dialogs.dart';
 import 'package:cookbook/global/utils/app_snakbars.dart';
 import 'package:cookbook/models/Comments/comment_model.dart';
 import 'package:cookbook/models/Recipes/recipe_model.dart';
+import 'package:cookbook/models/User/user_model.dart';
 import 'package:cookbook/widgets/appbar/secondary_appbar_widget.dart';
+import 'package:cookbook/widgets/loading/loading_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:velocity_x/velocity_x.dart';
 
 class CommentsScreen extends StatefulWidget {
@@ -27,6 +27,8 @@ class _CommentsScreenState extends State<CommentsScreen> {
   final commentsController = TextEditingController();
   CommentsBloc commentsBloc = CommentsBloc();
   UserCollectionBloc userCollectionBloc = UserCollectionBloc();
+  List<CommentModel> comments = [];
+  UserModel? user;
 
   @override
   void initState() {
@@ -46,145 +48,180 @@ class _CommentsScreenState extends State<CommentsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const SecondaryAppbarWidget(title: AppText.commentsText),
-      body: BlocListener<CommentsBloc, CommentsState>(
-        listener: (context, state) {
-          if (state is CommentsLoadingState) {
-            AppDialogs.loadingDialog(context);
-          } else if (state is CommentsAddedState) {
-            AppDialogs.closeDialog();
-            commentsController.clear();
-            AppSnackbars.normal(context, "Comment added successfully");
-            commentsBloc.add(
-              CommentsGetDataEvent(postId: widget.post.postId!),
-            );
-          } else if (state is CommentsNoInternetState) {
-            AppDialogs.closeDialog();
-            AppSnackbars.normal(context, "No internet connection");
-          }
-        },
-        child: BlocBuilder<CommentsBloc, CommentsState>(
+    return RefreshIndicator(
+      onRefresh: () async {
+        commentsBloc.add(
+          CommentsGetDataEvent(postId: widget.post.postId!),
+        );
+      },
+      child: Scaffold(
+        appBar: const SecondaryAppbarWidget(title: AppText.commentsText),
+        body: BlocConsumer<CommentsBloc, CommentsState>(
           bloc: commentsBloc,
-          builder: (context, st) {
-            if (st is CommentsLoadedState) {
+          listener: (context, state) {
+            if (state is CommentsLoadingState) {
+            } else if (state is CommentsAddedState) {
+              AppSnackbars.normal(context, "Comment added successfully");
+              commentsBloc.add(
+                CommentsGetDataEvent(postId: widget.post.postId!),
+              );
+            } else if (state is CommentsNoInternetState) {
+              AppSnackbars.normal(context, "No internet connection");
+            }
+          },
+          builder: (context, state) {
+            if (state is CommentsLoadingState) {
+              return const LoadingWidget();
+            }
+            if (state is CommentsEmptyState) {
               return Column(
                 children: [
-                  // AspectRatio(
-                  //   aspectRatio: 1,
-                  //   child: CachedNetworkImage(
-                  //     imageUrl: post.image.toString(),
-                  //     fit: BoxFit.contain,
-                  //   ),
-                  // ),
                   Expanded(
-                    child: ListView.builder(
-                      itemBuilder: (context, index) {
-                        CommentModel comment = st.comments[index];
-                        return BlocBuilder<UserCollectionBloc,
-                            UserCollectionState>(
-                          bloc: userCollectionBloc
-                            ..add(UserCollectionGetDataEvent(
-                                st.comments[index].userId)),
-                          builder: (context, userState) {
-                            if (userState is UserCollectionLoadedState) {
-                              return ListTile(
-                                leading: CircleAvatar(
-                                  backgroundImage: CachedNetworkImageProvider(
-                                    userState.userDocument.photoUrl.toString(),
-                                  ),
-                                  onBackgroundImageError:
-                                      (exception, stackTrace) =>
-                                          const Icon(Icons.error),
-                                ),
-                                title: Text(
-                                  userState.userDocument.fullName.toString(),
-                                ),
-                                subtitle: "${comment.comment}"
-                                    .text
-                                    .size(16)
-                                    .make()
-                                    .pOnly(bottom: 8),
-                                trailing: Text(
-                                  DateFormat.yMMMd().format(
-                                    comment.createdAt!.toDate(),
-                                  ),
-                                ),
-                              );
-                            }
-                            return Container();
-                          },
-                        );
-                      },
-                      itemCount: st.comments.length,
-                    ),
+                    child: "No comments for this recipe yet!"
+                        .text
+                        .make()
+                        .centered(),
                   ),
-                  ListTile(
-                    title: TextField(
-                      controller: commentsController,
-                      decoration: const InputDecoration(
-                        hintText: AppText.addCommentText,
-                        border: InputBorder.none,
+                  BlocListener<UserCollectionBloc, UserCollectionState>(
+                    bloc: userCollectionBloc
+                      ..add(UserCollectionGetDataEvent(null)),
+                    listener: (context, state) {
+                      if (state is UserCollectionLoadedState) {
+                        user = state.userDocument;
+                      }
+                    },
+                    child: ListTile(
+                      title: TextField(
+                        controller: commentsController,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
+                        decoration: const InputDecoration(
+                          hintText: "Add a comment",
+                          border: InputBorder.none,
+                        ),
                       ),
-                    ),
-                    trailing: IconButton(
-                      onPressed: () {
-                        context.read<CommentsBloc>().add(
+                      trailing: IconButton(
+                        onPressed: () {
+                          if (commentsController.text.isNotEmpty) {
+                            commentsBloc.add(
                               CommentsAddEvent(
-                                postId: widget.post.postId!,
                                 comment: CommentModel(
-                                  comment: commentsController.text.trim(),
+                                  comment: commentsController.text,
+                                  postId: widget.post.postId!,
                                   createdAt: Timestamp.now(),
-                                  postId: widget.post.postId,
                                   userId:
                                       FirebaseAuth.instance.currentUser!.uid,
+                                  username: user?.fullName,
                                 ),
+                                postId: widget.post.postId!,
                               ),
                             );
-                      },
-                      icon: const Icon(Ionicons.send),
+                            commentsController.clear();
+                          }
+                        },
+                        icon: const Icon(Icons.send),
+                      ),
                     ),
                   ),
                 ],
               );
             }
-            return Column(
-              children: [
-                // AspectRatio(
-                //   aspectRatio: 1,
-                //   child: CachedNetworkImage(
-                //     imageUrl: post.image.toString(),
-                //     fit: BoxFit.contain,
-                //   ),
-                // ),
-                Expanded(child: Container()),
-                ListTile(
-                  title: TextField(
-                    controller: commentsController,
-                    decoration: const InputDecoration(
-                      hintText: AppText.addCommentText,
-                      border: InputBorder.none,
+            if (state is CommentsLoadedState) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            ListTile(
+                              onTap: () {
+                                // Navigate To User Profile screen based on user id
+                                print(state.comments[index].userId);
+                              },
+                              title:
+                                  state.comments[index].username?.text.make(),
+                              trailing: state.comments[index].createdAt != null
+                                  ? timeago
+                                      .format(
+                                        state.comments[index].createdAt!
+                                            .toDate(),
+                                      )
+                                      .text
+                                      .make()
+                                  : const SizedBox(),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 20,
+                              ),
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.appGreyColor,
+                                borderRadius: const BorderRadius.only(
+                                  topRight: Radius.circular(20),
+                                  bottomLeft: Radius.circular(20),
+                                ),
+                              ),
+                              alignment: Alignment.centerLeft,
+                              child: state.comments[index].comment?.text.make(),
+                            ),
+                            const Divider(),
+                          ],
+                        );
+                      },
+                      itemCount: state.comments.length,
                     ),
                   ),
-                  trailing: IconButton(
-                    onPressed: () {
-                      context.read<CommentsBloc>().add(
-                            CommentsAddEvent(
-                              postId: widget.post.postId!,
-                              comment: CommentModel(
-                                comment: commentsController.text.trim(),
-                                createdAt: Timestamp.now(),
-                                postId: widget.post.postId,
-                                userId: widget.post.ownerId,
-                              ),
-                            ),
-                          );
+                  BlocListener<UserCollectionBloc, UserCollectionState>(
+                    bloc: userCollectionBloc
+                      ..add(UserCollectionGetDataEvent(null)),
+                    listener: (context, state) {
+                      if (state is UserCollectionLoadedState) {
+                        user = state.userDocument;
+                      }
                     },
-                    icon: const Icon(Ionicons.send),
+                    child: ListTile(
+                      title: TextField(
+                        controller: commentsController,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
+                        decoration: const InputDecoration(
+                          hintText: "Add a comment",
+                          border: InputBorder.none,
+                        ),
+                      ),
+                      trailing: IconButton(
+                        onPressed: () {
+                          if (commentsController.text.isNotEmpty) {
+                            commentsBloc.add(
+                              CommentsAddEvent(
+                                comment: CommentModel(
+                                  comment: commentsController.text,
+                                  postId: widget.post.postId!,
+                                  createdAt: Timestamp.now(),
+                                  userId:
+                                      FirebaseAuth.instance.currentUser!.uid,
+                                  username: user?.fullName,
+                                ),
+                                postId: widget.post.postId!,
+                              ),
+                            );
+                            commentsController.clear();
+                          }
+                        },
+                        icon: const Icon(Icons.send),
+                      ),
+                    ),
                   ),
-                ),
-              ],
-            );
+                ],
+              );
+            }
+            return const SizedBox();
           },
         ),
       ),

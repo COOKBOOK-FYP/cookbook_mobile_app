@@ -7,7 +7,6 @@ import 'package:cookbook/constants/app_images.dart';
 import 'package:cookbook/constants/firebase_constants.dart';
 import 'package:cookbook/global/utils/app_dialogs.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
-import 'package:cookbook/global/utils/format_timestamp.dart';
 import 'package:cookbook/models/Recipes/recipe_model.dart';
 import 'package:cookbook/screens/comments/comments_screen.dart';
 import 'package:cookbook/widgets/images/circular_image.dart';
@@ -18,6 +17,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:lottie/lottie.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:velocity_x/velocity_x.dart';
 
 class PostWidget extends StatefulWidget {
@@ -100,7 +100,7 @@ class _PostWidgetState extends State<PostWidget> {
                           .size(16)
                           .make(),
                       // just now, 2 min ago, 1 day ago
-                      "${widget.post.category} - ${formatTimestamp(widget.post.createdAt!)}"
+                      "${widget.post.category} - ${timeago.format(widget.post.createdAt!.toDate())}"
                           .text
                           .make(),
                     ],

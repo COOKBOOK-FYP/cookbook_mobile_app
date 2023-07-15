@@ -39,7 +39,7 @@ class ErrorScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               border: Border.all(color: AppColors.primaryColor),
             ),
-            child: buttonText!.text.center
+            child: buttonText?.text.center
                 .color(AppColors.primaryColor)
                 .size(20.sp)
                 .fontFamily(AppFonts.robotoMonoMedium)
