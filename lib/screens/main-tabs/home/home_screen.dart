@@ -1,3 +1,4 @@
+import 'package:cookbook/blocs/post/fetch_post/fetch_all_posts_bloc.dart';
 import 'package:cookbook/blocs/post/fetch_post/fetch_post_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_config.dart';
@@ -38,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // context.read<UserCollectionBloc>().add(UserCollectionGetDataEvent());
     // increasePaginatedBy();
-    context.read<FetchPostBloc>().add(FetchCurrentPosts(paginatedBy));
+    context.read<FetchAllPostsBloc>().add(FetchAllPosts(paginatedBy));
     super.initState();
   }
 
@@ -56,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
         paginatedBy += AppConfig.recipesPostPagenatedCount;
         AppConfig.recipesPostMaxCount().then((maxCount) {
           if (paginatedBy <= maxCount) {
-            context.read<FetchPostBloc>().add(FetchCurrentPosts(paginatedBy));
+            context.read<FetchAllPostsBloc>().add(FetchAllPosts(paginatedBy));
           }
         });
       }
@@ -71,11 +72,13 @@ class _HomeScreenState extends State<HomeScreen> {
         return AppDialogs.exitDialog(context);
       },
       child: RefreshIndicator(
-        onRefresh: () async {},
+        onRefresh: () async {
+          context.read<FetchAllPostsBloc>().add(FetchAllPosts(paginatedBy));
+        },
         child: Scaffold(
           key: scaffoldKey,
           appBar: const PrimaryAppbarWidget(),
-          body: BlocConsumer<FetchPostBloc, FetchPostState>(
+          body: BlocConsumer<FetchAllPostsBloc, FetchPostState>(
             listener: (context, state) {},
             builder: (context, state) {
               if (state is FetchPostErrorState) {
@@ -98,8 +101,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       caption: "Retry",
                       onPressed: () {
                         context
-                            .read<FetchPostBloc>()
-                            .add(FetchCurrentPosts(paginatedBy));
+                            .read<FetchAllPostsBloc>()
+                            .add(FetchAllPosts(paginatedBy));
                       },
                     ),
                   ],
@@ -110,7 +113,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   ErrorScreen(
                     lottie: LottieAssets.noPosts,
                     message: "It seems like no one has posted anything yet!",
-                    onPressed: () async {},
+                    onPressed: () async {
+                      context
+                          .read<FetchAllPostsBloc>()
+                          .add(FetchAllPosts(paginatedBy));
+                    },
                     buttonText: "Load Posts",
                   ),
                 ]);

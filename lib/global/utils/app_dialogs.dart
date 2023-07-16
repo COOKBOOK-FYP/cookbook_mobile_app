@@ -34,6 +34,7 @@ class AppDialogs {
         dialogueContext = ctx;
         return Lottie.asset(
           LottieAssets.doubleTapLike2,
+          repeat: false,
         );
       },
     );

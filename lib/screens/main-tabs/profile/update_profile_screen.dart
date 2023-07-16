@@ -88,8 +88,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
             .child("profile_images/$profileImageId.jpg")
             .putFile(compressedImage!),
       );
-    } else {
-      photoUrl = "";
     }
   }
 

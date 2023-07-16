@@ -29,6 +29,12 @@ class PostController {
           .set(
             recipe.toJson(),
           );
+      await FirebaseFirestore.instance
+          .collection("FeedPosts")
+          .doc(recipe.postId)
+          .set(
+            recipe.toJson(),
+          );
       // update post count in user collection for the current user
       await FirebaseContants.usersCollection
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -81,7 +87,10 @@ class PostController {
   static Future<List<RecipeModel>> fetchAllPosts(int paginatedBy) async {
     List<RecipeModel> recipes = [];
     try {
-      final posts = await FirebaseContants.recipesCollection.get();
+      final posts = await FirebaseFirestore.instance
+          .collection("FeedPosts")
+          .orderBy('createdAt', descending: true)
+          .get();
 
       if (posts.docs.isEmpty) {
         return recipes;

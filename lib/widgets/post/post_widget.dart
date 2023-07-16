@@ -43,36 +43,54 @@ class _PostWidgetState extends State<PostWidget> {
     super.initState();
   }
 
-  Future<void> likePost() async {
-    if (isPostLiked == true) {
-      widget.post.likes?.remove(FirebaseAuth.instance.currentUser!.uid);
-      widget.post.likeCount = widget.post.likeCount! - 1;
-      isPostLiked = false;
-      FirebaseContants.usersCollection.doc(widget.post.ownerId).update({
-        'likes': FieldValue.increment(-1),
-      });
-    } else {
-      widget.post.likes?[FirebaseAuth.instance.currentUser!.uid] = true;
-      widget.post.likeCount = widget.post.likeCount! + 1;
-      isPostLiked = true;
-      // increment likes in the user collection
-      FirebaseContants.usersCollection.doc(widget.post.ownerId).update({
-        'likes': FieldValue.increment(1),
-      });
-    }
-    await FirebaseContants.recipesCollection
-        .doc(widget.post.ownerId)
-        .collection('UserPosts')
-        .doc(widget.post.postId)
-        .update({'likes': widget.post.likes});
+  Future<void> likePost(BuildContext context) async {
+    try {
+      if (isPostLiked == true) {
+        widget.post.likes?.remove(FirebaseAuth.instance.currentUser!.uid);
+        widget.post.likeCount = widget.post.likeCount! - 1;
+        isPostLiked = false;
+        FirebaseContants.usersCollection.doc(widget.post.ownerId).update({
+          'likes': FieldValue.increment(-1),
+        });
 
-    FirebaseContants.recipesCollection
-        .doc(widget.post.ownerId)
-        .collection('UserPosts')
-        .doc(widget.post.postId)
-        .update({'likeCount': widget.post.likeCount});
+        FirebaseFirestore.instance
+            .collection("FeedPosts")
+            .doc(widget.post.postId)
+            .update({
+          'likes': widget.post.likes,
+          'likeCount': FieldValue.increment(-1),
+        });
+      } else {
+        widget.post.likes?[FirebaseAuth.instance.currentUser!.uid] = true;
+        widget.post.likeCount = widget.post.likeCount! + 1;
+        isPostLiked = true;
+        // increment likes in the user collection
+        FirebaseContants.usersCollection.doc(widget.post.ownerId).update({
+          'likes': FieldValue.increment(1),
+        });
+        FirebaseFirestore.instance
+            .collection("FeedPosts")
+            .doc(widget.post.postId)
+            .update({
+          'likes': widget.post.likes,
+          'likeCount': FieldValue.increment(1),
+        });
+      }
+      await FirebaseContants.recipesCollection
+          .doc(widget.post.ownerId)
+          .collection('UserPosts')
+          .doc(widget.post.postId)
+          .update({
+        'likes': widget.post.likes,
+        'likeCount': widget.post.likeCount,
+      });
 
-    setState(() {});
+      await FirebaseFirestore.instance.doc(widget.post.postId!).update({
+        'likes': widget.post.likes,
+        'likeCount': widget.post.likeCount,
+      });
+      setState(() {});
+    } catch (error) {}
   }
 
   @override
@@ -86,8 +104,14 @@ class _PostWidgetState extends State<PostWidget> {
             children: [
               Row(
                 children: [
-                  CircularImage(
-                    imageUrl: state.userDocument.photoUrl.toString(),
+                  GestureDetector(
+                    onTap: () {
+                      // Navigate to user profile screen with user id
+                      print(state.userDocument.userId);
+                    },
+                    child: CircularImage(
+                      imageUrl: state.userDocument.photoUrl.toString(),
+                    ),
                   ),
                   10.widthBox,
                   Column(
@@ -122,10 +146,12 @@ class _PostWidgetState extends State<PostWidget> {
                 onDoubleTap: () async {
                   if (isPostLiked == false) {
                     AppDialogs.postLikeDialog(context);
-                    await likePost();
+                    await likePost(context);
                     AppDialogs.closeDialog();
+                    setState(() {});
                   } else {
-                    await likePost();
+                    await likePost(context);
+                    setState(() {});
                   }
                 },
                 child: Stack(
@@ -153,7 +179,7 @@ class _PostWidgetState extends State<PostWidget> {
                   IconButton(
                     onPressed: () {
                       setState(() {
-                        likePost();
+                        likePost(context);
                       });
                     },
                     icon: isPostLiked == true
