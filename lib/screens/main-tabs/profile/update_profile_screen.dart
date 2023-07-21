@@ -3,9 +3,12 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cookbook/blocs/post/fetch_post/fetch_all_posts_bloc.dart';
+import 'package:cookbook/blocs/post/fetch_post/fetch_post_bloc.dart';
 import 'package:cookbook/blocs/profile/update_profile_bloc.dart';
 import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
+import 'package:cookbook/constants/app_config.dart';
 import 'package:cookbook/constants/app_texts.dart';
 import 'package:cookbook/controllers/Post/post_controller.dart';
 import 'package:cookbook/global/utils/app_dialogs.dart';
@@ -137,6 +140,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
               context
                   .read<UserCollectionBloc>()
                   .add(UserCollectionGetDataEvent(null));
+              context.read<FetchAllPostsBloc>().add(
+                    FetchAllPosts(AppConfig.recipesPostPagenatedCount),
+                  );
 
               // go back to previous page but with new data
               Navigator.pop(context, true);
@@ -203,7 +209,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           },
                           icon: CircleAvatar(
                             backgroundColor: AppColors.secondaryColor,
-                            child: const Icon(Ionicons.camera_outline),
+                            child: Icon(
+                              Ionicons.camera_outline,
+                              color: AppColors.appWhiteColor,
+                            ),
                           ),
                         ),
                       ),

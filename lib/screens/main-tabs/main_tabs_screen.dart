@@ -6,6 +6,7 @@ import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/firebase_constants.dart';
 import 'package:cookbook/screens/main-tabs/home/home_screen.dart';
+import 'package:cookbook/screens/main-tabs/notification/notification_screen.dart';
 import 'package:cookbook/screens/main-tabs/profile/profile_screen.dart';
 import 'package:cookbook/screens/main-tabs/widgets/FadeIndexedStack.dart';
 import 'package:cookbook/screens/main-tabs/widgets/HomeBottomNavBar.dart';
@@ -24,6 +25,7 @@ class _MainTabsScreenState extends State<MainTabsScreen> {
   int tabindex = 0;
   static List<Widget> homepageTabs = <Widget>[
     HomeScreen(),
+    NotificationScreen(),
     AccountScreen(),
   ];
 
@@ -70,9 +72,10 @@ class _MainTabsScreenState extends State<MainTabsScreen> {
                           .read<UserCollectionBloc>()
                           .add(UserCollectionGetDataEvent(null));
                     }
+                    if (tabindex == 1) {}
 
                     //Account Page
-                    if (index == 1) {
+                    if (index == 2) {
                       context
                           .read<UserCollectionBloc>()
                           .add(UserCollectionGetDataEvent(null));

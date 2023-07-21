@@ -147,94 +147,92 @@ class _PostScreenState extends State<PostScreen> {
                 child: "Post".text.make(),
               ),
               body: SingleChildScrollView(
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          AvatarImageWidget(
-                            imageUrl: state.userDocument.photoUrl.toString(),
-                            height: 60.h,
-                            width: 60.w,
-                          ),
-                          20.widthBox,
-                          state.userDocument.fullName.toString().text.xl.make(),
-                        ],
-                      ).box.make().px16(),
-
-                      TextFormField(
-                        controller: descriptionController,
-                        maxLines: 5,
-                        decoration: const InputDecoration(
-                          hintText: "Say something about this recipe",
-                          hintStyle: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 20,
-                          ),
-                          border: InputBorder.none,
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        AvatarImageWidget(
+                          imageUrl: state.userDocument.photoUrl.toString(),
+                          height: 60.h,
+                          width: 60.w,
                         ),
-                      ).box.make().px16(),
-                      DropDownWidget(
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            foodCategory = newValue!;
-                          });
-                        },
-                        value: foodCategory,
-                        items: AppText.foodCategories,
-                      )
-                          .box
-                          .alignCenterRight
-                          .margin(const EdgeInsets.only(right: 12))
-                          .make()
-                          .w(context.width()),
-                      AspectRatio(
-                        aspectRatio: 1.2,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: Colors.grey),
-                          ),
-                          child: compressedImage != null
-                              ? Image.file(
-                                  compressedImage!,
-                                  fit: BoxFit.cover,
-                                )
-                              : Icon(
-                                  Ionicons.image_outline,
-                                  size: 80.sp,
-                                ),
+                        20.widthBox,
+                        state.userDocument.fullName.toString().text.xl.make(),
+                      ],
+                    ).box.make().px16(),
+
+                    TextFormField(
+                      controller: descriptionController,
+                      maxLines: 5,
+                      decoration: const InputDecoration(
+                        hintText: "Say something about this recipe",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 20,
                         ),
-                      ).box.make().p12(),
-                      // drop down button
-
-                      20.heightBox,
-                      CustomListTile(
-                        leadingIcon: Ionicons.image_outline,
-                        title: "Photo from gallery",
-                        leadingIconBackgroundColor: AppColors.secondaryColor,
-                        onTap: () async {
-                          await pickFromGallery();
-                        },
+                        border: InputBorder.none,
                       ),
-                      const Divider(thickness: 2).box.make().px16(),
-
-                      CustomListTile(
-                        leadingIcon: Ionicons.camera_outline,
-                        title: "Take a photo",
-                        onTap: () async {
-                          try {
-                            image = await AppImagePicker.pickFromCamera();
-                          } catch (error) {
-                            AppSnackbars.danger(context, error.toString());
-                          }
-                        },
+                    ).box.make().px16(),
+                    DropDownWidget(
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          foodCategory = newValue!;
+                        });
+                      },
+                      value: foodCategory,
+                      items: AppText.foodCategories,
+                    )
+                        .box
+                        .alignCenterRight
+                        .margin(const EdgeInsets.only(right: 12))
+                        .make()
+                        .w(context.width()),
+                    AspectRatio(
+                      aspectRatio: 1.2,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.grey),
+                        ),
+                        child: compressedImage != null
+                            ? Image.file(
+                                compressedImage!,
+                                fit: BoxFit.cover,
+                              )
+                            : Icon(
+                                Ionicons.image_outline,
+                                size: 80.sp,
+                              ),
                       ),
-                      const Divider(thickness: 2).box.make().px16(),
-                    ],
-                  ).box.make(),
-                ),
+                    ).box.make().p12(),
+                    // drop down button
+
+                    20.heightBox,
+                    CustomListTile(
+                      leadingIcon: Ionicons.image_outline,
+                      title: "Photo from gallery",
+                      leadingIconBackgroundColor: AppColors.secondaryColor,
+                      onTap: () async {
+                        await pickFromGallery();
+                      },
+                    ),
+                    const Divider(thickness: 2).box.make().px16(),
+
+                    CustomListTile(
+                      leadingIcon: Ionicons.camera_outline,
+                      title: "Take a photo",
+                      onTap: () async {
+                        try {
+                          image = await AppImagePicker.pickFromCamera();
+                        } catch (error) {
+                          AppSnackbars.danger(context, error.toString());
+                        }
+                      },
+                    ),
+                    const Divider(thickness: 2).box.make().px16(),
+                  ],
+                ).box.make(),
               ),
             );
           }

@@ -4,9 +4,14 @@ abstract class CommentsEvent {}
 
 class CommentsAddEvent extends CommentsEvent {
   final String postId;
+  final String postOwnerId;
   final CommentModel comment;
 
-  CommentsAddEvent({required this.comment, required this.postId});
+  CommentsAddEvent({
+    required this.comment,
+    required this.postId,
+    required this.postOwnerId,
+  });
 }
 
 class CommentsGetDataEvent extends CommentsEvent {

@@ -1,12 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
-import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/constants/app_images.dart';
 import 'package:cookbook/constants/firebase_constants.dart';
 import 'package:cookbook/global/utils/app_dialogs.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
+import 'package:cookbook/global/utils/app_snakbars.dart';
+import 'package:cookbook/models/Notification/notification_model.dart';
 import 'package:cookbook/models/Recipes/recipe_model.dart';
 import 'package:cookbook/screens/comments/comments_screen.dart';
 import 'package:cookbook/widgets/images/circular_image.dart';
@@ -43,14 +44,14 @@ class _PostWidgetState extends State<PostWidget> {
     super.initState();
   }
 
-  Future<void> likePost(BuildContext context) async {
+  Future<void> likePost() async {
     try {
       if (isPostLiked == true) {
         widget.post.likes?.remove(FirebaseAuth.instance.currentUser!.uid);
         widget.post.likeCount = widget.post.likeCount! - 1;
         isPostLiked = false;
         FirebaseContants.usersCollection.doc(widget.post.ownerId).update({
-          'likes': FieldValue.increment(-1),
+          'like': FieldValue.increment(-1),
         });
 
         FirebaseFirestore.instance
@@ -60,6 +61,7 @@ class _PostWidgetState extends State<PostWidget> {
           'likes': widget.post.likes,
           'likeCount': FieldValue.increment(-1),
         });
+        await removeLikeFromNotification();
       } else {
         widget.post.likes?[FirebaseAuth.instance.currentUser!.uid] = true;
         widget.post.likeCount = widget.post.likeCount! + 1;
@@ -75,6 +77,7 @@ class _PostWidgetState extends State<PostWidget> {
           'likes': widget.post.likes,
           'likeCount': FieldValue.increment(1),
         });
+        await addLikeToNotification();
       }
       await FirebaseContants.recipesCollection
           .doc(widget.post.ownerId)
@@ -85,12 +88,45 @@ class _PostWidgetState extends State<PostWidget> {
         'likeCount': widget.post.likeCount,
       });
 
-      await FirebaseFirestore.instance.doc(widget.post.postId!).update({
+      await FirebaseFirestore.instance
+          .collection("FeedPosts")
+          .doc(widget.post.postId!)
+          .update({
         'likes': widget.post.likes,
         'likeCount': widget.post.likeCount,
       });
       setState(() {});
-    } catch (error) {}
+    } catch (error) {
+      AppSnackbars.danger(context, error.toString());
+    }
+  }
+
+  Future<void> addLikeToNotification() async {
+    if (widget.post.ownerId == FirebaseAuth.instance.currentUser!.uid) return;
+    await FirebaseContants.feedCollection
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("notifications")
+        .doc(widget.post.postId)
+        .set(NotificationModel(
+          type: "like",
+          userId: FirebaseAuth.instance.currentUser!.uid,
+          mediaUrl: widget.post.image.toString(),
+          postId: widget.post.postId,
+          createdAt: Timestamp.now(),
+        ).toJson());
+  }
+
+  Future<void> removeLikeFromNotification() async {
+    if (widget.post.ownerId == FirebaseAuth.instance.currentUser!.uid) return;
+    final doc = await FirebaseContants.feedCollection
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("notifications")
+        .doc(widget.post.postId)
+        .get();
+
+    if (doc.exists) {
+      doc.reference.delete();
+    }
   }
 
   @override
@@ -146,11 +182,11 @@ class _PostWidgetState extends State<PostWidget> {
                 onDoubleTap: () async {
                   if (isPostLiked == false) {
                     AppDialogs.postLikeDialog(context);
-                    await likePost(context);
+                    await likePost();
                     AppDialogs.closeDialog();
                     setState(() {});
                   } else {
-                    await likePost(context);
+                    await likePost();
                     setState(() {});
                   }
                 },
@@ -179,7 +215,7 @@ class _PostWidgetState extends State<PostWidget> {
                   IconButton(
                     onPressed: () {
                       setState(() {
-                        likePost(context);
+                        likePost();
                       });
                     },
                     icon: isPostLiked == true
@@ -211,21 +247,21 @@ class _PostWidgetState extends State<PostWidget> {
                   //   size: 20.sp,
                   // ),
                   const Spacer(),
-                  IconButton(
-                    splashRadius: 20.sp,
-                    splashColor: AppColors.secondaryColor,
-                    icon: Icon(
-                      Ionicons.chatbox_outline,
-                      size: 20.sp,
-                    ),
-                    onPressed: () {
+                  InkWell(
+                    onTap: () {
                       AppNavigator.goToPage(
                         context: context,
                         screen: CommentsScreen(post: widget.post),
                       );
                     },
+                    child: Row(
+                      children: [
+                        Icon(Ionicons.chatbox_outline, size: 20.sp),
+                        5.widthBox,
+                        "Comments".text.semiBold.make(),
+                      ],
+                    ),
                   ),
-                  "Comments".text.semiBold.make(),
                 ],
               ),
               const Divider(thickness: 1),

@@ -29,20 +29,13 @@ class PostController {
           .set(
             recipe.toJson(),
           );
+
       await FirebaseFirestore.instance
           .collection("FeedPosts")
           .doc(recipe.postId)
           .set(
             recipe.toJson(),
           );
-      // update post count in user collection for the current user
-      await FirebaseContants.usersCollection
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .update(
-        {
-          'postCount': FieldValue.increment(1),
-        },
-      );
     } catch (error) {
       rethrow;
     }
@@ -116,6 +109,63 @@ class PostController {
       return recipes;
     } catch (error) {
       return recipes;
+    }
+  }
+
+  static Future<void> likePost({
+    required RecipeModel post,
+    required bool isPostLiked,
+  }) async {
+    try {
+      if (isPostLiked == true) {
+        post.likes?.remove(FirebaseAuth.instance.currentUser!.uid);
+        post.likeCount = post.likeCount! - 1;
+        isPostLiked = false;
+        FirebaseContants.usersCollection.doc(post.ownerId).update({
+          'like': FieldValue.increment(-1),
+        });
+
+        FirebaseFirestore.instance
+            .collection("FeedPosts")
+            .doc(post.postId)
+            .update({
+          'likes': post.likes,
+          'likeCount': FieldValue.increment(-1),
+        });
+      } else {
+        post.likes?[FirebaseAuth.instance.currentUser!.uid] = true;
+        post.likeCount = post.likeCount! + 1;
+        isPostLiked = true;
+        // increment likes in the user collection
+        FirebaseContants.usersCollection.doc(post.ownerId).update({
+          'likes': FieldValue.increment(1),
+        });
+        FirebaseFirestore.instance
+            .collection("FeedPosts")
+            .doc(post.postId)
+            .update({
+          'likes': post.likes,
+          'likeCount': FieldValue.increment(1),
+        });
+      }
+      await FirebaseContants.recipesCollection
+          .doc(post.ownerId)
+          .collection('UserPosts')
+          .doc(post.postId)
+          .update({
+        'likes': post.likes,
+        'likeCount': post.likeCount,
+      });
+
+      await FirebaseFirestore.instance
+          .collection("FeedPosts")
+          .doc(post.postId!)
+          .update({
+        'likes': post.likes,
+        'likeCount': post.likeCount,
+      });
+    } catch (error) {
+      rethrow;
     }
   }
 

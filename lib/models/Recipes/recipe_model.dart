@@ -4,6 +4,7 @@ class RecipeModel {
   Timestamp? createdAt;
   Map? likes;
   int? likeCount;
+  int? commentsCount;
   String? description;
   String? category;
   Timestamp? updatedAt;
@@ -19,6 +20,7 @@ class RecipeModel {
     this.createdAt,
     this.likes,
     this.likeCount,
+    this.commentsCount,
     this.description,
     this.category,
     this.updatedAt,
@@ -35,6 +37,7 @@ class RecipeModel {
     createdAt = json['createdAt'];
     likes = json['likes'];
     likeCount = json['likeCount'];
+    commentsCount = json['commentsCount'];
     description = json['description'];
     category = json['category'];
     updatedAt = json['updatedAt'];
@@ -52,6 +55,7 @@ class RecipeModel {
     data['createdAt'] = createdAt;
     data['likes'] = likes;
     data['likeCount'] = likeCount;
+    data['commentsCount'] = commentsCount;
     data['description'] = description;
     data['category'] = category;
     data['updatedAt'] = updatedAt;

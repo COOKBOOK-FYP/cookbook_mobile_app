@@ -24,6 +24,9 @@ class AppText {
   static const String alreadyHaveAnAccountText = "Already have an account?";
   static const String locationText = "Location";
 
+  // Notification screen
+  static const String notificationText = "Notification";
+
   // Account Screen
 
   // Settings Screen

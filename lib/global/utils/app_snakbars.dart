@@ -6,7 +6,7 @@ class AppSnackbars {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message),
+        content: Text(message.replaceAll("Exception:", "")),
         duration: const Duration(seconds: 5),
         backgroundColor: AppColors.dangerColor,
         shape: const RoundedRectangleBorder(

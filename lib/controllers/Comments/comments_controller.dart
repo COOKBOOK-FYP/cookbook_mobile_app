@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 class CommentsController {
   static Future<void> addComment(String postId, CommentModel comment) async {
     final commentId = const Uuid().v4();
+
     try {
       await FirebaseContants.commentsCollection
           .doc(postId)

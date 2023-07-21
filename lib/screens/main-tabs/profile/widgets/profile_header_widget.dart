@@ -1,13 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_fonts.dart';
+import 'package:cookbook/constants/firebase_constants.dart';
 import 'package:cookbook/screens/main-tabs/profile/widgets/profile_text_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class ProfileHeaderWidget extends StatelessWidget {
+class ProfileHeaderWidget extends StatefulWidget {
   final String photoUrl;
   final String firstName;
   final String lastName;
@@ -24,6 +26,30 @@ class ProfileHeaderWidget extends StatelessWidget {
     required this.likes,
     required this.postCount,
   }) : super(key: key);
+
+  @override
+  State<ProfileHeaderWidget> createState() => _ProfileHeaderWidgetState();
+}
+
+class _ProfileHeaderWidgetState extends State<ProfileHeaderWidget> {
+  getPostCount() {
+    int count = 0;
+    FirebaseContants.recipesCollection
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('UserPosts')
+        .get()
+        .then((value) {
+      count = value.size;
+      print(count);
+    });
+  }
+
+  @override
+  void initState() {
+    getPostCount();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -43,7 +69,7 @@ class ProfileHeaderWidget extends StatelessWidget {
                     width: 1,
                   ),
                   image: DecorationImage(
-                    image: CachedNetworkImageProvider(photoUrl),
+                    image: CachedNetworkImageProvider(widget.photoUrl),
                     fit: BoxFit.cover,
                     onError: (exception, stackTrace) => Icon(
                       Icons.account_circle_rounded,
@@ -52,7 +78,7 @@ class ProfileHeaderWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                child: (photoUrl.isEmpty)
+                child: (widget.photoUrl.isEmpty)
                     ? const Icon(
                         Ionicons.person,
                         size: 50,
@@ -68,17 +94,17 @@ class ProfileHeaderWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ProfileTextWidget(
-                    text1: firstName,
-                    text2: lastName,
+                    text1: widget.firstName,
+                    text2: widget.lastName,
                   ),
                   5.heightBox,
-                  country.text
+                  widget.country.text
                       .size(16)
                       .fontFamily(AppFonts.openSansMedium)
                       .color(AppColors.appTextColorPrimary)
                       .make(),
                   10.heightBox,
-                  bio.text
+                  widget.bio.text
                       .fontFamily(AppFonts.openSansLight)
                       .maxLines(2)
                       .size(15)

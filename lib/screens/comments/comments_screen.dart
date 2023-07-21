@@ -4,8 +4,10 @@ import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/constants/app_texts.dart';
+import 'package:cookbook/constants/firebase_constants.dart';
 import 'package:cookbook/global/utils/app_snakbars.dart';
 import 'package:cookbook/models/Comments/comment_model.dart';
+import 'package:cookbook/models/Notification/notification_model.dart';
 import 'package:cookbook/models/Recipes/recipe_model.dart';
 import 'package:cookbook/models/User/user_model.dart';
 import 'package:cookbook/widgets/appbar/secondary_appbar_widget.dart';
@@ -128,6 +130,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                                   username: user?.fullName,
                                 ),
                                 postId: widget.post.postId!,
+                                postOwnerId: widget.post.ownerId!,
                               ),
                             );
                             commentsController.clear();
@@ -179,7 +182,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                         ),
                       ),
                       trailing: IconButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (commentsController.text.isNotEmpty) {
                             commentsBloc.add(
                               CommentsAddEvent(
@@ -192,8 +195,29 @@ class _CommentsScreenState extends State<CommentsScreen> {
                                   username: user?.fullName,
                                 ),
                                 postId: widget.post.postId!,
+                                postOwnerId: widget.post.ownerId!,
                               ),
                             );
+                            if (FirebaseAuth.instance.currentUser!.uid !=
+                                widget.post.ownerId!) {
+                              print("comment from other user");
+                              await FirebaseContants.feedCollection
+                                  .doc(widget.post.ownerId)
+                                  .collection("notifications")
+                                  .add(
+                                    NotificationModel(
+                                      type: "comment",
+                                      createdAt: Timestamp.now(),
+                                      postId: widget.post.postId,
+                                      userId: FirebaseAuth
+                                          .instance.currentUser!.uid,
+                                      commentData:
+                                          commentsController.text.trim(),
+                                    ).toJson(),
+                                  );
+                            } else {
+                              print("comment from same user");
+                            }
                             commentsController.clear();
                           }
                         },
