@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:cookbook/blocs/notification/notification_bloc.dart';
 import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/firebase_constants.dart';

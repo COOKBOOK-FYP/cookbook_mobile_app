@@ -3,6 +3,7 @@ import 'package:cookbook/blocs/authentication/google/google_signin_bloc.dart';
 import 'package:cookbook/blocs/authentication/signUp/signup_bloc.dart';
 import 'package:cookbook/blocs/authentication/signin/signin_bloc.dart';
 import 'package:cookbook/blocs/comments/comments_bloc.dart';
+import 'package:cookbook/blocs/notification/notification_bloc.dart';
 import 'package:cookbook/blocs/post/create_post/post_bloc.dart';
 import 'package:cookbook/blocs/post/fetch_post/fetch_all_posts_bloc.dart';
 import 'package:cookbook/blocs/post/fetch_post/fetch_post_bloc.dart';
@@ -27,5 +28,6 @@ class BlocProviders {
     BlocProvider<FetchPostBloc>(create: (context) => FetchPostBloc()),
     BlocProvider<FetchAllPostsBloc>(create: (context) => FetchAllPostsBloc()),
     BlocProvider<CommentsBloc>(create: (context) => CommentsBloc()),
+    BlocProvider<NotificationBloc>(create: (context) => NotificationBloc()),
   ];
 }

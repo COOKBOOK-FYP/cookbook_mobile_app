@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cookbook/blocs/comments/comments_bloc.dart';
 import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
-import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/constants/app_texts.dart';
 import 'package:cookbook/constants/firebase_constants.dart';
 import 'package:cookbook/global/utils/app_snakbars.dart';
@@ -10,13 +9,13 @@ import 'package:cookbook/models/Comments/comment_model.dart';
 import 'package:cookbook/models/Notification/notification_model.dart';
 import 'package:cookbook/models/Recipes/recipe_model.dart';
 import 'package:cookbook/models/User/user_model.dart';
+import 'package:cookbook/screens/comments/widgets/comment_widget.dart';
 import 'package:cookbook/widgets/appbar/secondary_appbar_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
-import 'package:timeago/timeago.dart' as timeago;
 import 'package:velocity_x/velocity_x.dart';
 
 class CommentsScreen extends StatefulWidget {
@@ -85,7 +84,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                     createdAt: Timestamp.now(),
                     commentBackgroundColor: AppColors.appGreyColor,
                   ),
-                  itemCount: 4,
+                  itemCount: 3,
                 ),
               );
             }
@@ -202,7 +201,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                                 widget.post.ownerId!) {
                               print("comment from other user");
                               await FirebaseContants.feedCollection
-                                  .doc(widget.post.ownerId)
+                                  .doc(widget.post.ownerId!)
                                   .collection("notifications")
                                   .add(
                                     NotificationModel(
@@ -213,6 +212,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                                           .instance.currentUser!.uid,
                                       commentData:
                                           commentsController.text.trim(),
+                                      mediaUrl: widget.post.image,
                                     ).toJson(),
                                   );
                             } else {
@@ -235,65 +235,6 @@ class _CommentsScreenState extends State<CommentsScreen> {
           },
         ),
       ),
-    );
-  }
-}
-
-class CommentWidget extends StatelessWidget {
-  final String userId;
-  final String comment;
-  final Timestamp? createdAt;
-  final String username;
-  final Color? commentBackgroundColor;
-  const CommentWidget({
-    super.key,
-    required this.userId,
-    required this.comment,
-    this.createdAt,
-    required this.username,
-    this.commentBackgroundColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ListTile(
-          onTap: () {
-            // Navigate To User Profile screen based on user id
-            print(userId);
-          },
-          title: username.text.fontFamily(AppFonts.robotoMonoBold).make(),
-          trailing: createdAt != null
-              ? timeago
-                  .format(
-                    createdAt!.toDate(),
-                  )
-                  .text
-                  .make()
-              : const SizedBox(),
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 10,
-            vertical: 20,
-          ),
-          margin: const EdgeInsets.symmetric(
-            horizontal: 10,
-          ),
-          decoration: BoxDecoration(
-            color: commentBackgroundColor ??
-                AppColors.secondaryColor.withOpacity(0.16),
-            borderRadius: const BorderRadius.only(
-              topRight: Radius.circular(20),
-              bottomLeft: Radius.circular(20),
-            ),
-          ),
-          alignment: Alignment.centerLeft,
-          child: comment.text.fontFamily(AppFonts.openSansMedium).make(),
-        ),
-        const Divider(),
-      ],
     );
   }
 }

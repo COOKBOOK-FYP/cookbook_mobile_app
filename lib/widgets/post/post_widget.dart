@@ -104,7 +104,7 @@ class _PostWidgetState extends State<PostWidget> {
   Future<void> addLikeToNotification() async {
     if (widget.post.ownerId == FirebaseAuth.instance.currentUser!.uid) return;
     await FirebaseContants.feedCollection
-        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .doc(widget.post.ownerId)
         .collection("notifications")
         .doc(widget.post.postId)
         .set(NotificationModel(
@@ -119,7 +119,7 @@ class _PostWidgetState extends State<PostWidget> {
   Future<void> removeLikeFromNotification() async {
     if (widget.post.ownerId == FirebaseAuth.instance.currentUser!.uid) return;
     final doc = await FirebaseContants.feedCollection
-        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .doc(widget.post.ownerId)
         .collection("notifications")
         .doc(widget.post.postId)
         .get();
