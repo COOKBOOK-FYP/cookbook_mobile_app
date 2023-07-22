@@ -169,6 +169,23 @@ class PostController {
     }
   }
 
+  static Future<RecipeModel> fetchPostById(String postId) async {
+    RecipeModel recipe = RecipeModel();
+    try {
+      final post = await FirebaseContants.recipesCollection
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection("UserPosts")
+          .doc(postId)
+          .get();
+      if (post.exists) {
+        recipe = RecipeModel.fromJson(post.data()!);
+      }
+      return recipe;
+    } catch (error) {
+      return recipe;
+    }
+  }
+
   Future<int> countPostLikes(likes) async {
     int count = 0;
     if (likes == null) {

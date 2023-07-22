@@ -28,7 +28,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int paginatedBy = AppConfig.recipesPostPagenatedCount;
+  int paginatedBy = 3;
   // scroll controller
   ScrollController scrollController = ScrollController();
 
@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     // context.read<UserCollectionBloc>().add(UserCollectionGetDataEvent());
-    // increasePaginatedBy();
+    increasePaginatedBy();
     context.read<FetchAllPostsBloc>().add(FetchAllPosts(paginatedBy));
     super.initState();
   }

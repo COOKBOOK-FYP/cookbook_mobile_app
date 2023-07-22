@@ -181,6 +181,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                         );
                       },
                       itemCount: state.comments.length,
+                      physics: const BouncingScrollPhysics(),
                     ),
                   ),
                   BlocListener<UserCollectionBloc, UserCollectionState>(

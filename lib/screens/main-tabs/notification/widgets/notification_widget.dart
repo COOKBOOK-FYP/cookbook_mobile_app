@@ -2,7 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_fonts.dart';
+import 'package:cookbook/global/utils/app_navigator.dart';
 import 'package:cookbook/models/Notification/notification_model.dart';
+import 'package:cookbook/screens/recipe/recipe_details_screen.dart';
 import 'package:cookbook/widgets/images/circular_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,8 +39,19 @@ class _NotificationWidgetState extends State<NotificationWidget> {
           return Column(
             children: [
               ListTile(
-                // tileColor: AppColors.secondaryColor.withOpacity(0.1),
-                // tileColor: AppColors.appGreyColor,
+                onTap: () {
+                  if (widget.notificationModel.type != "follow") {
+                    // Navigate to post screen
+                    AppNavigator.goToPage(
+                      context: context,
+                      screen: RecipeDetailsScreen(
+                        postId: widget.notificationModel.postId.toString(),
+                      ),
+                    );
+                  } else {
+// Navigate to user profile screen
+                  }
+                },
                 isThreeLine: true,
                 leading: CircularImage(
                   imageUrl: state.userDocument.photoUrl.toString(),

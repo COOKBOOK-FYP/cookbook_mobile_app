@@ -268,7 +268,7 @@ class _PostWidgetState extends State<PostWidget> {
             ],
           );
         }
-        return const LoadingWidget().box.make();
+        return const LoadingWidget().box.make().centered();
       },
     );
   }

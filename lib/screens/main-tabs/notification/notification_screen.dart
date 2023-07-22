@@ -57,14 +57,21 @@ class _NotificationScreenState extends State<NotificationScreen> {
             },
             child: Scaffold(
               appBar: const PrimaryAppbarWidget(),
-              body: ListView.builder(
-                itemBuilder: (context, index) {
-                  return NotificationWidget(
-                    notificationModel: state.notifications[index],
-                  );
-                },
-                itemCount: state.notifications.length,
-                physics: const BouncingScrollPhysics(),
+              body: Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        return NotificationWidget(
+                          notificationModel: state.notifications[index],
+                        );
+                      },
+                      itemCount: state.notifications.length,
+                      physics: const BouncingScrollPhysics(),
+                    ),
+                  ),
+                  50.heightBox,
+                ],
               ),
             ),
           );
