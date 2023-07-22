@@ -69,11 +69,15 @@ class _MainTabsScreenState extends State<MainTabsScreen> {
                     });
                     //Home Page
                     if (tabindex == 0) {
-                      context
-                          .read<UserCollectionBloc>()
-                          .add(UserCollectionGetDataEvent(null));
+                      // context
+                      //     .read<UserCollectionBloc>()
+                      //     .add(UserCollectionGetDataEvent(null));
                     }
-                    if (tabindex == 1) {}
+                    if (tabindex == 1) {
+                      context
+                          .read<NotificationBloc>()
+                          .add(NotificationEventFetch());
+                    }
 
                     //Account Page
                     if (index == 2) {

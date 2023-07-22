@@ -7,8 +7,10 @@ import 'package:velocity_x/velocity_x.dart';
 
 class CircularImage extends StatelessWidget {
   final String imageUrl;
+  final Color? borderColor;
 
-  const CircularImage({Key? key, required this.imageUrl}) : super(key: key);
+  const CircularImage({Key? key, required this.imageUrl, this.borderColor})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -18,7 +20,7 @@ class CircularImage extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: AppColors.primaryColor,
+          color: borderColor ?? AppColors.primaryColor,
           width: 2,
         ),
         image: DecorationImage(

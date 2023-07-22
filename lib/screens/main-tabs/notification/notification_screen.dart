@@ -30,14 +30,21 @@ class _NotificationScreenState extends State<NotificationScreen> {
           return const LoadingWidget();
         }
         if (state is NotificationStateEmpty) {
-          return Scaffold(
-            appBar: const PrimaryAppbarWidget(),
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Lottie.asset(LottieAssets.notification, repeat: true),
-                "No new notifications".text.bold.xl2.make().centered(),
-              ],
+          return RefreshIndicator(
+            onRefresh: () {
+              return Future.delayed(const Duration(microseconds: 500), () {
+                context.read<NotificationBloc>().add(NotificationEventFetch());
+              });
+            },
+            child: Scaffold(
+              appBar: const PrimaryAppbarWidget(),
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Lottie.asset(LottieAssets.notification, repeat: true),
+                  "No new notifications".text.bold.xl2.make().centered(),
+                ],
+              ),
             ),
           );
         }
@@ -62,8 +69,15 @@ class _NotificationScreenState extends State<NotificationScreen> {
             ),
           );
         }
-        return const Scaffold(
-          appBar: PrimaryAppbarWidget(),
+        return RefreshIndicator(
+          onRefresh: () {
+            return Future.delayed(const Duration(microseconds: 500), () {
+              context.read<NotificationBloc>().add(NotificationEventFetch());
+            });
+          },
+          child: const Scaffold(
+            appBar: PrimaryAppbarWidget(),
+          ),
         );
       },
     );

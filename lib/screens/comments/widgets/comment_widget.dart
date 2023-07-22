@@ -54,6 +54,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                 },
                 leading: CircularImage(
                   imageUrl: state.userDocument.photoUrl.toString(),
+                  borderColor: AppColors.transparentColor,
                 ),
                 title: state.userDocument.fullName
                     .toString()
@@ -79,7 +80,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                 ),
                 decoration: BoxDecoration(
                   color: widget.commentBackgroundColor ??
-                      AppColors.secondaryColor.withOpacity(0.16),
+                      AppColors.secondaryColor.withOpacity(0.2),
                   borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(20),
                     bottomLeft: Radius.circular(20),

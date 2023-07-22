@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
+import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/models/Notification/notification_model.dart';
 import 'package:cookbook/widgets/images/circular_image.dart';
@@ -36,11 +37,12 @@ class _NotificationWidgetState extends State<NotificationWidget> {
           return Column(
             children: [
               ListTile(
-                // tileColor: AppColors.primaryColor.withOpacity(0.1),
+                // tileColor: AppColors.secondaryColor.withOpacity(0.1),
                 // tileColor: AppColors.appGreyColor,
                 isThreeLine: true,
                 leading: CircularImage(
                   imageUrl: state.userDocument.photoUrl.toString(),
+                  borderColor: AppColors.appDarkGreyColor,
                 ),
                 title: state.userDocument.fullName.toString().text.make(),
                 subtitle: (widget.notificationModel.type == 'like')

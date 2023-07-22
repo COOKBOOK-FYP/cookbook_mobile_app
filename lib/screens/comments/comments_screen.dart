@@ -43,6 +43,26 @@ class _CommentsScreenState extends State<CommentsScreen> {
     super.initState();
   }
 
+  addCommentToNotification() async {
+    if (FirebaseAuth.instance.currentUser!.uid != widget.post.ownerId!) {
+      await FirebaseContants.feedCollection
+          .doc(widget.post.ownerId!)
+          .collection("notifications")
+          .add(
+            NotificationModel(
+              type: "comment",
+              createdAt: Timestamp.now(),
+              postId: widget.post.postId,
+              userId: FirebaseAuth.instance.currentUser!.uid,
+              commentData: commentsController.text.trim(),
+              mediaUrl: widget.post.image,
+            ).toJson(),
+          );
+    } else {
+      return;
+    }
+  }
+
   @override
   void dispose() {
     commentsController.dispose();
@@ -116,7 +136,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                         ),
                       ),
                       trailing: IconButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (commentsController.text.isNotEmpty) {
                             commentsBloc.add(
                               CommentsAddEvent(
@@ -132,6 +152,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                                 postOwnerId: widget.post.ownerId!,
                               ),
                             );
+                            await addCommentToNotification();
                             commentsController.clear();
                           }
                         },
@@ -197,27 +218,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                                 postOwnerId: widget.post.ownerId!,
                               ),
                             );
-                            if (FirebaseAuth.instance.currentUser!.uid !=
-                                widget.post.ownerId!) {
-                              print("comment from other user");
-                              await FirebaseContants.feedCollection
-                                  .doc(widget.post.ownerId!)
-                                  .collection("notifications")
-                                  .add(
-                                    NotificationModel(
-                                      type: "comment",
-                                      createdAt: Timestamp.now(),
-                                      postId: widget.post.postId,
-                                      userId: FirebaseAuth
-                                          .instance.currentUser!.uid,
-                                      commentData:
-                                          commentsController.text.trim(),
-                                      mediaUrl: widget.post.image,
-                                    ).toJson(),
-                                  );
-                            } else {
-                              print("comment from same user");
-                            }
+                            await addCommentToNotification();
                             commentsController.clear();
                           }
                         },
