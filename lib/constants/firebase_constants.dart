@@ -17,6 +17,10 @@ class FirebaseContants {
       FirebaseFirestore.instance.collection('Comments');
   static final likesCollection = FirebaseFirestore.instance.collection('Likes');
   static final feedCollection = FirebaseFirestore.instance.collection('Feed');
+  static final followersCollection =
+      FirebaseFirestore.instance.collection('Followers');
+  static final followingCollection =
+      FirebaseFirestore.instance.collection('Followings');
   // Storage constants //
   static final storageRef = FirebaseStorage.instance.ref();
 }

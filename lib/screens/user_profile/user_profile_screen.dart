@@ -1,6 +1,8 @@
+import 'package:cookbook/blocs/follow_and_unfollow/follow_unfollow_bloc.dart';
 import 'package:cookbook/blocs/post/fetch_post/fetch_post_bloc.dart';
 import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
+import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/constants/firebase_constants.dart';
 import 'package:cookbook/screens/main-tabs/profile/widgets/profile_recipe_image_widget.dart';
 import 'package:cookbook/widgets/appbar/secondary_appbar_widget.dart';
@@ -26,14 +28,36 @@ class UserProfileScreen extends StatefulWidget {
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   final bloc = UserCollectionBloc();
+  final followUnfollowBloc = FollowUnfollowBloc();
   int postCount = 0;
   bool isFollowed = false;
   bool isGrid = true;
 
   @override
   void initState() {
+    bloc.add(UserCollectionGetDataEvent(widget.userId));
     setPostCount();
+    checkFollow();
     super.initState();
+  }
+
+  void checkFollow() {
+    FirebaseContants.followingCollection
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('userFollowing')
+        .doc(widget.userId)
+        .get()
+        .then((value) {
+      if (value.exists) {
+        setState(() {
+          isFollowed = true;
+        });
+      } else {
+        setState(() {
+          isFollowed = false;
+        });
+      }
+    });
   }
 
   void setPostCount() {
@@ -61,7 +85,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UserCollectionBloc, UserCollectionState>(
-      bloc: bloc..add(UserCollectionGetDataEvent(widget.userId)),
+      bloc: bloc,
       builder: (context, state) {
         if (state is UserCollectionLoadedState) {
           return Scaffold(
@@ -90,10 +114,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           width: 120.w,
                           boxFit: BoxFit.cover,
                         ),
-                        state.userDocument.fullName!.text.make(),
                       ],
                     ),
-                    50.widthBox,
+                    10.widthBox,
                     Expanded(
                       child: Column(
                         children: [
@@ -102,54 +125,104 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             children: [
                               Column(
                                 children: [
-                                  "Posts".text.bold.make(),
+                                  "Posts".text.size(16).bold.make(),
                                   postCount.text.make(),
                                 ],
                               ),
                               Column(
                                 children: [
-                                  "Followers".text.bold.make(),
+                                  "Followers".text.bold.size(16).make(),
                                   postCount.text.make(),
                                 ],
                               ),
                               Column(
                                 children: [
-                                  "Following".text.bold.make(),
+                                  "Following".text.bold.size(16).make(),
                                   postCount.text.make(),
                                 ],
                               ),
                             ],
                           ),
                           10.heightBox,
-                          GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(vertical: 5),
-                              decoration: BoxDecoration(
-                                color: isFollowed
-                                    ? AppColors.transparentColor
-                                    : AppColors.primaryColor,
-                                border: Border.all(
-                                  color: isFollowed
-                                      ? AppColors.appBlackColor
-                                      : AppColors.primaryColor,
+                          buttonText() != "Edit profile"
+                              ? BlocListener<FollowUnfollowBloc,
+                                  FollowUnfollowState>(
+                                  bloc: followUnfollowBloc,
+                                  listener: (context, state) {
+                                    if (state is FollowUnfollowTrueState) {
+                                      setState(() {
+                                        isFollowed = true;
+                                      });
+                                    } else if (state
+                                        is FollowUnfollowFalseState) {
+                                      setState(() {
+                                        isFollowed = false;
+                                      });
+                                    }
+                                  },
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      if (isFollowed) {
+                                        followUnfollowBloc.add(
+                                          FollowUnfollowUnfollowEvent(
+                                              otherUserId: widget.userId),
+                                        );
+                                      } else {
+                                        followUnfollowBloc.add(
+                                          FollowUnfollowFollowEvent(
+                                              otherUserId: widget.userId),
+                                        );
+                                      }
+                                    },
+                                    child: Container(
+                                      width: double.infinity,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 5),
+                                      decoration: BoxDecoration(
+                                        color: isFollowed
+                                            ? AppColors.appBlackColor
+                                            : AppColors.primaryColor,
+                                      ),
+                                      child: buttonText()
+                                          .text
+                                          .color(AppColors.appWhiteColor)
+                                          .make()
+                                          .centered(),
+                                    ),
+                                  ),
+                                )
+                              : GestureDetector(
+                                  onTap: () {},
+                                  child: Container(
+                                    width: double.infinity,
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 5),
+                                    decoration: BoxDecoration(
+                                      color: isFollowed
+                                          ? AppColors.secondaryColor
+                                          : AppColors.primaryColor,
+                                    ),
+                                    child: buttonText()
+                                        .text
+                                        .color(AppColors.appWhiteColor)
+                                        .make()
+                                        .centered(),
+                                  ),
                                 ),
-                              ),
-                              child: buttonText()
-                                  .text
-                                  .color(isFollowed
-                                      ? AppColors.appBlackColor
-                                      : AppColors.appWhiteColor)
-                                  .make()
-                                  .centered(),
-                            ),
-                          ),
                         ],
                       ),
                     ),
                   ],
                 ),
+                10.heightBox,
+                state.userDocument.fullName
+                    .toString()
+                    .text
+                    .xl
+                    .fontFamily(AppFonts.openSansBold)
+                    .make()
+                    .centered(),
+                state.userDocument.bio.toString().text.make(),
                 const Divider(thickness: 1),
 
                 // switch between list and grid of recipes
@@ -198,13 +271,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               physics: const BouncingScrollPhysics(),
                             )
                           : StaggeredGrid.count(
-                              crossAxisCount: 4,
-                              mainAxisSpacing: 4,
-                              crossAxisSpacing: 4,
+                              crossAxisCount: 3,
+                              mainAxisSpacing: 3,
+                              crossAxisSpacing: 3,
                               children: st.posts
                                   .map(
                                     (recipe) => ProfileRecipeImageWidget(
-                                        recipe: recipe),
+                                      recipe: recipe,
+                                    ),
                                   )
                                   .toList(),
                             );
