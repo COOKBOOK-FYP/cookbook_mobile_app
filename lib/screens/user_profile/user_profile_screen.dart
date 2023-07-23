@@ -30,6 +30,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   final bloc = UserCollectionBloc();
   final followUnfollowBloc = FollowUnfollowBloc();
   int postCount = 0;
+  int followersCount = 0;
+  int followingCount = 0;
   bool isFollowed = false;
   bool isGrid = true;
 
@@ -37,6 +39,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   void initState() {
     bloc.add(UserCollectionGetDataEvent(widget.userId));
     setPostCount();
+    setFollowersCount();
+    setFollowingCount();
     checkFollow();
     super.initState();
   }
@@ -69,6 +73,30 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         .then((value) {
       count = value.size;
       postCount = count;
+    });
+  }
+
+  void setFollowersCount() {
+    int count = 0;
+    FirebaseContants.followersCollection
+        .doc(widget.userId)
+        .collection('userFollowers')
+        .get()
+        .then((value) {
+      count = value.size;
+      followersCount = count;
+    });
+  }
+
+  void setFollowingCount() {
+    int count = 0;
+    FirebaseContants.followingCollection
+        .doc(widget.userId)
+        .collection('userFollowing')
+        .get()
+        .then((value) {
+      count = value.size;
+      followingCount = count;
     });
   }
 
@@ -110,8 +138,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       children: [
                         AvatarImageWidget(
                           imageUrl: state.userDocument.photoUrl.toString(),
-                          height: 120.h,
-                          width: 120.w,
+                          height: 100.h,
+                          width: 100.w,
                           boxFit: BoxFit.cover,
                         ),
                       ],
@@ -132,13 +160,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               Column(
                                 children: [
                                   "Followers".text.bold.size(16).make(),
-                                  postCount.text.make(),
+                                  followersCount.text.make(),
                                 ],
                               ),
                               Column(
                                 children: [
                                   "Following".text.bold.size(16).make(),
-                                  postCount.text.make(),
+                                  followingCount.text.make(),
                                 ],
                               ),
                             ],
@@ -152,11 +180,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                     if (state is FollowUnfollowTrueState) {
                                       setState(() {
                                         isFollowed = true;
+                                        setFollowersCount();
+                                        setFollowingCount();
                                       });
                                     } else if (state
                                         is FollowUnfollowFalseState) {
                                       setState(() {
                                         isFollowed = false;
+                                        setFollowersCount();
+                                        setFollowingCount();
                                       });
                                     }
                                   },

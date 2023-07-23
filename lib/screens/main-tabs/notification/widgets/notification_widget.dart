@@ -39,107 +39,151 @@ class _NotificationWidgetState extends State<NotificationWidget> {
         if (state is UserCollectionLoadedState) {
           return Column(
             children: [
-              ListTile(
-                onTap: () {
-                  if (widget.notificationModel.type != "follow") {
-                    // Navigate to post screen
-                    AppNavigator.goToPage(
-                      context: context,
-                      screen: RecipeDetailsScreen(
-                        postId: widget.notificationModel.postId.toString(),
+              widget.notificationModel.type == 'follow'
+                  ? ListTile(
+                      onTap: () {},
+                      leading: CircularImage(
+                        imageUrl: state.userDocument.photoUrl.toString(),
+                        borderColor: AppColors.appDarkGreyColor,
+                        onTap: () {
+                          AppNavigator.goToPage(
+                            context: context,
+                            screen: UserProfileScreen(
+                              userId: state.userDocument.userId.toString(),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  } else {
+                      title: state.userDocument.fullName.toString().text.make(),
+                      subtitle: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'started following you - ',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: AppFonts.robotoMonoLight,
+                                fontSize: 14,
+                              ),
+                            ),
+                            TextSpan(
+                              text: timeago.format(
+                                  widget.notificationModel.createdAt!.toDate()),
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: AppFonts.openSansMedium,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : ListTile(
+                      onTap: () {
+                        if (widget.notificationModel.type != "follow") {
+                          // Navigate to post screen
+                          AppNavigator.goToPage(
+                            context: context,
+                            screen: RecipeDetailsScreen(
+                              postId:
+                                  widget.notificationModel.postId.toString(),
+                            ),
+                          );
+                        } else {
 // Navigate to user profile screen
-                  }
-                },
-                isThreeLine: true,
-                leading: CircularImage(
-                  imageUrl: state.userDocument.photoUrl.toString(),
-                  borderColor: AppColors.appDarkGreyColor,
-                  onTap: () {
-                    AppNavigator.goToPage(
-                      context: context,
-                      screen: UserProfileScreen(
-                        userId: state.userDocument.userId.toString(),
+                        }
+                      },
+                      isThreeLine: true,
+                      leading: CircularImage(
+                        imageUrl: state.userDocument.photoUrl.toString(),
+                        borderColor: AppColors.appDarkGreyColor,
+                        onTap: () {
+                          AppNavigator.goToPage(
+                            context: context,
+                            screen: UserProfileScreen(
+                              userId: state.userDocument.userId.toString(),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
-                title: state.userDocument.fullName.toString().text.make(),
-                subtitle: (widget.notificationModel.type == 'like')
-                    ?
-                    // "liked your post - ${timeago.format(widget.notificationModel.createdAt!.toDate())}"
-                    //     .text
-                    //     .make()
-                    RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'liked your post - ',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: AppFonts.robotoMonoLight,
-                                fontSize: 14,
+                      title: state.userDocument.fullName.toString().text.make(),
+                      subtitle: (widget.notificationModel.type == 'like')
+                          ?
+                          // "liked your post - ${timeago.format(widget.notificationModel.createdAt!.toDate())}"
+                          //     .text
+                          //     .make()
+                          RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: 'liked your post - ',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: AppFonts.robotoMonoLight,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: timeago.format(widget
+                                        .notificationModel.createdAt!
+                                        .toDate()),
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: AppFonts.openSansMedium,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: 'commented on your post - ',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: AppFonts.robotoMonoLight,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: timeago.format(widget
+                                        .notificationModel.createdAt!
+                                        .toDate()),
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: AppFonts.openSansMedium,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text:
+                                        '\n\n${widget.notificationModel.commentData}',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: AppFonts.robotoMonoLight,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            TextSpan(
-                              text: timeago.format(
-                                  widget.notificationModel.createdAt!.toDate()),
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: AppFonts.openSansMedium,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
+                      // "commented on your post - ${timeago.format(widget.notificationModel.createdAt!.toDate())}\n\n\n${widget.notificationModel.commentData}"
+                      //     .text
+                      //     .make(),
+                      trailing: CircleAvatar(
+                        backgroundImage: CachedNetworkImageProvider(
+                          widget.notificationModel.mediaUrl.toString(),
                         ),
-                      )
-                    : RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'commented on your post - ',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: AppFonts.robotoMonoLight,
-                                fontSize: 14,
-                              ),
-                            ),
-                            TextSpan(
-                              text: timeago.format(
-                                  widget.notificationModel.createdAt!.toDate()),
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: AppFonts.openSansMedium,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            TextSpan(
-                              text:
-                                  '\n\n${widget.notificationModel.commentData}',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: AppFonts.robotoMonoLight,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
+                        onBackgroundImageError: (exception, stackTrace) =>
+                            const Icon(Icons.error),
                       ),
-                // "commented on your post - ${timeago.format(widget.notificationModel.createdAt!.toDate())}\n\n\n${widget.notificationModel.commentData}"
-                //     .text
-                //     .make(),
-                trailing: CircleAvatar(
-                  backgroundImage: CachedNetworkImageProvider(
-                    widget.notificationModel.mediaUrl.toString(),
-                  ),
-                  onBackgroundImageError: (exception, stackTrace) =>
-                      const Icon(Icons.error),
-                ),
-              ),
+                    ),
               const Divider(thickness: 1),
             ],
           );
