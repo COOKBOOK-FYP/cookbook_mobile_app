@@ -27,6 +27,25 @@ class FollowUnfollowBloc
         emit(FollowUnfollowFailureState(errorMessage: "No Internet"));
       }
     });
-    on<FollowUnfollowUnfollowEvent>((event, emit) {});
+    on<FollowUnfollowUnfollowEvent>((event, emit) async {
+      bool networkStatus = await isNetworkAvailable();
+      if (networkStatus) {
+        try {
+          emit(FollowUnfollowLoadingState());
+
+          final isUnfollow =
+              await UserController.unfollowFollowers(event.otherUserId);
+          if (isUnfollow) {
+            emit(FollowUnfollowFalseState());
+          } else {
+            emit(FollowUnfollowTrueState());
+          }
+        } catch (error) {
+          emit(FollowUnfollowFailureState(errorMessage: error.toString()));
+        }
+      } else {
+        emit(FollowUnfollowFailureState(errorMessage: "No Internet"));
+      }
+    });
   }
 }
