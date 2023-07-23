@@ -15,7 +15,8 @@ class FetchPostBloc extends Bloc<FetchPostEvent, FetchPostState> {
       bool connectionValue = await isNetworkAvailable();
       if (connectionValue) {
         try {
-          posts = await PostController.fetchCurrentUserPosts(event.paginatedBy);
+          posts = await PostController.fetchCurrentUserPosts(
+              event.paginatedBy, event.userId);
           if (posts.isEmpty) {
             emit(FetchPostEmptyState());
           } else {

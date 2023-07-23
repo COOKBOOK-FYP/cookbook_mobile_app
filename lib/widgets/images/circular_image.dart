@@ -8,39 +8,47 @@ import 'package:velocity_x/velocity_x.dart';
 class CircularImage extends StatelessWidget {
   final String imageUrl;
   final Color? borderColor;
+  final VoidCallback? onTap;
 
-  const CircularImage({Key? key, required this.imageUrl, this.borderColor})
-      : super(key: key);
+  const CircularImage({
+    Key? key,
+    required this.imageUrl,
+    this.borderColor,
+    this.onTap,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 50.w,
-      height: 50.w,
-      margin: const EdgeInsets.only(right: 10),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: borderColor ?? AppColors.primaryColor,
-          width: 2,
-        ),
-        image: DecorationImage(
-          image: CachedNetworkImageProvider(
-            imageUrl,
-            errorListener: () => Icon(
+    return GestureDetector(
+      onTap: onTap ?? () {},
+      child: Container(
+        width: 50.w,
+        height: 50.w,
+        margin: const EdgeInsets.only(right: 10),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: borderColor ?? AppColors.primaryColor,
+            width: 2,
+          ),
+          image: DecorationImage(
+            image: CachedNetworkImageProvider(
+              imageUrl,
+              errorListener: () => Icon(
+                Ionicons.person,
+                color: AppColors.primaryColor,
+              ),
+            ),
+            fit: BoxFit.cover,
+            onError: (exception, stackTrace) => Icon(
               Ionicons.person,
               color: AppColors.primaryColor,
             ),
           ),
-          fit: BoxFit.cover,
-          onError: (exception, stackTrace) => Icon(
-            Ionicons.person,
-            color: AppColors.primaryColor,
-          ),
         ),
+        child: imageUrl.isEmptyOrNull
+            ? const Icon(Ionicons.person)
+            : const SizedBox.shrink(),
       ),
-      child: imageUrl.isEmptyOrNull
-          ? const Icon(Ionicons.person)
-          : const SizedBox.shrink(),
     );
   }
 }

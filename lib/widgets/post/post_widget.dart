@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
+import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/constants/app_images.dart';
 import 'package:cookbook/constants/firebase_constants.dart';
@@ -10,6 +11,7 @@ import 'package:cookbook/global/utils/app_snakbars.dart';
 import 'package:cookbook/models/Notification/notification_model.dart';
 import 'package:cookbook/models/Recipes/recipe_model.dart';
 import 'package:cookbook/screens/comments/comments_screen.dart';
+import 'package:cookbook/screens/user_profile/user_profile_screen.dart';
 import 'package:cookbook/widgets/images/circular_image.dart';
 import 'package:cookbook/widgets/loading/loading_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -143,10 +145,23 @@ class _PostWidgetState extends State<PostWidget> {
                   GestureDetector(
                     onTap: () {
                       // Navigate to user profile screen with user id
-                      print(state.userDocument.userId);
+                      AppNavigator.goToPage(
+                        context: context,
+                        screen: UserProfileScreen(
+                          userId: widget.post.ownerId.toString(),
+                        ),
+                      );
                     },
                     child: CircularImage(
                       imageUrl: state.userDocument.photoUrl.toString(),
+                      borderColor: AppColors.appGreyColor,
+                      onTap: () {
+                        AppNavigator.goToPage(
+                          context: context,
+                          screen:
+                              UserProfileScreen(userId: widget.post.ownerId!),
+                        );
+                      },
                     ),
                   ),
                   10.widthBox,

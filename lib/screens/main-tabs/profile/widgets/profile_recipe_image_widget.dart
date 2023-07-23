@@ -31,20 +31,11 @@ class _ProfileRecipeImageWidgetState extends State<ProfileRecipeImageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => print('tapped'),
-      child: Column(
-        children: [
-          CachedNetworkImage(
-            imageUrl: widget.recipe.image.toString(),
-            fit: BoxFit.cover,
-            placeholder: (context, url) => const LoadingWidget(),
-            errorWidget: (context, url, error) =>
-                const Icon(Ionicons.image_outline),
-          ),
-          // "likes: ${countPostLikes(widget.recipe.likes)}".text.make(),
-        ],
-      ),
+    return CachedNetworkImage(
+      imageUrl: widget.recipe.image.toString(),
+      fit: BoxFit.cover,
+      placeholder: (context, url) => const LoadingWidget(),
+      errorWidget: (context, url, error) => const Icon(Ionicons.image_outline),
     );
   }
 }

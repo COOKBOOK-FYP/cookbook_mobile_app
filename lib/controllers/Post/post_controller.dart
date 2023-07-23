@@ -42,11 +42,13 @@ class PostController {
   }
 
   static Future<List<RecipeModel>> fetchCurrentUserPosts(
-      int paginatedBy) async {
+    int paginatedBy,
+    String? userId,
+  ) async {
     List<RecipeModel> recipes = [];
     try {
       final posts = await FirebaseContants.recipesCollection
-          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .doc(userId ?? FirebaseAuth.instance.currentUser!.uid)
           .collection("UserPosts")
           .orderBy('createdAt', descending: true)
           .get();

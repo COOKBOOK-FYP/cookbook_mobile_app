@@ -5,6 +5,7 @@ import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
 import 'package:cookbook/models/Notification/notification_model.dart';
 import 'package:cookbook/screens/recipe/recipe_details_screen.dart';
+import 'package:cookbook/screens/user_profile/user_profile_screen.dart';
 import 'package:cookbook/widgets/images/circular_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -56,6 +57,14 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                 leading: CircularImage(
                   imageUrl: state.userDocument.photoUrl.toString(),
                   borderColor: AppColors.appDarkGreyColor,
+                  onTap: () {
+                    AppNavigator.goToPage(
+                      context: context,
+                      screen: UserProfileScreen(
+                        userId: state.userDocument.userId.toString(),
+                      ),
+                    );
+                  },
                 ),
                 title: state.userDocument.fullName.toString().text.make(),
                 subtitle: (widget.notificationModel.type == 'like')

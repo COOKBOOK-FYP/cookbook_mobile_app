@@ -26,7 +26,8 @@ abstract class FetchPostEvent {}
 
 class FetchCurrentPosts extends FetchPostEvent {
   final int paginatedBy;
-  FetchCurrentPosts(this.paginatedBy);
+  final String? userId;
+  FetchCurrentPosts(this.paginatedBy, this.userId);
 }
 
 class FetchAllPosts extends FetchPostEvent {
