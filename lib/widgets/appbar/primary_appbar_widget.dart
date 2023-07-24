@@ -4,6 +4,7 @@ import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
 import 'package:cookbook/screens/search/search_user_screen.dart';
 import 'package:cookbook/screens/settings/settings_screen.dart';
+import 'package:cookbook/screens/user_profile/user_profile_screen.dart';
 import 'package:cookbook/widgets/buttons/round_icon_button.dart';
 import 'package:cookbook/widgets/images/circular_image.dart';
 import 'package:flutter/material.dart';
@@ -136,7 +137,16 @@ class _PrimaryAppbarWidgetState extends State<PrimaryAppbarWidget> {
                   },
                   icon: const Icon(Ionicons.settings_outline),
                 ),
-                CircularImage(imageUrl: state.userDocument.photoUrl.toString()),
+                CircularImage(
+                  imageUrl: state.userDocument.photoUrl.toString(),
+                  onTap: () {
+                    AppNavigator.goToPage(
+                      context: context,
+                      screen:
+                          UserProfileScreen(userId: state.userDocument.userId!),
+                    );
+                  },
+                ),
               ],
             );
           }

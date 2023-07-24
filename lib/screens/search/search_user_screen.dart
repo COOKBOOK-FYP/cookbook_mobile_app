@@ -2,7 +2,9 @@ import 'package:cookbook/blocs/user-search/user_search_bloc.dart';
 import 'package:cookbook/constants/app_config.dart';
 import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/constants/app_texts.dart';
+import 'package:cookbook/global/utils/app_navigator.dart';
 import 'package:cookbook/models/User/user_model.dart';
+import 'package:cookbook/screens/user_profile/user_profile_screen.dart';
 import 'package:cookbook/widgets/appbar/secondary_appbar_widget.dart';
 import 'package:cookbook/widgets/circle_avatar/circle_avatar_widget.dart';
 import 'package:cookbook/widgets/loading/loading_widget.dart';
@@ -85,12 +87,20 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
                             .make(),
                         subtitle: Text(userModel.email.toString()),
                         trailing: const Icon(Ionicons.chevron_forward),
+
                         onTap: () {
                           // pass user model to the next screen
+                          AppNavigator.goToPage(
+                            context: context,
+                            screen: UserProfileScreen(
+                              userId: userModel.userId.toString(),
+                            ),
+                          );
                         },
                         // Add other user details as needed
                       );
                     },
+                    physics: const BouncingScrollPhysics(),
                   );
                 } else if (state is UserSearchError) {
                   return Center(

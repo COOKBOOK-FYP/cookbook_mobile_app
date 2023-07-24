@@ -41,7 +41,15 @@ class _NotificationWidgetState extends State<NotificationWidget> {
             children: [
               widget.notificationModel.type == 'follow'
                   ? ListTile(
-                      onTap: () {},
+                      onTap: () {
+                        AppNavigator.goToPage(
+                          context: context,
+                          screen: UserProfileScreen(
+                            userId: state.userDocument.userId.toString(),
+                            followBack: true,
+                          ),
+                        );
+                      },
                       leading: CircularImage(
                         imageUrl: state.userDocument.photoUrl.toString(),
                         borderColor: AppColors.appDarkGreyColor,
@@ -50,6 +58,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                             context: context,
                             screen: UserProfileScreen(
                               userId: state.userDocument.userId.toString(),
+                              followBack: true,
                             ),
                           );
                         },

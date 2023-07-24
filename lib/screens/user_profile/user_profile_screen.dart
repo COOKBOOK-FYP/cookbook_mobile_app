@@ -4,8 +4,12 @@ import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/constants/firebase_constants.dart';
+import 'package:cookbook/global/utils/app_navigator.dart';
+import 'package:cookbook/screens/main-tabs/profile/update_profile_screen.dart';
 import 'package:cookbook/screens/main-tabs/profile/widgets/profile_recipe_image_widget.dart';
+import 'package:cookbook/screens/user_profile/widgets/follow_unfollow_button.dart';
 import 'package:cookbook/widgets/appbar/secondary_appbar_widget.dart';
+import 'package:cookbook/widgets/buttons/toggle_buttons_widget.dart';
 import 'package:cookbook/widgets/images/avatar_image_widget.dart';
 import 'package:cookbook/widgets/loading/loading_widget.dart';
 import 'package:cookbook/widgets/page/page_widget.dart';
@@ -15,19 +19,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class UserProfileScreen extends StatefulWidget {
   final String userId;
-  const UserProfileScreen({Key? key, required this.userId}) : super(key: key);
+  final bool? followBack;
+  const UserProfileScreen({Key? key, required this.userId, this.followBack})
+      : super(key: key);
 
   @override
   State<UserProfileScreen> createState() => _UserProfileScreenState();
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-  final bloc = UserCollectionBloc();
+  final userCollectionBloc = UserCollectionBloc();
   final followUnfollowBloc = FollowUnfollowBloc();
   int postCount = 0;
   int followersCount = 0;
@@ -37,7 +43,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   @override
   void initState() {
-    bloc.add(UserCollectionGetDataEvent(widget.userId));
+    userCollectionBloc.add(UserCollectionGetDataEvent(widget.userId));
     setPostCount();
     setFollowersCount();
     setFollowingCount();
@@ -106,6 +112,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     } else if (isFollowed) {
       return "Following";
     } else {
+      if (widget.followBack != null) {
+        return "Follow back";
+      }
       return "Follow";
     }
   }
@@ -113,7 +122,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UserCollectionBloc, UserCollectionState>(
-      bloc: bloc,
+      bloc: userCollectionBloc,
       builder: (context, state) {
         if (state is UserCollectionLoadedState) {
           return Scaffold(
@@ -122,15 +131,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             ),
             body: PageWidget(
               children: [
-                // ProfileHeaderWidget(
-                //   photoUrl: state.userDocument.photoUrl.toString(),
-                //   firstName: state.userDocument.firstName.toString(),
-                //   lastName: state.userDocument.lastName.toString(),
-                //   country: state.userDocument.country.toString(),
-                //   bio: state.userDocument.bio.toString(),
-                //   likes: state.userDocument.likes!,
-                //   postCount: state.userDocument.postCount!,
-                // ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -177,11 +177,19 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   FollowUnfollowState>(
                                   bloc: followUnfollowBloc,
                                   listener: (context, state) {
+                                    if (state is FollowUnfollowLoadingState) {
+                                      setState(() {
+                                        isFollowed = !isFollowed;
+                                        setFollowersCount();
+                                        setFollowingCount();
+                                      });
+                                    }
                                     if (state is FollowUnfollowTrueState) {
                                       setState(() {
                                         isFollowed = true;
                                         setFollowersCount();
                                         setFollowingCount();
+                                        toast("Followed");
                                       });
                                     } else if (state
                                         is FollowUnfollowFalseState) {
@@ -189,42 +197,33 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                         isFollowed = false;
                                         setFollowersCount();
                                         setFollowingCount();
+                                        toast("Unfollowed");
+                                      });
+                                    }
+
+                                    if (state is FollowUnfollowFailureState) {
+                                      toast("Something went wrong");
+                                      setState(() {
+                                        isFollowed = !isFollowed;
                                       });
                                     }
                                   },
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      if (isFollowed) {
-                                        followUnfollowBloc.add(
-                                          FollowUnfollowUnfollowEvent(
-                                              otherUserId: widget.userId),
-                                        );
-                                      } else {
-                                        followUnfollowBloc.add(
-                                          FollowUnfollowFollowEvent(
-                                              otherUserId: widget.userId),
-                                        );
-                                      }
-                                    },
-                                    child: Container(
-                                      width: double.infinity,
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 5),
-                                      decoration: BoxDecoration(
-                                        color: isFollowed
-                                            ? AppColors.appBlackColor
-                                            : AppColors.primaryColor,
-                                      ),
-                                      child: buttonText()
-                                          .text
-                                          .color(AppColors.appWhiteColor)
-                                          .make()
-                                          .centered(),
-                                    ),
+                                  child: FollowFollowingButton(
+                                    isFollowed: isFollowed,
+                                    followUnfollowBloc: followUnfollowBloc,
+                                    userId: widget.userId,
+                                    buttonText: buttonText(),
                                   ),
                                 )
                               : GestureDetector(
-                                  onTap: () {},
+                                  onTap: () {
+                                    AppNavigator.goToPage(
+                                      context: context,
+                                      screen: UpdateProfileScreen(
+                                        userCollectionBloc: userCollectionBloc,
+                                      ),
+                                    );
+                                  },
                                   child: Container(
                                     width: double.infinity,
                                     padding:
@@ -256,36 +255,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     .centered(),
                 state.userDocument.bio.toString().text.make(),
                 const Divider(thickness: 1),
-
-                // switch between list and grid of recipes
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        setState(() {
-                          isGrid = true;
-                        });
-                      },
-                      icon: isGrid
-                          ? Icon(Ionicons.grid, color: AppColors.primaryColor)
-                          : const Icon(Ionicons.grid_outline),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        setState(() {
-                          isGrid = false;
-                        });
-                      },
-                      icon: !isGrid
-                          ? Icon(Ionicons.list, color: AppColors.primaryColor)
-                          : const Icon(Ionicons.list_outline),
-                    ),
-                  ],
+                ToggleButtonsWidget(
+                  types: const ["Grid", "List"],
+                  onPressed: () {
+                    setState(() {
+                      isGrid = !isGrid;
+                    });
+                  },
                 ),
                 20.heightBox,
-                // const ProfileRecipeListWidget(),
-
                 BlocBuilder<FetchPostBloc, FetchPostState>(
                   bloc: FetchPostBloc()
                     ..add(

@@ -1,15 +1,14 @@
 import 'package:cookbook/blocs/post/fetch_post/fetch_post_bloc.dart';
 import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
-import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/screens/main-tabs/profile/widgets/profile_header_widget.dart';
 import 'package:cookbook/screens/main-tabs/profile/widgets/profile_recipe_image_widget.dart';
 import 'package:cookbook/widgets/appbar/primary_appbar_widget.dart';
+import 'package:cookbook/widgets/buttons/toggle_buttons_widget.dart';
 import 'package:cookbook/widgets/loading/loading_widget.dart';
 import 'package:cookbook/widgets/post/post_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -55,36 +54,17 @@ class _AccountScreenState extends State<AccountScreen> {
                           likes: state.userDocument.likes ?? 0,
                           postCount: state.userDocument.postCount ?? 0,
                         ),
-                        const VxDivider(type: VxDividerType.horizontal),
-                        10.heightBox,
+                        const Divider(thickness: 1),
                         // switch between list and grid of recipes
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  isGrid = true;
-                                });
-                              },
-                              icon: isGrid
-                                  ? Icon(Ionicons.grid,
-                                      color: AppColors.primaryColor)
-                                  : const Icon(Ionicons.grid_outline),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  isGrid = false;
-                                });
-                              },
-                              icon: !isGrid
-                                  ? Icon(Ionicons.list,
-                                      color: AppColors.primaryColor)
-                                  : const Icon(Ionicons.list_outline),
-                            ),
-                          ],
+                        ToggleButtonsWidget(
+                          types: const ["Grid", "List"],
+                          onPressed: () {
+                            setState(() {
+                              isGrid = !isGrid;
+                            });
+                          },
                         ),
+
                         10.heightBox,
 
                         BlocBuilder<FetchPostBloc, FetchPostState>(

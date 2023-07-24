@@ -30,7 +30,9 @@ import 'package:uuid/uuid.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
-  const UpdateProfileScreen({Key? key}) : super(key: key);
+  final UserCollectionBloc? userCollectionBloc;
+  const UpdateProfileScreen({Key? key, this.userCollectionBloc})
+      : super(key: key);
 
   @override
   State<UpdateProfileScreen> createState() => _UpdateProfileScreenState();
@@ -303,6 +305,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               photoUrl: photoUrl,
                             ),
                           );
+
+                        if (widget.userCollectionBloc != null) {
+                          widget.userCollectionBloc!.add(
+                            UserCollectionGetDataEvent(null),
+                          );
+                        }
                       }
                     } catch (error) {
                       AppDialogs.closeDialog();
