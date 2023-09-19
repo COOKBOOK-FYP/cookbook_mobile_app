@@ -1,7 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cookbook/blocs/post/fetch_post/fetch_all_posts_bloc.dart';
+import 'package:cookbook/blocs/post/fetch_post/fetch_post_bloc.dart';
 import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
+import 'package:cookbook/constants/app_config.dart';
 import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/constants/app_images.dart';
 import 'package:cookbook/constants/firebase_constants.dart';
@@ -15,11 +18,13 @@ import 'package:cookbook/screens/user_profile/user_profile_screen.dart';
 import 'package:cookbook/widgets/images/circular_image.dart';
 import 'package:cookbook/widgets/loading/loading_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:lottie/lottie.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:velocity_x/velocity_x.dart';
 
@@ -35,6 +40,7 @@ class PostWidget extends StatefulWidget {
 class _PostWidgetState extends State<PostWidget> {
   bool? isPostLiked = false;
   var bloc = UserCollectionBloc();
+  int paginatedBy = AppConfig.recipesPostPagenatedCount;
 
   @override
   void initState() {
@@ -180,12 +186,57 @@ class _PostWidgetState extends State<PostWidget> {
                           .make(),
                     ],
                   ),
-                  // const Spacer(),
-                  // Icon(
-                  //   Ionicons.trash,
-                  //   size: 20.sp,
-                  //   color: Colors.red,
-                  // ),
+                  const Spacer(),
+                  IconButton(
+                    icon: CircleAvatar(
+                      backgroundColor: AppColors.appGreyColor,
+                      child: Icon(
+                        Ionicons.trash_outline,
+                        size: 20.sp,
+                        color: Colors.red,
+                      ),
+                    ),
+                    onPressed: () async {
+                      // Delete the current post as well as image from storage
+                      AppDialogs.loadingDialog(context);
+                      Future.wait([
+                        FirebaseContants.recipesCollection
+                            .doc(widget.post.ownerId)
+                            .collection('UserPosts')
+                            .doc(widget.post.postId)
+                            .delete(),
+                        FirebaseFirestore.instance
+                            .collection('FeedPosts')
+                            .doc(widget.post.postId)
+                            .delete(),
+
+                        // now delete the image from storage
+                        FirebaseStorage.instance
+                            .ref("posts/${widget.post.postId}.jpg")
+                            .delete(),
+                      ]).then((_) {
+                        AppSnackbars.success(
+                            context, "Post deleted successfully");
+                        // call the bloc again
+                        context
+                            .read<FetchAllPostsBloc>()
+                            .add(FetchAllPosts(paginatedBy));
+                        context
+                            .read<FetchPostBloc>()
+                            .add(FetchCurrentPosts(50, null));
+
+                        AppDialogs.closeDialog();
+                      }).onError((error, stackTrace) {
+                        AppSnackbars.danger(context, error.toString());
+                      }).catchError((error) {
+                        AppSnackbars.danger(context, error.toString());
+                        AppDialogs.closeDialog();
+                      });
+                    },
+                  ).visible(
+                    widget.post.ownerId ==
+                        FirebaseAuth.instance.currentUser!.uid,
+                  ),
                 ],
               ),
               10.heightBox,

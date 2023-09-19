@@ -20,7 +20,7 @@ class SecondaryAppbarWidget extends StatelessWidget
             color: AppColors.appBlackColor,
           ),
           onPressed: () {
-            context.pop();
+            Navigator.pop(context);
           },
         ),
       ),
