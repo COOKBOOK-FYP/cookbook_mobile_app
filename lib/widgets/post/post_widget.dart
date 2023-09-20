@@ -16,7 +16,6 @@ import 'package:cookbook/models/Recipes/recipe_model.dart';
 import 'package:cookbook/screens/comments/comments_screen.dart';
 import 'package:cookbook/screens/user_profile/user_profile_screen.dart';
 import 'package:cookbook/widgets/images/circular_image.dart';
-import 'package:cookbook/widgets/loading/loading_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +24,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:velocity_x/velocity_x.dart';
 
@@ -137,6 +137,37 @@ class _PostWidgetState extends State<PostWidget> {
     }
   }
 
+  void deletePost() {
+    // Delete the current post as well as image from storage
+    AppDialogs.loadingDialog(context);
+    Future.wait([
+      FirebaseContants.recipesCollection
+          .doc(widget.post.ownerId)
+          .collection('UserPosts')
+          .doc(widget.post.postId)
+          .delete(),
+      FirebaseFirestore.instance
+          .collection('FeedPosts')
+          .doc(widget.post.postId)
+          .delete(),
+
+      // now delete the image from storage
+      FirebaseStorage.instance.ref("posts/${widget.post.postId}.jpg").delete(),
+    ]).then((_) {
+      AppSnackbars.success(context, "Post deleted successfully");
+      // call the bloc again
+      context.read<FetchAllPostsBloc>().add(FetchAllPosts(paginatedBy));
+      context.read<FetchPostBloc>().add(FetchCurrentPosts(50, null));
+
+      AppDialogs.closeDialog();
+    }).onError((error, stackTrace) {
+      AppSnackbars.danger(context, error.toString());
+    }).catchError((error) {
+      AppSnackbars.danger(context, error.toString());
+      AppDialogs.closeDialog();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UserCollectionBloc, UserCollectionState>(
@@ -197,41 +228,35 @@ class _PostWidgetState extends State<PostWidget> {
                       ),
                     ),
                     onPressed: () async {
-                      // Delete the current post as well as image from storage
-                      AppDialogs.loadingDialog(context);
-                      Future.wait([
-                        FirebaseContants.recipesCollection
-                            .doc(widget.post.ownerId)
-                            .collection('UserPosts')
-                            .doc(widget.post.postId)
-                            .delete(),
-                        FirebaseFirestore.instance
-                            .collection('FeedPosts')
-                            .doc(widget.post.postId)
-                            .delete(),
-
-                        // now delete the image from storage
-                        FirebaseStorage.instance
-                            .ref("posts/${widget.post.postId}.jpg")
-                            .delete(),
-                      ]).then((_) {
-                        AppSnackbars.success(
-                            context, "Post deleted successfully");
-                        // call the bloc again
-                        context
-                            .read<FetchAllPostsBloc>()
-                            .add(FetchAllPosts(paginatedBy));
-                        context
-                            .read<FetchPostBloc>()
-                            .add(FetchCurrentPosts(50, null));
-
-                        AppDialogs.closeDialog();
-                      }).onError((error, stackTrace) {
-                        AppSnackbars.danger(context, error.toString());
-                      }).catchError((error) {
-                        AppSnackbars.danger(context, error.toString());
-                        AppDialogs.closeDialog();
-                      });
+                      showBottomSheet(
+                        context: context,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        builder: (context) {
+                          return AlertDialog(
+                            backgroundColor: AppColors.appGreyColor,
+                            title: const Text("Delete Post"),
+                            content: const Text(
+                                "Are you sure you want to delete this post?"),
+                            actions: [
+                              TextButton(
+                                child: const Text("Cancel"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              TextButton(
+                                child: const Text("Delete"),
+                                onPressed: () {
+                                  deletePost();
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
                   ).visible(
                     widget.post.ownerId ==
@@ -334,7 +359,76 @@ class _PostWidgetState extends State<PostWidget> {
             ],
           );
         }
-        return const LoadingWidget().box.make().centered();
+        return Shimmer(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  CircleAvatar(
+                    backgroundColor: AppColors.appGreyColor,
+                    child: Icon(
+                      Ionicons.person,
+                      size: 20.sp,
+                      color: AppColors.appGreyColor,
+                    ),
+                  ),
+                  10.widthBox,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Shimmer(
+                        child: Container(
+                          width: 100.w,
+                          height: 10.h,
+                          color: Colors.grey[200],
+                        ),
+                      ),
+                      // just now, 2 min ago, 1 day ago
+                      Shimmer(
+                        child: Container(
+                          width: 100.w,
+                          height: 10.h,
+                          color: Colors.grey[200],
+                        ),
+                      )
+                    ],
+                  ),
+                  const Spacer(),
+                ],
+              ),
+              10.heightBox,
+              // image description with auto resize text
+              Shimmer(
+                child: Container(
+                  width: 100.w,
+                  height: 10.h,
+                  color: Colors.grey[200],
+                ),
+              ),
+              10.heightBox,
+              Stack(
+                children: [
+                  AspectRatio(
+                    aspectRatio: 0.8,
+                    child: Shimmer(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.grey[200],
+                        ),
+                        child: Icon(
+                          Ionicons.image_outline,
+                          size: 60.sp,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
       },
     );
   }
