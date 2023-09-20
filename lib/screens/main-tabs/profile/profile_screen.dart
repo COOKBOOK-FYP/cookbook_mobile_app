@@ -53,6 +53,7 @@ class _AccountScreenState extends State<AccountScreen> {
                           bio: state.userDocument.bio.toString(),
                           likes: state.userDocument.likes ?? 0,
                           postCount: state.userDocument.postCount ?? 0,
+                          birthDate: state.userDocument.dateOfBirth ?? "",
                         ),
                         const Divider(thickness: 1),
                         // switch between list and grid of recipes

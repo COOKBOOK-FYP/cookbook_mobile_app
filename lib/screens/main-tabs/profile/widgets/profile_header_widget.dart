@@ -16,6 +16,7 @@ class ProfileHeaderWidget extends StatefulWidget {
   final String country;
   final String bio;
   final int likes, postCount;
+  final String birthDate;
   const ProfileHeaderWidget({
     Key? key,
     required this.photoUrl,
@@ -25,6 +26,7 @@ class ProfileHeaderWidget extends StatefulWidget {
     required this.bio,
     required this.likes,
     required this.postCount,
+    required this.birthDate,
   }) : super(key: key);
 
   @override
@@ -32,7 +34,8 @@ class ProfileHeaderWidget extends StatefulWidget {
 }
 
 class _ProfileHeaderWidgetState extends State<ProfileHeaderWidget> {
-  getPostCount() {
+  int postCount = 0;
+  int getPostCount() {
     int count = 0;
     FirebaseContants.recipesCollection
         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -40,13 +43,13 @@ class _ProfileHeaderWidgetState extends State<ProfileHeaderWidget> {
         .get()
         .then((value) {
       count = value.size;
-      print(count);
     });
+    return count;
   }
 
   @override
   void initState() {
-    getPostCount();
+    postCount = getPostCount();
     super.initState();
   }
 
@@ -114,13 +117,7 @@ class _ProfileHeaderWidgetState extends State<ProfileHeaderWidget> {
             ),
           ],
         ).box.make().wh(context.width(), context.height() * 0.20),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-        //   children: [
-        //     'Recipes: $postCount'.text.size(20.sp).make(),
-        //     "Likes: $likes".text.size(20.sp).make(),
-        //   ],
-        // ),
+        // 'Birth: ${widget.birthDate}'.capitalized.text.size(18.sp).make(),
       ],
     );
   }

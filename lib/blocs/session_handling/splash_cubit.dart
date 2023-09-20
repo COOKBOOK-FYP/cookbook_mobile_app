@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'package:bloc/bloc.dart';
+import 'package:cookbook/controllers/PushNotification/push_notification_controller.dart';
 import 'package:cookbook/global/utils/secure_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
@@ -63,6 +64,7 @@ class SessionHandlingCubit extends Cubit<SessionHandlingState> {
               emit(SessionHandlingOnBoarding());
             }
           } else {
+            PushNotificationController.requestNotificationPermission();
             emit(SessionHandlingHomeScreen(user: user));
           }
         });
@@ -75,6 +77,7 @@ class SessionHandlingCubit extends Cubit<SessionHandlingState> {
               emit(SessionHandlingOnBoarding());
             }
           } else {
+            PushNotificationController.requestNotificationPermission();
             emit(SessionHandlingHomeScreen(user: user));
           }
         });
@@ -87,6 +90,7 @@ class SessionHandlingCubit extends Cubit<SessionHandlingState> {
               emit(SessionHandlingOnBoarding());
             }
           } else {
+            PushNotificationController.requestNotificationPermission();
             emit(SessionHandlingHomeScreen(user: user));
           }
         });

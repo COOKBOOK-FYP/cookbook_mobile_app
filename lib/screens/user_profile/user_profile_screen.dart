@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -254,6 +255,26 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     .make()
                     .centered(),
                 state.userDocument.bio.toString().text.make(),
+                30.heightBox,
+                Row(
+                  children: [
+                    const Icon(Ionicons.location_outline),
+                    20.width,
+                    "Country: ${state.userDocument.country.toString()}"
+                        .text
+                        .make(),
+                  ],
+                ),
+                10.heightBox,
+                Row(
+                  children: [
+                    const Icon(Ionicons.calendar_outline),
+                    20.width,
+                    "Birth : ${state.userDocument.dateOfBirth.toString()}"
+                        .text
+                        .make(),
+                  ],
+                ),
                 const Divider(thickness: 1),
                 ToggleButtonsWidget(
                   types: const ["Grid", "List"],

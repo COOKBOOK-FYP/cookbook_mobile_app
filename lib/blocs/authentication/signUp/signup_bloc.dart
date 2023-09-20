@@ -61,6 +61,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
               fullName: '${event.firstName} ${event.lastName}',
               phoneNumber: event.phoneNumber,
             );
+
             emit(SignupStateSuccess());
           } on FirebaseAuthException catch (e) {
             if (e.code == 'invalid-email') {
