@@ -1,5 +1,6 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
 import 'package:cookbook/blocs/session_handling/splash_cubit.dart';
+import 'package:cookbook/constants/firebase_constants.dart';
 import 'package:cookbook/controllers/PushNotification/push_notification_controller.dart';
 import 'package:cookbook/global/themes/app_theme.dart';
 import 'package:cookbook/providers/bloc_provider.dart';
@@ -41,6 +42,10 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     PushNotificationController.requestNotificationPermission();
+    PushNotificationController.getFCMToken().then((value) {
+      FirebaseContants.fcmToken = value;
+    });
+    PushNotificationController.isTokenRefreshed();
 
     super.initState();
   }

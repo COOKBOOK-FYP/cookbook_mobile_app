@@ -94,18 +94,31 @@ class _CommentsScreenState extends State<CommentsScreen> {
           },
           builder: (context, state) {
             if (state is CommentsLoadingState) {
-              return Shimmer(
-                direction: const ShimmerDirection.fromLeftToRight(),
-                child: ListView.builder(
-                  itemBuilder: (context, index) => CommentWidget(
-                    userId: "userId",
-                    comment: "comment",
-                    username: "username",
-                    createdAt: Timestamp.now(),
-                    commentBackgroundColor: AppColors.appGreyColor,
-                  ),
-                  itemCount: 3,
+              return ListView.builder(
+                itemBuilder: (context, index) => Column(
+                  children: [
+                    Shimmer(
+                      direction: const ShimmerDirection.fromLeftToRight(),
+                      child: ListTile(
+                        leading: Icon(
+                          Ionicons.person,
+                          size: 30,
+                          color: AppColors.appDarkGreyColor,
+                        ),
+                        title: Shimmer(
+                          direction: const ShimmerDirection.fromRBLT(),
+                          child: Container(
+                            height: 10,
+                            width: 100,
+                            color: AppColors.appGreyColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Divider(color: AppColors.appDarkGreyColor),
+                  ],
                 ),
+                itemCount: 5,
               );
             }
             if (state is CommentsEmptyState) {

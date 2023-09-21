@@ -78,6 +78,7 @@ class SessionHandlingCubit extends Cubit<SessionHandlingState> {
             }
           } else {
             PushNotificationController.requestNotificationPermission();
+            PushNotificationController.isTokenRefreshed();
             emit(SessionHandlingHomeScreen(user: user));
           }
         });

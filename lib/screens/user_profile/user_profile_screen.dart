@@ -23,6 +23,8 @@ import 'package:ionicons/ionicons.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+enum Visibility { info, posts }
+
 class UserProfileScreen extends StatefulWidget {
   final String userId;
   final bool? followBack;
@@ -258,19 +260,67 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 30.heightBox,
                 Row(
                   children: [
-                    const Icon(Ionicons.location_outline),
-                    20.width,
-                    "Country: ${state.userDocument.country.toString()}"
+                    CircleAvatar(
+                      radius: 20,
+                      backgroundColor: AppColors.appGreyColor.withOpacity(0.6),
+                      child: Icon(
+                        Ionicons.location_outline,
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                    10.width,
+                    "Country Name: ${state.userDocument.country.toString()}"
                         .text
                         .make(),
                   ],
                 ),
-                10.heightBox,
+                16.heightBox,
                 Row(
                   children: [
-                    const Icon(Ionicons.calendar_outline),
-                    20.width,
-                    "Birth : ${state.userDocument.dateOfBirth.toString()}"
+                    CircleAvatar(
+                      radius: 20,
+                      backgroundColor: AppColors.appGreyColor.withOpacity(0.6),
+                      child: Icon(
+                        Ionicons.phone_portrait_outline,
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                    10.width,
+                    "Phone Number: ${state.userDocument.phoneNumber.toString()}"
+                        .text
+                        .make(),
+                  ],
+                ),
+                16.heightBox,
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 20,
+                      backgroundColor: AppColors.appGreyColor.withOpacity(0.6),
+                      child: Icon(
+                        Ionicons.calendar_number_outline,
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                    10.width,
+                    "Birth Date : ${state.userDocument.dateOfBirth.toString()}"
+                        .text
+                        .make(),
+                  ],
+                ),
+                16.heightBox,
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 20,
+                      backgroundColor: AppColors.appGreyColor.withOpacity(0.6),
+                      child: Icon(
+                        Ionicons.heart_outline,
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                    10.width,
+                    "Total Likes: ${state.userDocument.likes.toString()}"
                         .text
                         .make(),
                   ],

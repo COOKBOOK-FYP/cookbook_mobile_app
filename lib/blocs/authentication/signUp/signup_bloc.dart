@@ -2,7 +2,9 @@
 
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cookbook/constants/app_texts.dart';
+import 'package:cookbook/constants/firebase_constants.dart';
 import 'package:cookbook/controllers/Auth/auth_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,6 +63,15 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
               fullName: '${event.firstName} ${event.lastName}',
               phoneNumber: event.phoneNumber,
             );
+
+            // save its fcm token in the firestore
+            FirebaseContants.pushNotificationColletion
+                .doc(userCred.user!.uid)
+                .set({
+              'fcmToken': FirebaseContants.fcmToken,
+              'created_at': Timestamp.now(),
+              'updated_at': Timestamp.now(),
+            });
 
             emit(SignupStateSuccess());
           } on FirebaseAuthException catch (e) {

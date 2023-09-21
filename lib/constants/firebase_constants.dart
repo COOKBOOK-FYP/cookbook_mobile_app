@@ -8,6 +8,9 @@ class FirebaseContants {
   static final GoogleSignIn googleSignIn = GoogleSignIn();
   static final googleUid = FirebaseContants.googleSignIn.currentUser!.id;
 
+  // Push notifications
+  static String? fcmToken;
+
   // Firebase constants //
   static String uid = FirebaseAuth.instance.currentUser!.uid;
   static final usersCollection = FirebaseFirestore.instance.collection('Users');
@@ -21,6 +24,9 @@ class FirebaseContants {
       FirebaseFirestore.instance.collection('Followers');
   static final followingCollection =
       FirebaseFirestore.instance.collection('Followings');
+
+  static final pushNotificationColletion =
+      FirebaseFirestore.instance.collection('PushNotifications');
   // Storage constants //
   static final storageRef = FirebaseStorage.instance.ref();
 }
