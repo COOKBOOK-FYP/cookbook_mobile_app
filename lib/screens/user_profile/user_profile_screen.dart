@@ -44,6 +44,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   bool isFollowed = false;
   bool isGrid = true;
 
+  int selectedVisibility = 0;
+
   @override
   void initState() {
     userCollectionBloc.add(UserCollectionGetDataEvent(widget.userId));
@@ -52,6 +54,18 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     setFollowingCount();
     checkFollow();
     super.initState();
+  }
+
+  void setVisibility() {
+    if (Visibility.values[selectedVisibility] == Visibility.info) {
+      setState(() {
+        selectedVisibility = 0;
+      });
+    } else {
+      setState(() {
+        selectedVisibility = 1;
+      });
+    }
   }
 
   void checkFollow() {
@@ -258,6 +272,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     .centered(),
                 state.userDocument.bio.toString().text.make(),
                 30.heightBox,
+                const Divider(thickness: 1),
                 Row(
                   children: [
                     CircleAvatar(

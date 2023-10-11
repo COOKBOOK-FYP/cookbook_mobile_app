@@ -64,7 +64,6 @@ class SessionHandlingCubit extends Cubit<SessionHandlingState> {
               emit(SessionHandlingOnBoarding());
             }
           } else {
-            PushNotificationController.requestNotificationPermission();
             emit(SessionHandlingHomeScreen(user: user));
           }
         });
@@ -77,8 +76,6 @@ class SessionHandlingCubit extends Cubit<SessionHandlingState> {
               emit(SessionHandlingOnBoarding());
             }
           } else {
-            PushNotificationController.requestNotificationPermission();
-            PushNotificationController.isTokenRefreshed();
             emit(SessionHandlingHomeScreen(user: user));
           }
         });
@@ -91,7 +88,6 @@ class SessionHandlingCubit extends Cubit<SessionHandlingState> {
               emit(SessionHandlingOnBoarding());
             }
           } else {
-            PushNotificationController.requestNotificationPermission();
             emit(SessionHandlingHomeScreen(user: user));
           }
         });

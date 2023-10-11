@@ -170,10 +170,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                 image: DecorationImage(
                                   image: CachedNetworkImageProvider(
                                     user.photoUrl.toString(),
-                                    errorListener: () => const Icon(
-                                      Ionicons.person_outline,
-                                      size: 100,
-                                    ),
+                                    // errorListener: () => const Icon(
+                                    //   Ionicons.person_outline,
+                                    //   size: 100,
+                                    // ),
                                   ),
                                   fit: BoxFit.cover,
                                   onError: (exception, stackTrace) =>

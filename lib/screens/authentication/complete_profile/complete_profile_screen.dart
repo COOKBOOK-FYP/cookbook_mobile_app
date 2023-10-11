@@ -6,6 +6,7 @@ import 'package:cookbook/blocs/authentication/complete_profile/complete_profile_
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/controllers/Post/post_controller.dart';
+import 'package:cookbook/controllers/PushNotification/push_notification_controller.dart';
 import 'package:cookbook/global/utils/app_dialogs.dart';
 import 'package:cookbook/global/utils/app_image_picker.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
