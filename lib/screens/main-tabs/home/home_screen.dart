@@ -4,6 +4,7 @@ import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_config.dart';
 import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/constants/app_images.dart';
+import 'package:cookbook/controllers/PushNotification/push_notification_controller.dart';
 import 'package:cookbook/global/utils/app_dialogs.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
 import 'package:cookbook/screens/error/error_screen.dart';
@@ -39,6 +40,10 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // context.read<UserCollectionBloc>().add(UserCollectionGetDataEvent());
     // increasePaginatedBy();
+    // listen for the incoming messages
+    PushNotificationController.listenMessages(context);
+    // Handle background and terminated state payloads
+    PushNotificationController.handlePayloadForTerminatedAndBackground(context);
     context.read<FetchAllPostsBloc>().add(FetchAllPosts(paginatedBy));
     super.initState();
   }

@@ -43,7 +43,6 @@ dependencies:
   firebase_core: ^2.14.0
   firebase_messaging: ^14.6.8
   app_settings: ^5.0.0
-  flutter_local_notifications: ^15.1.1
   pinput: ^2.2.31
   flutter_screenutil: ^5.7.0
   page_transition: ^2.0.9
@@ -77,6 +76,8 @@ dependencies:
   flutter_exit_app: ^1.1.2
   onesignal_flutter: ^5.0.1
   timeago: ^3.5.0  
+  http: ^1.1.0
+  flutter_local_notifications: ^16.1.0
   # firebase_messaging: ^14.6.5
   # flutter_local_notifications: ^15.1.0+1
 

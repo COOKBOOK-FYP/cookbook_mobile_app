@@ -193,7 +193,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               ? BlocListener<FollowUnfollowBloc,
                                   FollowUnfollowState>(
                                   bloc: followUnfollowBloc,
-                                  listener: (context, state) {
+                                  listener: (context, state) async {
                                     if (state is FollowUnfollowLoadingState) {
                                       setState(() {
                                         isFollowed = !isFollowed;

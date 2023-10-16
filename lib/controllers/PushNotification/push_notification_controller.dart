@@ -1,8 +1,17 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
+import 'package:cookbook/constants/firebase_constants.dart';
+import 'package:cookbook/global/utils/app_navigator.dart';
+import 'package:cookbook/screens/main-tabs/notification/notification_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:http/http.dart' as http;
 
 class PushNotificationController {
   static var messaging = FirebaseMessaging.instance;
@@ -28,7 +37,12 @@ class PushNotificationController {
       settings,
       onDidReceiveNotificationResponse: (payload) {
         debugPrint('notification received');
+        handleAndroidPayload(context, message);
       },
+      // onDidReceiveBackgroundNotificationResponse: (details) {
+      //   debugPrint('notification received in background');
+      //   handleAndroidPayload(context, message);
+      // },
     );
   }
 
@@ -47,9 +61,25 @@ class PushNotificationController {
     if (notificationSettings.authorizationStatus ==
         AuthorizationStatus.authorized) {
       debugPrint('user has accepted the permissions');
+      // add fcm to the notification collection
+      await FirebaseContants.pushNotificationColletion
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .set({
+        'fcmToken': await getFcmToken(),
+        'createdAt': DateTime.now(),
+        'updatedAt': DateTime.now(),
+      });
     } else if (notificationSettings.authorizationStatus ==
         AuthorizationStatus.provisional) {
       debugPrint('user has accepted the provisional permissions');
+      // add fcm to the notification collection
+      await FirebaseContants.pushNotificationColletion
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .set({
+        'fcmToken': await getFcmToken(),
+        'createdAt': DateTime.now(),
+        'updatedAt': DateTime.now(),
+      });
     } else if (notificationSettings.authorizationStatus ==
         AuthorizationStatus.denied) {
       debugPrint('user has denied the permissions');
@@ -64,8 +94,15 @@ class PushNotificationController {
       debugPrint(message.notification?.title.toString());
       debugPrint(message.notification?.body.toString());
 
-      // whenever you listen for new notifications, just show it
-      showNotifications(context, message);
+      if (Platform.isAndroid) {
+        // the very first thing that we need to do is to initialize the
+        // local notifications plugin
+        initLocalNotifications(context, message);
+        // whenever you listen for new notifications, just show it
+        showNotifications(context, message);
+      } else {
+        showNotifications(context, message);
+      }
     });
   }
 
@@ -73,9 +110,6 @@ class PushNotificationController {
     BuildContext context,
     RemoteMessage message,
   ) async {
-    // the very first thing that we need to do is to initialize the
-    // local notifications plugin
-    initLocalNotifications(context, message);
     AndroidNotificationChannel channel = AndroidNotificationChannel(
       Random.secure().nextInt(1000).toString(),
       'High Importance Notifications',
@@ -112,6 +146,43 @@ class PushNotificationController {
     });
   }
 
+  static void handleAndroidPayload(
+      BuildContext context, RemoteMessage message) {
+    var notificationBody = message.data;
+    var notificationType = notificationBody['type'];
+
+    switch (notificationType) {
+      case 'post':
+        // Navigate user to the notification page
+        AppNavigator.goToPage(
+          context: context,
+          screen: const NotificationScreen(),
+        );
+        break;
+      case 'follow':
+        // Navigate user to the user profile
+        print('follow');
+        break;
+      default:
+        // Navigate user to the home page
+        print('home');
+        break;
+    }
+  }
+
+  static Future<void> handlePayloadForTerminatedAndBackground(
+      BuildContext context) async {
+    final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null) {
+      handleAndroidPayload(context, initialMessage);
+    }
+
+    // handle the notification tapped when the app is in background
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      handleAndroidPayload(context, message);
+    });
+  }
+
   static Future<String> getFcmToken() async {
     String? token = await messaging.getToken();
 
@@ -131,15 +202,46 @@ class PushNotificationController {
     });
     return token;
   }
+
+  static Future<void> sendNotification(
+    String fcmToken, {
+    required String body,
+    required String type,
+  }) async {
+    const String authKey =
+        'AAAA-Fu01VY:APA91bE_WYC0uyX7HiyHreAUrYupFZI7tUUdNIzE1jzFpHUkTgbumYmI89G5KaMGpqYbgVYrkrHN2PNDr7fwL6TT8wDTUUz6E1jXpfc1zEn-kGvHjQXqT8IODcAorTXqQRWz5L2a-FmU';
+    // const String fcmToken =
+    //     'dPHLxmBdT8Sc_QU7KpIwh9:APA91bH_ixHNGX6T2Nid6A395klvYDulERZwUa6eZktR08E5H-MnXxpZSS8C_V5tZbtWminJj_cMRyq-lMBYpOSkgEH38Ebyx_vnMd0frDPXMbkGK1jbDvD7x7bfyB3871rqI9oBEY3k';
+    const headers = {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'key=$authKey',
+    };
+
+    var data = {
+      'to': fcmToken,
+      'priority': 'high',
+      'notification': {
+        'title': 'Cookbook',
+        'body': body,
+      },
+      // payload
+      'data': {
+        'type': 'follow',
+      },
+    };
+
+    print('calling....::&&&&&&*********^^^^');
+
+    final response = await http.post(
+      Uri.parse('https://fcm.googleapis.com/fcm/send'),
+      headers: headers,
+      body: json.encode(data),
+    );
+
+    if (response.statusCode == 200) {
+      debugPrint('notification sent');
+    } else {
+      debugPrint('notification not sent');
+    }
+  }
 }
-
-
-
-
-// FirebaseContants.pushNotificationColletion
-//           .doc(FirebaseAuth.instance.currentUser!.uid)
-//           .update({
-//         "fcmToken": token,
-//         "updated_at": Timestamp.now(),
-//       });
-

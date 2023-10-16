@@ -8,6 +8,7 @@ import 'package:cookbook/constants/app_config.dart';
 import 'package:cookbook/constants/app_fonts.dart';
 import 'package:cookbook/constants/app_images.dart';
 import 'package:cookbook/constants/firebase_constants.dart';
+import 'package:cookbook/controllers/PushNotification/push_notification_controller.dart';
 import 'package:cookbook/global/utils/app_dialogs.dart';
 import 'package:cookbook/global/utils/app_navigator.dart';
 import 'package:cookbook/global/utils/app_snakbars.dart';
@@ -27,6 +28,8 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:velocity_x/velocity_x.dart';
+
+String? username;
 
 class PostWidget extends StatefulWidget {
   final RecipeModel post;
@@ -111,6 +114,13 @@ class _PostWidgetState extends State<PostWidget> {
 
   Future<void> addLikeToNotification() async {
     if (widget.post.ownerId == FirebaseAuth.instance.currentUser!.uid) return;
+    String? fcmToken;
+    var temp = await FirebaseContants.pushNotificationColletion
+        .doc(widget.post.ownerId)
+        .get();
+    final data = temp.data();
+    fcmToken = data?['fcmToken'];
+
     await FirebaseContants.feedCollection
         .doc(widget.post.ownerId)
         .collection("notifications")
@@ -122,6 +132,11 @@ class _PostWidgetState extends State<PostWidget> {
           postId: widget.post.postId,
           createdAt: Timestamp.now(),
         ).toJson());
+    await PushNotificationController.sendNotification(
+      fcmToken!,
+      body: "${widget.post.ownerName} likes your recipe",
+      type: "post",
+    );
   }
 
   Future<void> removeLikeFromNotification() async {
@@ -170,8 +185,13 @@ class _PostWidgetState extends State<PostWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserCollectionBloc, UserCollectionState>(
+    return BlocConsumer<UserCollectionBloc, UserCollectionState>(
       bloc: bloc,
+      listener: (context, state) {
+        if (state is UserCollectionLoadedState) {
+          username = state.userDocument.fullName;
+        }
+      },
       builder: (context, state) {
         if (state is UserCollectionLoadedState) {
           return Column(

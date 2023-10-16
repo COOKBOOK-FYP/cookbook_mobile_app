@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cookbook/constants/firebase_constants.dart';
+import 'package:cookbook/controllers/PushNotification/push_notification_controller.dart';
 import 'package:cookbook/models/Notification/notification_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -26,6 +27,12 @@ class UserController {
       });
 
       if (FirebaseAuth.instance.currentUser!.uid != otherUserId) {
+        String? fcmToken;
+        var temp = await FirebaseContants.pushNotificationColletion
+            .doc(FirebaseAuth.instance.currentUser?.uid)
+            .get();
+        final data = temp.data();
+        fcmToken = data?['fcmToken'];
         await FirebaseContants.feedCollection
             .doc(otherUserId)
             .collection("notifications")
@@ -37,6 +44,11 @@ class UserController {
                 userId: FirebaseAuth.instance.currentUser!.uid,
               ).toJson(),
             );
+        await PushNotificationController.sendNotification(
+          fcmToken!,
+          body: "Someone started following you",
+          type: "follow",
+        );
       }
       return true;
     } catch (_) {

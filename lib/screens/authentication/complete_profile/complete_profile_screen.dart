@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:cookbook/blocs/authentication/complete_profile/complete_profile_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_fonts.dart';
+import 'package:cookbook/constants/firebase_constants.dart';
 import 'package:cookbook/controllers/Post/post_controller.dart';
 import 'package:cookbook/controllers/PushNotification/push_notification_controller.dart';
 import 'package:cookbook/global/utils/app_dialogs.dart';
@@ -48,6 +49,11 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
   @override
   void initState() {
     bioController.text = 'Hey there! I am using Cookbook';
+
+    PushNotificationController.requestPermissions();
+    PushNotificationController.getFcmToken().then((token) {
+      FirebaseContants.fcmToken = token;
+    });
     super.initState();
   }
 

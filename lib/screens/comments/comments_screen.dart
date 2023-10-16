@@ -4,6 +4,7 @@ import 'package:cookbook/blocs/user-collection/user_collection_bloc.dart';
 import 'package:cookbook/constants/app_colors.dart';
 import 'package:cookbook/constants/app_texts.dart';
 import 'package:cookbook/constants/firebase_constants.dart';
+import 'package:cookbook/controllers/PushNotification/push_notification_controller.dart';
 import 'package:cookbook/global/utils/app_snakbars.dart';
 import 'package:cookbook/models/Comments/comment_model.dart';
 import 'package:cookbook/models/Notification/notification_model.dart';
@@ -17,6 +18,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:velocity_x/velocity_x.dart';
+
+// Global variables
+String? username;
 
 class CommentsScreen extends StatefulWidget {
   final RecipeModel post;
@@ -44,6 +48,13 @@ class _CommentsScreenState extends State<CommentsScreen> {
   }
 
   addCommentToNotification() async {
+    String? fcmToken;
+    var temp = await FirebaseContants.pushNotificationColletion
+        .doc(widget.post.ownerId)
+        .get();
+    final data = temp.data();
+    fcmToken = data?['fcmToken'];
+
     if (FirebaseAuth.instance.currentUser!.uid != widget.post.ownerId!) {
       await FirebaseContants.feedCollection
           .doc(widget.post.ownerId!)
@@ -58,6 +69,16 @@ class _CommentsScreenState extends State<CommentsScreen> {
               mediaUrl: widget.post.image,
             ).toJson(),
           );
+      try {
+        // get current user name
+        await PushNotificationController.sendNotification(
+          fcmToken!,
+          body: "$username commented on your recipe",
+          type: "post",
+        );
+      } catch (error) {
+        return;
+      }
     } else {
       return;
     }
@@ -136,6 +157,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                     listener: (context, state) {
                       if (state is UserCollectionLoadedState) {
                         user = state.userDocument;
+                        username = user?.fullName.toString();
                       }
                     },
                     child: ListTile(
@@ -203,6 +225,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                     listener: (context, state) {
                       if (state is UserCollectionLoadedState) {
                         user = state.userDocument;
+                        username = user?.fullName.toString();
                       }
                     },
                     child: ListTile(
