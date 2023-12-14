@@ -64,21 +64,17 @@ class PushNotificationController {
       // add fcm to the notification collection
       await FirebaseContants.pushNotificationColletion
           .doc(FirebaseAuth.instance.currentUser!.uid)
-          .set({
+          .update({
         'fcmToken': await getFcmToken(),
-        'createdAt': DateTime.now(),
-        'updatedAt': DateTime.now(),
       });
     } else if (notificationSettings.authorizationStatus ==
         AuthorizationStatus.provisional) {
-      debugPrint('user has accepted the provisional permissions');
+      debugPrint('user has accept ed the provisional permissions');
       // add fcm to the notification collection
       await FirebaseContants.pushNotificationColletion
           .doc(FirebaseAuth.instance.currentUser!.uid)
-          .set({
+          .update({
         'fcmToken': await getFcmToken(),
-        'createdAt': DateTime.now(),
-        'updatedAt': DateTime.now(),
       });
     } else if (notificationSettings.authorizationStatus ==
         AuthorizationStatus.denied) {
@@ -229,8 +225,6 @@ class PushNotificationController {
         'type': 'follow',
       },
     };
-
-    print('calling....::&&&&&&*********^^^^');
 
     final response = await http.post(
       Uri.parse('https://fcm.googleapis.com/fcm/send'),

@@ -219,7 +219,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                     }
 
                                     if (state is FollowUnfollowFailureState) {
-                                      toast("Something went wrong");
+                                      toast(state.errorMessage);
                                       setState(() {
                                         isFollowed = !isFollowed;
                                       });

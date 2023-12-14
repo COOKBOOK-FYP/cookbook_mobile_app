@@ -13,8 +13,9 @@ class FollowUnfollowBloc
         try {
           emit(FollowUnfollowLoadingState());
 
-          final isFollow =
-              await UserController.followFollowers(event.otherUserId);
+          final isFollow = await UserController.followFollowers(
+            event.otherUserId,
+          );
           if (isFollow) {
             emit(FollowUnfollowTrueState());
           } else {

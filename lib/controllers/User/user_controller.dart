@@ -44,11 +44,13 @@ class UserController {
                 userId: FirebaseAuth.instance.currentUser!.uid,
               ).toJson(),
             );
-        await PushNotificationController.sendNotification(
-          fcmToken!,
-          body: "Someone started following you",
-          type: "follow",
-        );
+        if (fcmToken != null) {
+          await PushNotificationController.sendNotification(
+            fcmToken,
+            body: "Someone started following you",
+            type: "follow",
+          );
+        }
       }
       return true;
     } catch (_) {
